@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.subsystems.drive.Drive;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,7 +27,7 @@ import frc.robot.Constants.ControllerConstants;
  */
 public class RobotContainer {
   // -- Subsystems --
-  // private final Drive drive;
+  private final Drive drive;
 
   // -- Controllers --
   private final CommandJoystick driveJoystick =
@@ -41,7 +42,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // drive = new Drive();
+    drive = new Drive();
     // switch (RuntimeConstants.currentMode) {
     //   case REAL:
     //     // Real robot, instantiate hardware IO implementations
@@ -96,7 +97,7 @@ public class RobotContainer {
     //     "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
-    configureButtonBindings();
+    configureJoystickBindings();
   }
 
   /**
@@ -105,7 +106,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {
+  private void configureJoystickBindings() {
     // // Default command, normal field-relative drive
     // drive.setDefaultCommand(
     //     DriveCommands.joystickDrive(

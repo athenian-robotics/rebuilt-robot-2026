@@ -2,6 +2,9 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
+import java.io.File;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
@@ -10,21 +13,40 @@ import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 
 public class Drive extends SubsystemBase {
-  private SwerveDrive drivetrain;
+  private final SwerveDrive drivetrain;
+
+  private static final File cfgPath = new File(Filesystem.getDeployDirectory(), "swerve");
 
   // -- Alerts --
-  // private final Alert noSwerveConfigFoundAlert = new Alert(getName(), "No YAGSL
-  // swerve configuration found.", AlertType.kError);
+  
 
   public Drive() {
     try {
       drivetrain =
-          new SwerveParser(Filesystem.getDeployDirectory())
+          new SwerveParser(cfgPath)
               .createSwerveDrive(DrivetrainConstants.MAX_LINEAR_VELOCITY.in(MetersPerSecond));
     } catch (Exception e) {
-      throw new RuntimeException("Unable to load subsystem", e);
+      throw new RuntimeException("Unable to load drive subsystem", e);
     }
 
     SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
   }
+
+  /**
+	 * Resets the odometry to the given pose.
+	 *
+	 * @param FieldPos The pose to reset the odometry to
+	 */
+  public void resetOdometry(Pose2d fieldPos) {
+    
+  }
+
+  
+
+  
+
+
+  
+
+
 }
