@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drive;
+package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
@@ -40,13 +40,4 @@ public class Drive extends SubsystemBase {
   public void resetOdometry(Pose2d fieldPos) {
     
   }
-
-  
-
-  
-
-
-  
-
-
 }

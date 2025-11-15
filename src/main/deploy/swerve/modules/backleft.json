@@ -6,17 +6,17 @@
   "absoluteEncoderOffset": -0.273193359375,
   "drive": {
     "type": "krakenx60",
-    "id": 2,
+    "id": 16,
     "canbus": null
   },
   "angle": {
     "type": "krakenx60",
-    "id": 6,
+    "id": 17,
     "canbus": null
   },
   "encoder": {
     "type": "cancoder",
-    "id": 11,
+    "id": 18,
     "canbus": null
   },
   "inverted": {
