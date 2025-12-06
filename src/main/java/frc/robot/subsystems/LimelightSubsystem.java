@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -31,6 +32,8 @@ public class LimelightSubsystem extends SubsystemBase {
 
   private VisionObservation latestObservation;
   private double lastHeartbeat = 0.0;
+  private double lastConsoleReportSeconds = 0.0;
+  private static final double CONSOLE_REPORT_INTERVAL = 1.0;
 
   @Override
   public void periodic() {
@@ -57,6 +60,7 @@ public class LimelightSubsystem extends SubsystemBase {
             avgAmbiguity,
             estimate.isMegaTag2);
     lastHeartbeat = Timer.getFPGATimestamp();
+    reportObservation(latestObservation);
   }
 
   /** Returns an optional view of the cached observation. */
@@ -141,6 +145,30 @@ public class LimelightSubsystem extends SubsystemBase {
     thetaStd = Math.max(Constants.LimelightConstants.MIN_THETA_STDDEV, thetaStd);
 
     return new MeasurementNoise(xyStd, thetaStd);
+  }
+
+  @SuppressWarnings("PMD.AvoidPrintStackTrace")
+  private String reportObservation(VisionObservation observation) {
+    double now = Timer.getFPGATimestamp();
+    if (now - lastConsoleReportSeconds < CONSOLE_REPORT_INTERVAL) {
+      return "";
+    }
+    lastConsoleReportSeconds = now;
+    Pose2d pose = observation.poseMeters();
+    return ("Limelight pose: (%.2fm, %.2fm @ %.1f°), tags=%d, STD_xy=%.2fm, STD_theta=%.1f°%n"
+            + " "
+            + pose.getTranslation().getX()
+            + "m, "
+            + pose.getTranslation().getY()
+            + "m, "
+            + pose.getRotation().getDegrees()
+            + "º,"
+            + observation.tagCount()
+            + ", "
+            + observation.xyStdDevMeters()
+            + "m, "
+            + Units.radiansToDegrees(observation.thetaStdDevRad()))
+        + "º";
   }
 
   private record MeasurementNoise(double xyStdDev, double thetaStdDev) {}
