@@ -5,12 +5,12 @@ public final class BuildConstants {
   public static final String MAVEN_GROUP = "";
   public static final String MAVEN_NAME = "arc-template";
   public static final String VERSION = "unspecified";
-  public static final int GIT_REVISION = 6;
-  public static final String GIT_SHA = "b564208f1ed11057cab2caec4426ddca6bd28e29";
-  public static final String GIT_DATE = "2025-11-14 23:16:06 EST";
+  public static final int GIT_REVISION = 7;
+  public static final String GIT_SHA = "28ff0012bed169b99c85834a9f0c9f6f80d3a4ea";
+  public static final String GIT_DATE = "2025-12-12 20:25:39 EST";
   public static final String GIT_BRANCH = "ctre-swerve";
-  public static final String BUILD_DATE = "2025-12-12 20:22:57 EST";
-  public static final long BUILD_UNIX_TIME = 1765588977998L;
+  public static final String BUILD_DATE = "2026-01-08 14:19:24 EST";
+  public static final long BUILD_UNIX_TIME = 1767899964282L;
   public static final int DIRTY = 1;
 
   private BuildConstants() {}

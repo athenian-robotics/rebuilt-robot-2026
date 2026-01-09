@@ -49,7 +49,7 @@ deploy {
                     jvmArgs.add("-Djava.rmi.server.hostname=10.8.52.2")
 
                     // GARBAGE COLLECTOR
-                    gcType = 'Parallel'
+                    // gcType = 'Parallel'
 
                     // The options below may improve performance, but should only be enabled on the RIO 2
                     //
