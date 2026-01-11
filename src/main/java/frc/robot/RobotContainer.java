@@ -57,6 +57,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    limelightSubsystem = new LimelightSubsystem();
+    vision = new Vision(limelightSubsystem);
     switch (RuntimeConstants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -67,8 +69,6 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        limelightSubsystem = new LimelightSubsystem();
-        vision = new Vision(limelightSubsystem);
         break;
 
       case SIM:
