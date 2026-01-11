@@ -7,6 +7,9 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.Optional;
 
+// The library is kept in package `frc.robot` because git reasons. The library is in
+// src/lib/LimelightHelpers
+
 /** The subsystem for handling vision. */
 public class Vision extends SubsystemBase {
   private static final double MAX_TRANSLATION_ERROR_METERS = 2.0;
@@ -43,6 +46,6 @@ public class Vision extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // LimelightSubsystem runs its own periodic loop; this wrapper simply offers convenient APIs.
+    // TODO Auto-generated method stub
   }
 }
