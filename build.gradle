@@ -8,6 +8,14 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+sourceSets {
+    main {
+        java {
+            srcDirs 'src/main/java', 'src/lib/LimelightHelpers'
+        }
+    }
+}
+
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
@@ -108,6 +116,25 @@ jar {
 deployArtifact.jarTask = jar
 wpi.java.configureExecutableTasks(jar)
 wpi.java.configureTestTasks(test)
+
+// Create commit with working changes on event branches
+task(eventDeploy) {
+    doLast {
+        def branch = ""
+        def proc = "git rev-parse --abbrev-ref HEAD".execute()
+        proc.in.eachLine { line -> branch = line }
+        proc.waitFor()
+        if (branch.startsWith("event/")) {
+            exec {
+                commandLine "git", "add", "-A"
+            }
+            exec {
+                commandLine "git", "commit", "-m", "Event deploy: " + new Date()
+                ignoreExitValue = true
+            }
+        }
+    }
+}
 
 // Configure string concat to always inline compile
 tasks.withType(JavaCompile) {

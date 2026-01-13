@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,10 +15,10 @@ public class Vision extends SubsystemBase {
   private static final double MAX_TRANSLATION_ERROR_METERS = 2.0;
   private static final double MAX_ROTATION_ERROR_RADIANS = Units.degreesToRadians(30.0);
 
-  private final LimelightSubsystem limelightSubsystem;
+  private final Limelight limelight;
 
-  public Vision(LimelightSubsystem limelightSubsystem) {
-    this.limelightSubsystem = limelightSubsystem;
+  public Vision(Limelight limelight) {
+    this.limelight = limelight;
   }
 
   /**
@@ -27,14 +27,14 @@ public class Vision extends SubsystemBase {
    *     no estimate can be made.
    */
   public Optional<Pose2d> findRobotPose(Pose2d estimatedPose) {
-    if (!limelightSubsystem.hasFreshObservation(0.5)) {
+    if (!limelight.hasFreshObservation(0.5)) {
       return Optional.empty();
     }
 
-    return limelightSubsystem
+    return limelight
         .getLatestObservation()
         .filter(observation -> measurementMatchesOdometry(estimatedPose, observation.pose()))
-        .map(LimelightSubsystem.VisionObservation::pose);
+        .map(Limelight.VisionObservation::pose);
   }
 
   private boolean measurementMatchesOdometry(Pose2d reference, Pose2d measurement) {

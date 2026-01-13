@@ -1,23 +1,23 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants; 
+import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.LimelightHelpers.RawFiducial;
 import java.util.Optional;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * Limelight vision subsystem modeled after the pose-consumer patterns used by the reference teams
  * in {@code useful-repo/C2024-Public}. It polls pose estimates, filters out low-confidence
  * measurements, and exposes the latest trusted result for downstream odometry/path-planning code.
  */
-public class LimelightSubsystem extends SubsystemBase {
+public class Limelight extends SubsystemBase {
   /**
    * Simple container for the last usable vision sample.
    *
@@ -45,10 +45,6 @@ public class LimelightSubsystem extends SubsystemBase {
   private VisionObservation latestObservation;
   /** FPGA timestamp seconds when the last trusted observation arrived. */
   private double lastHeartbeatSeconds = 0.0;
-  /** FPGA timestamp seconds when we last printed a console update. */
-  private double lastConsoleReportSeconds = 0.0;
-  /** Minimum interval (s) between console pose prints to avoid spamming logs. */
-  private static final double CONSOLE_REPORT_INTERVAL_SECONDS = 1.0;
 
   @Override
   public void periodic() {
@@ -169,28 +165,16 @@ public class LimelightSubsystem extends SubsystemBase {
     return new MeasurementNoise(xyStd, thetaStd);
   }
 
-  @SuppressWarnings("PMD.AvoidPrintStackTrace")
-  private String reportObservation(VisionObservation observation) {
-    double now = Timer.getFPGATimestamp();
-    if (now - lastConsoleReportSeconds < CONSOLE_REPORT_INTERVAL_SECONDS) {
-      return "";
-    }
-    lastConsoleReportSeconds = now;
-    Pose2d pose = observation.pose();
-    return ("Limelight pose: (%.2fm, %.2fm @ %.1f°), tags=%d, STD_xy=%.2fm, STD_theta=%.1f°%n"
-            + " "
-            + pose.getTranslation().getX()
-            + "m, "
-            + pose.getTranslation().getY()
-            + "m, "
-            + pose.getRotation().getDegrees()
-            + "º,"
-            + observation.tagCount()
-            + ", "
-            + observation.xyStdDevMeters()
-            + "m, "
-            + Units.radiansToDegrees(observation.thetaStdDevRad()))
-        + "º";
+  private void reportObservation(VisionObservation observation) {
+    Logger.recordOutput("Limelight/Observation/Timestamp", observation.timestampSeconds());
+    Logger.recordOutput("Limelight/Observation/Pose", observation.pose());
+    Logger.recordOutput("Limelight/Observation/TagCount", observation.tagCount());
+    Logger.recordOutput("Limelight/Observation/AvgTagDist", observation.avgTagDistanceMeters());
+    Logger.recordOutput("Limelight/Observation/AvgTagArea", observation.avgTagAreaPercent());
+    Logger.recordOutput("Limelight/Observation/AvgAmbiguity", observation.avgAmbiguityRatio());
+    Logger.recordOutput("Limelight/Observation/XYStdDev", observation.xyStdDevMeters());
+    Logger.recordOutput("Limelight/Observation/ThetaStdDev", observation.thetaStdDevRad());
+    Logger.recordOutput("Limelight/Observation/IsMegaTag2", observation.isMegaTag2());
   }
 
   private record MeasurementNoise(double xyStdDev, double thetaStdDev) {}

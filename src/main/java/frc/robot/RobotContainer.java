@@ -22,14 +22,14 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.RuntimeConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.LimelightSubsystem;
-import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.vision.Limelight;
+import frc.robot.subsystems.vision.Vision;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -41,7 +41,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // -- Subsystems --
   private final Drive drive;
-  private final LimelightSubsystem limelightSubsystem;
+  private final Limelight limelight;
   private final Vision vision;
 
   // -- Controllers --
@@ -57,8 +57,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    limelightSubsystem = new LimelightSubsystem();
-    vision = new Vision(limelightSubsystem);
+    limelight = new Limelight();
+    vision = new Vision(limelight);
     switch (RuntimeConstants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
