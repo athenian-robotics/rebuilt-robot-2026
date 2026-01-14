@@ -132,7 +132,8 @@ public class RobotContainer {
             drive,
             () -> driveJoystick.getY(),
             () -> driveJoystick.getX(),
-            () -> new Rotation2d(-steerJoystick.getY(), -steerJoystick.getX())));
+            () -> new Rotation2d(-steerJoystick.getY(), -steerJoystick.getX()),
+            () -> steerJoystick.getMagnitude() >= Constants.ControllerConstants.HEADING_DEADZONE));
 
     // // Lock to 0° when A button is held
     // controller
