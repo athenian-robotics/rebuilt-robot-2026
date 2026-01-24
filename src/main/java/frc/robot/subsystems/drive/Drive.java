@@ -226,7 +226,8 @@ public class Drive extends SubsystemBase {
 
     // Update vision
     vision.setRobotOrientation(getRotation(), gyroInputs.yawVelocityRadPerSec);
-    var visionObservation = vision.getVisionObservation(getPose());
+    var visionObservation =
+        vision.getVisionObservation(DriverStation.isDisabled() ? null : getPose());
     if (visionObservation.isPresent()) {
       var obs = visionObservation.get();
       addVisionMeasurement(
@@ -241,6 +242,9 @@ public class Drive extends SubsystemBase {
 
     // Update Field2d
     field.setRobotPose(getPose());
+    Logger.recordOutput("Odometry/Robot", Pose2d.struct, getPose());
+    Logger.recordOutput("SwerveStates/Measured", SwerveModuleState.struct, getModuleStates());
+    Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds());
 
     // Update gyro alert
     gyroDisconnectedAlert.set(

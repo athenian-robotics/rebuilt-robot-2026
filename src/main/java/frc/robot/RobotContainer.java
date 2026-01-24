@@ -140,7 +140,7 @@ public class RobotContainer {
             drive,
             () -> driveJoystick.getY(),
             () -> driveJoystick.getX(),
-            () -> steerJoystick.getX()));
+            () -> -steerJoystick.getX()));
 
     // // Lock to 0° when A button is held
     // controller

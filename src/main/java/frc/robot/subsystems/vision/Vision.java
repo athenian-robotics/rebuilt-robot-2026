@@ -4,10 +4,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.Optional;
+  import edu.wpi.first.wpilibj2.command.SubsystemBase;
+  import java.util.Optional;
+  import org.littletonrobotics.junction.Logger;
 
-// The library is kept in package `frc.robot` because git reasons. The library is in
+  // The library is kept in package `frc.robot` because git reasons. The library is in
 // src/lib/LimelightHelpers
 
 /** The subsystem for handling vision. */
@@ -30,18 +31,24 @@ public class Vision extends SubsystemBase {
    */
   public Optional<Limelight.VisionObservation> getVisionObservation(Pose2d currentPose) {
     if (!limelight.hasFreshObservation(0.5)) {
+      Logger.recordOutput("Vision/HasFreshObservation", false);
       return Optional.empty();
     }
+    Logger.recordOutput("Vision/HasFreshObservation", true);
 
-    return limelight
-        .getLatestObservation()
-        .filter(
-            observation -> {
-              if (currentPose == null) {
-                return true;
-              }
-              return measurementMatchesOdometry(currentPose, observation.pose());
-            });
+    var observationOpt = limelight.getLatestObservation();
+    if (observationOpt.isEmpty()) {
+      return Optional.empty();
+    }
+    var observation = observationOpt.get();
+
+    if (currentPose != null && !measurementMatchesOdometry(currentPose, observation.pose())) {
+      Logger.recordOutput("Vision/RejectedByOdometry", true);
+      return Optional.empty();
+    }
+    Logger.recordOutput("Vision/RejectedByOdometry", false);
+
+    return Optional.of(observation);
   }
 
   public void setRobotOrientation(Rotation2d rotation, double yawVelocityRadPerSec) {

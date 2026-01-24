@@ -1,6 +1,9 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -46,6 +49,20 @@ public class Limelight extends SubsystemBase {
   /** FPGA timestamp seconds when the last trusted observation arrived. */
   private double lastHeartbeatSeconds = 0.0;
 
+  public Limelight() {
+    Translation3d translation = Constants.LimelightConstants.ROBOT_TO_CAMERA.getTranslation();
+    Rotation3d rotation = Constants.LimelightConstants.ROBOT_TO_CAMERA.getRotation();
+    LimelightHelpers.setCameraPose_RobotSpace(
+        Constants.LimelightConstants.CAMERA_NAME,
+        translation.getX(),
+        translation.getY(),
+        translation.getZ(),
+        Units.radiansToDegrees(rotation.getX()),
+        Units.radiansToDegrees(rotation.getY()),
+        Units.radiansToDegrees(rotation.getZ()));
+    LimelightHelpers.setPipelineIndex(Constants.LimelightConstants.CAMERA_NAME, 0);
+  }
+
   @Override
   public void periodic() {
     if (Constants.RuntimeConstants.currentMode == Constants.RuntimeConstants.Mode.SIM) {
@@ -53,15 +70,19 @@ public class Limelight extends SubsystemBase {
     }
 
     PoseEstimate estimate = sampleEstimate();
-    // LimelightHelpers returns null if the array is missing/empty (not connected).
-    boolean connected = estimate != null;
-    Logger.recordOutput("Limelight/Connected", connected);
+    // LimelightHelpers returns null if the array is missing/empty.
+    boolean hasEstimate = estimate != null;
+    Logger.recordOutput("Limelight/HasEstimate", hasEstimate);
 
     // Check if Limelight sees any target (TV) even if solve failed
     boolean hasTarget = LimelightHelpers.getTV(Constants.LimelightConstants.CAMERA_NAME);
     Logger.recordOutput("Limelight/HasTarget", hasTarget);
 
-    if (!connected) {
+    // Log heartbeat to verify network connection
+    double hb = LimelightHelpers.getLimelightNTDouble(Constants.LimelightConstants.CAMERA_NAME, "hb");
+    Logger.recordOutput("Limelight/Heartbeat", hb);
+
+    if (!hasEstimate) {
       Logger.recordOutput("Limelight/IsUsable", false);
       Logger.recordOutput("Limelight/RawTagCount", 0);
       Logger.recordOutput("Limelight/AvgAmbiguity", 0.0);
@@ -69,6 +90,7 @@ public class Limelight extends SubsystemBase {
     }
 
     Logger.recordOutput("Limelight/RawTagCount", estimate.tagCount);
+    Logger.recordOutput("Limelight/RawPose", estimate.pose); // Log the raw pose from Limelight
     double avgAmbiguity = computeAverageAmbiguity(estimate);
     Logger.recordOutput("Limelight/AvgAmbiguity", avgAmbiguity);
 
@@ -140,12 +162,26 @@ public class Limelight extends SubsystemBase {
    */
   private PoseEstimate sampleEstimate() {
     Optional<Alliance> alliance = DriverStation.getAlliance();
+    // Use MegaTag1 for stability if MegaTag2 is glitchy.
+    // Switch to MegaTag2 once gyro sync is verified and stable.
+    boolean useMegaTag2 = false; 
+
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-      return LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2(
+      if (useMegaTag2) {
+        return LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2(
+            Constants.LimelightConstants.CAMERA_NAME);
+      } else {
+        return LimelightHelpers.getBotPoseEstimate_wpiRed(
+            Constants.LimelightConstants.CAMERA_NAME);
+      }
+    }
+    if (useMegaTag2) {
+      return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(
+          Constants.LimelightConstants.CAMERA_NAME);
+    } else {
+      return LimelightHelpers.getBotPoseEstimate_wpiBlue(
           Constants.LimelightConstants.CAMERA_NAME);
     }
-    return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(
-        Constants.LimelightConstants.CAMERA_NAME);
   }
 
   private boolean isEstimateUsable(PoseEstimate estimate) {
