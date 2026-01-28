@@ -140,6 +140,11 @@ public class VisionIOLimelight implements VisionIO {
   private MeasurementNoise estimateNoise(PoseEstimate estimate) {
     double tagCountFactor = Math.max(1.0, estimate.tagCount);
     double distanceFactor =
+        estimate.avgTagDist <= 0.0
+            ? 1.0 // Happens if Limelight cannot compute a reliable range from the inputs.
+            : Math.max(
+                1.0,
+                estimate.avgTagDist / Constants.LimelightConstants.DISTANCE_TRUST_FALLOFF_METERS);
         Math.max(1.0, estimate.avgTagDist / Constants.LimelightConstants.DISTANCE_TRUST_FALLOFF_METERS);
 
     double xyStd =
