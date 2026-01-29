@@ -50,6 +50,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.RuntimeConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.vision.Vision;
@@ -59,30 +60,14 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Drive extends SubsystemBase {
-  // TunerConstants doesn't include these constants, so they are declared locally
-  static final double ODOMETRY_FREQUENCY =
-      new CANBus(TunerConstants.DrivetrainConstants.CANBusName).isNetworkFD() ? 250.0 : 100.0;
-  public static final double DRIVE_BASE_RADIUS =
-      Math.max(
-          Math.max(
-              Math.hypot(TunerConstants.FrontLeft.LocationX, TunerConstants.FrontLeft.LocationY),
-              Math.hypot(TunerConstants.FrontRight.LocationX, TunerConstants.FrontRight.LocationY)),
-          Math.max(
-              Math.hypot(TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
-              Math.hypot(TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)));
-
-  // PathPlanner config constants
-  private static final double ROBOT_MASS_KG = 74.088;
-  private static final double ROBOT_MOI = 6.883;
-  private static final double WHEEL_COF = 1.2;
   private static final RobotConfig PP_CONFIG =
       new RobotConfig(
-          ROBOT_MASS_KG,
-          ROBOT_MOI,
+          DrivetrainConstants.ROBOT_MASS_KG,
+          DrivetrainConstants.ROBOT_MOI,
           new ModuleConfig(
               TunerConstants.FrontLeft.WheelRadius,
               TunerConstants.kSpeedAt12Volts.in(MetersPerSecond),
-              WHEEL_COF,
+              DrivetrainConstants.WHEEL_COF,
               DCMotor.getKrakenX60Foc(1)
                   .withReduction(TunerConstants.FrontLeft.DriveMotorGearRatio),
               TunerConstants.FrontLeft.SlipCurrent,
@@ -386,7 +371,7 @@ public class Drive extends SubsystemBase {
 
   /** Returns the maximum angular speed in radians per sec. */
   public double getMaxAngularSpeedRadPerSec() {
-    return getMaxLinearSpeedMetersPerSec() / DRIVE_BASE_RADIUS;
+    return getMaxLinearSpeedMetersPerSec() / DrivetrainConstants.DRIVE_BASE_RADIUS;
   }
 
   /** Returns an array of module translations. */
