@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Shooter",
+      "request": "launch",
+      "mainClass": "frc.robot.subsystems.outtake.Shooter",
+      "projectName": "rebuilt-robot-2026"
+    },
+    {
+      "type": "java",
       "name": "Main",
       "request": "launch",
       "mainClass": "frc.robot.Main",

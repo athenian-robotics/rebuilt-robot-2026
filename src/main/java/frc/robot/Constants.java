@@ -77,4 +77,17 @@ public class Constants {
     public static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
     public static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
   }
+
+  public final class OuttakeConstants {
+    public static final int RIGHT_SHOOTER_ID = -1;
+    public static final int LEFT_SHOOTER_ID = -1;
+    public static final int INTAKE_MOTOR_ID = -1;
+    public static final int ANGLE_CHANGER_ID = -1;
+    public static final int STAR_WHEEL_ID = -1;
+
+    public static final double MAX_HOOD_ANGLE_DEGREES = 0;
+    public static final double MIN_HOOD_ANGLE_DEGREES = 0;
+    public static final double OUTTAKE_SPEED = 1.0;
+    public static final double INTAKE_SPEED = 0.1;
+  }
 }

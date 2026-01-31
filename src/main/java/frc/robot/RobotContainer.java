@@ -28,6 +28,9 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.outtake.OuttakeIOShooter;
+import frc.robot.subsystems.outtake.Shooter;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -39,6 +42,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // -- Subsystems --
   private final Drive drive;
+  private final Shooter shooter;
 
   // -- Controllers --
   private final CommandJoystick driveJoystick =
@@ -53,6 +57,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    shooter = new Shooter();
     switch (RuntimeConstants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
