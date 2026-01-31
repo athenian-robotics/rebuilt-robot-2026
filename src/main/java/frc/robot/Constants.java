@@ -77,4 +77,8 @@ public class Constants {
     public static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
     public static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
   }
+
+  public final class IndexerConstants {
+    public static final int MOTOR_ID = 1;
+  }
 }
