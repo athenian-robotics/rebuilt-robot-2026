@@ -18,13 +18,15 @@ public interface HopperIO {
     public static class HopperIOInputs{
         public Distance hopperExtension = Inches.of(0);
         public Voltage hopperVoltage = Volts.of(0);
+        public LinearVelocity hopperExtensionVelocity = InchesPerSecond.of(0);
         public SimpleMotorFeedforward hopperFeedforward = new SimpleMotorFeedforward(HopperConstants.kS, HopperConstants.kV);
         
     }
     /** Update the set of loggable inputs */
     public void updateInputs(HopperIOInputs inputs);
    // public void hopperMotorSpeed(AngularVelocity velocity);
-    public void extendToLength(Distance length);
+    public void moveToLength(Distance length);
+    
     
 
     

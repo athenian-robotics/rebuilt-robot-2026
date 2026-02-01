@@ -16,21 +16,25 @@ import frc.robot.Constants;
 import frc.robot.Constants.HopperConstants;
 import frc.robot.generated.TunerConstants;
 
-public class HopperIOReal implements HopperIO {
+public class HopperIOSparkMax implements HopperIO {
     private final SparkMax hopperMotor = new SparkMax(HopperConstants.SPARK_ID, MotorType.kBrushless);
     private final RelativeEncoder hopperEncoder = hopperMotor.getEncoder();
     
     private final SimpleMotorFeedforward hopperFeedforward = new SimpleMotorFeedforward(HopperConstants.kS, HopperConstants.kV);
     
-    private 
+    
     /** Update the set of loggable inputs */
     public void updateInputs(HopperIOInputs inputs) {
         inputs.hopperExtension = Rotations.of(hopperEncoder.getPosition());
 
     }
-    private void setHopperMotorSpeed(AngularVelocity velocity) {
-        hopperMotor.setVoltage(hopperFeedforward.calculate(velocity.in(DegreesPerSecond)));
+    private void linearToAngularVelocity(LinearVelocity lin_velocity){
+            return (WINCH_GEARBOX_GEAR_RATIO / (WINCH_DIAMETER * Math.PI)) * lin_velocity;
+    }
+    private void setHopperMotorSpeed(LinearVelocity lin_velocity) {
+        AngularVelocity velocity = linearToAngularVelocity(lin_velocity);
+        hopperMotor.setVoltage(hopperFeedforward.calculate(velocity.in(RevolutionsPerSecond)));
     }
 
-    public void doSomething() {}
+   
 }

@@ -88,7 +88,7 @@ public class Constants {
     public final static Distance WINCH_DIAMETER = Inches.of(0.75);
 
     public final static Distance SETPOINT_RETRACTED = Inches.of(0);
-    public final static Distance SETPOINT_MOVE_INTAKE = Inches.of(4);
+    public final static Distance SETPOINT_PARTIALLY_EXTENDED = Inches.of(4);
     public final static Distance SETPOINT_EXTENDED = Inches.of(11.425);
 
     public final static double kS = 0;

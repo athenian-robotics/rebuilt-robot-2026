@@ -31,7 +31,10 @@ public class Hopper extends SubsystemBase{
         io.updateInputs(inputs);
     }
 
-    public void moveTo(Distance target) {
-        
+    public void retractedToPartial(){
+        io.moveToLength(SETPOINT_PARTIALLY_EXTENDED);
+    }
+    public void partialToFull(){
+            io.moveToLength(SETPOINT_EXTENDED);
     }
 }
