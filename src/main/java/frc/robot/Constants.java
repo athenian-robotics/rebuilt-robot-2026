@@ -1,7 +1,9 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -76,5 +78,28 @@ public class Constants {
     public static final double FF_RAMP_RATE = 0.1; // Volts/Sec
     public static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
     public static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
+  }
+
+  public final class HopperConstants {
+    public final static int SPARK_ID = 0;
+    
+
+    public final static int WINCH_GEARBOX_GEAR_RATIO = 10;
+    public final static Distance WINCH_DIAMETER = Inches.of(0.75);
+
+    public final static Distance SETPOINT_RETRACTED = Inches.of(0);
+    public final static Distance SETPOINT_MOVE_INTAKE = Inches.of(4);
+    public final static Distance SETPOINT_EXTENDED = Inches.of(11.425);
+
+    public final static double kS = 0;
+    public final static double kV = 0;
+
+    public Distance extension = SETPOINT_RETRACTED;
+  }
+  public final class IntakeConstants {
+    
+    public final static double kS = 0;
+    public final static double kV = 0;
+
   }
 }

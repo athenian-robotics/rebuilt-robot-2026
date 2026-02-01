@@ -1,7 +1,12 @@
 package frc.robot.subsystems.hopintake;
 
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Revolutions;
+
+import org.littletonrobotics.junction.AutoLog;
 
 import com.revrobotics.spark.SparkMax;
 
@@ -9,24 +14,21 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.DriveCommandsConstants;
+import frc.robot.commands.DriveCommands;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-public class Hopper {
-    private final static int SPARK_ID = 0;
-    private final static int WINCH_GEARBOX_GEAR_RATIO = 10;
-    private final static Distance WINCH_DIAMETER = Inches.of(0.75);
-
-    private final static Distance SETPOINT_RETRACTED = Inches.of(0);
-    private final static Distance SETPOINT_MOVE_INTAKE = Inches.of(4);
-    private final static Distance SETPOINT_EXTENDED = Inches.of(11.425);
-
-    private Distance extension = SETPOINT_RETRACTED;
+public class Hopper extends SubsystemBase{
             
-    private final SparkMax motor = new SparkMax(SPARK_ID, MotorType.kBrushless);
-            
-    private static Angle lenToMotorAngle(Distance len) {
-        return Revolutions.of(len.in(Inches) * WINCH_GEARBOX_GEAR_RATIO / (WINCH_DIAMETER.in(Inches) * Math.PI));
+    private HopperIO io;
+    private HopperIOInputsAutoLogged inputs = new HopperIOInputsAutoLogged();
+
+    @Override
+    public void periodic() {
+        io.updateInputs(inputs);
     }
 
     public void moveTo(Distance target) {
