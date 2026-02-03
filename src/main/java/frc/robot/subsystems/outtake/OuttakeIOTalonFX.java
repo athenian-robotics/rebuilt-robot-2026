@@ -1,28 +1,32 @@
 package frc.robot.subsystems.outtake;
 
+import static edu.wpi.first.units.Units.Volts;
+
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.Constants.OuttakeConstants;
 import frc.robot.subsystems.outtake.OuttakeIO;
 
-public class Shooter extends SubsystemBase implements OuttakeIO {
+public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   private final TalonFX rightShooter, leftShooter, intake, angleChanger;
-  private final OuttakeIOLogs logs;
+  private final OuttakeIOInputs logs;
 
-  public Shooter() {
+  public OuttakeIOTalonFX() {
     super();
-    logs = new OuttakeIOLogs();
-    rightShooter = new TalonFX(-1);
-    leftShooter = new TalonFX(-1);
-    leftShooter.setControl(new Follower(-1, MotorAlignmentValue.Opposed));
-    intake = new TalonFX(-1);
-    angleChanger = new TalonFX(-1);
+    logs = new OuttakeIOInputs();
+    leftShooter = new TalonFX(OuttakeConstants.LEFT_SHOOTER_MOTOR);
+    rightShooter = new TalonFX(OuttakeConstants.RIGHT_SHOOTER_MOTOR);
+    leftShooter.setControl(new Follower(OuttakeConstants.RIGHT_SHOOTER_MOTOR, MotorAlignmentValue.Opposed));
+    intake = new TalonFX(OuttakeConstants.INTAKE_MOTOR);
+    angleChanger = new TalonFX(OuttakeConstants.ANGLE_CHANGER_MOTOR);
   }
 
   /**
@@ -56,8 +60,20 @@ public class Shooter extends SubsystemBase implements OuttakeIO {
   }
 
   @Override
-  public void updateLogs(OuttakeIOLogs logs) {
+  public void updateInputs(OuttakeIOInputs logs) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'updateLogs'");
+  }
+
+  public void startFlywheel() {
+    rightShooter.setControl(new VoltageOut(Volts.of(12)));
+  }
+
+  public void stopFlywheel() {
+    rightShooter.set(0.0);
+  }
+
+  public void setIntakeVoltage(Voltage voltage) {
+    intake.setControl(new VoltageOut(voltage));
   }
 }

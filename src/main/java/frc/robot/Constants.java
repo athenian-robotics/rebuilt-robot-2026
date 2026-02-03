@@ -1,8 +1,10 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotBase;
 
 public class Constants {
@@ -76,5 +78,15 @@ public class Constants {
     public static final double FF_RAMP_RATE = 0.1; // Volts/Sec
     public static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
     public static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
+  }
+
+  public final class OuttakeConstants {
+    public static final int RIGHT_SHOOTER_MOTOR = -1;
+    public static final int LEFT_SHOOTER_MOTOR = -1;
+    public static final int INTAKE_MOTOR = -1;
+    public static final int ANGLE_CHANGER_MOTOR = -1;
+
+    public static final Voltage INTAKE_TO_SHOOTER = Volts.of(2);
+    public static final Voltage INTAKE_TO_GROUND = Volts.of(2);
   }
 }
