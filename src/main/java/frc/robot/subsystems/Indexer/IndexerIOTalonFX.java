@@ -2,7 +2,6 @@ package frc.robot.subsystems.Indexer;
 
 import static edu.wpi.first.units.Units.Volts;
 
-import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -28,4 +27,8 @@ public class IndexerIOTalonFX implements IndexerIO {
         motor.setControl(new VoltageOut(voltage));
     }
     
+    @Override
+    public Voltage getVoltage() {
+        return appliedVoltage;
+    }
 }

@@ -14,8 +14,10 @@ public interface IndexerIO {
     }
     
     // Updates the logged inputs
-    public void updateInputs (IndexerIOInputs inputs);
+    public default void updateInputs (IndexerIOInputs inputs) {}
 
     // Runs the indexer at the specified voltage
-    public void setVoltage (Voltage voltage);
+    public default void setVoltage (Voltage voltage) {}
+
+    public default Voltage getVoltage() {return null;}
 }

@@ -1,8 +1,10 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Volt;
 
 import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotBase;
 
 public class Constants {
@@ -28,6 +30,8 @@ public class Constants {
   }
 
   public final class ControllerConstants {
+    /**Placeholder value to signify that it should be changed later */
+    public static final int PLACEHOLDER = 0;
     // -- Port (identifier) for each individual joystick/controller.
     public static final int JOYSTICK_LEFT_PORT = 0;
     public static final int JOYSTICK_MIDDLE_PORT = 1;
@@ -80,5 +84,6 @@ public class Constants {
 
   public final class IndexerConstants {
     public static final int MOTOR_ID = 1;
+    public static final Voltage MOTOR_VOLTAGE = Voltage.ofBaseUnits(3, Volt);
   }
 }

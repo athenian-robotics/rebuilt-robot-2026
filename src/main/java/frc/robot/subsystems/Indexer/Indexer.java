@@ -1,25 +1,18 @@
 package frc.robot.subsystems.Indexer;
 
-import static edu.wpi.first.units.Units.Volt;
-
 import org.littletonrobotics.junction.Logger;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IndexerConstants;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
-
 
 public class Indexer extends SubsystemBase {
     private final IndexerIO io;
     private final IndexerIOInputsAutoLogged inputs;
     
-    public Indexer() {
-        io = new IndexerIOTalonFX();
+    public Indexer(IndexerIO indexerIO) {
+        io = indexerIO;
         inputs = new IndexerIOInputsAutoLogged();
     }
 
@@ -36,4 +29,6 @@ public class Indexer extends SubsystemBase {
     public Command runIndexer(Voltage voltage) {
         return new InstantCommand(() -> io.setVoltage(voltage), this);
     }
+
+    public IndexerIO getIndexerIO() {return io;}
 }
