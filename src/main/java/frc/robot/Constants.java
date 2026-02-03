@@ -1,10 +1,6 @@
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.RobotBase;
 
 public class Constants {
@@ -65,7 +61,7 @@ public class Constants {
   }
 
   public final class DrivetrainConstants {
-    public static final LinearVelocity MAX_LINEAR_VELOCITY = MetersPerSecond.of(1);
+    public static final double MAX_LINEAR_VELOCITY = 1;
   }
 
   public final class DriveCommandsConstants {
@@ -85,16 +81,17 @@ public class Constants {
     
 
     public final static int WINCH_GEARBOX_GEAR_RATIO = 10;
-    public final static Distance WINCH_DIAMETER = Inches.of(0.75);
+    public final static double WINCH_DIAMETER_INCHES = 0.75;
 
-    public final static Distance SETPOINT_RETRACTED = Inches.of(0);
-    public final static Distance SETPOINT_PARTIALLY_EXTENDED = Inches.of(4);
-    public final static Distance SETPOINT_EXTENDED = Inches.of(11.425);
+    public final static double SETPOINT_RETRACTED_INCHES = 0;
+    public final static double SETPOINT_PARTIALLY_EXTENDED_INCHES = 4;
+    public final static double SETPOINT_EXTENDED_INCHES = 11.425;
 
     public final static double kS = 0;
     public final static double kV = 0;
 
-    public Distance extension = SETPOINT_RETRACTED;
+    public double extension = SETPOINT_RETRACTED_INCHES;
+    public SimpleMotorFeedforward hopperFeedforward = new SimpleMotorFeedforward(HopperConstants.kS, HopperConstants.kV);
   }
   public final class IntakeConstants {
     
