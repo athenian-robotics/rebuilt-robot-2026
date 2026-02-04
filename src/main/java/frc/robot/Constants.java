@@ -80,12 +80,15 @@ public class Constants {
     public final static int SPARK_ID = 0;
     
 
-    public final static int WINCH_GEARBOX_GEAR_RATIO = 10;
+    public final static int MOTOR_ROTATIONS = 10; //gearbox ratio is 10:1, every 10 motor rotations is one winch rotation
+    public final static int WINCH_ROTATIONS = 1;
     public final static double WINCH_DIAMETER_INCHES = 0.75;
 
     public final static double SETPOINT_RETRACTED_INCHES = 0;
     public final static double SETPOINT_PARTIALLY_EXTENDED_INCHES = 4;
     public final static double SETPOINT_EXTENDED_INCHES = 11.425;
+
+    public final static double HOPPER_VELOCITY_INCHESPERSECOND = 5; //TODO tune ts lowkey
 
     public final static double kS = 0;
     public final static double kV = 0;
