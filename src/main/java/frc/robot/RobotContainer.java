@@ -32,6 +32,9 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.vision.VisionIOLimelight;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -43,6 +46,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // -- Subsystems --
   private final Drive drive;
+  private final Vision vision;
 
   // -- Controllers --
   private final CommandJoystick driveJoystick =
@@ -60,8 +64,10 @@ public class RobotContainer {
     switch (RuntimeConstants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
+        vision = new Vision(new VisionIOLimelight());
         drive =
             new Drive(
+                vision,
                 new GyroIOPigeon2(),
                 new ModuleIOTalonFX(TunerConstants.FrontLeft),
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
@@ -71,8 +77,10 @@ public class RobotContainer {
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
+        vision = new Vision(new VisionIO() {});
         drive =
             new Drive(
+                vision,
                 new GyroIO() {},
                 new ModuleIOSim(TunerConstants.FrontLeft),
                 new ModuleIOSim(TunerConstants.FrontRight),
@@ -82,8 +90,10 @@ public class RobotContainer {
 
       default:
         // Replayed robot, disable IO implementations
+        vision = new Vision(new VisionIO() {});
         drive =
             new Drive(
+                vision,
                 new GyroIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {},
