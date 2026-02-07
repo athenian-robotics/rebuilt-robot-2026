@@ -78,23 +78,25 @@ public class Constants {
 
   public final class HopperConstants {
     public final static int SPARK_ID = 0;
-    
 
-    public final static int MOTOR_ROTATIONS = 10; //gearbox ratio is 10:1, every 10 motor rotations is one winch rotation
-    public final static int WINCH_ROTATIONS = 1;
-    public final static double WINCH_DIAMETER_INCHES = 0.75;
+    public final static double HOPPER_RETRACTED = 0;
+    public final static double HOPPER_PARTIAL = 4;
+    public final static double HOPPER_FULL = 11.425;
+   
+  
+//feedback constants
+    public final static double HOPPER_kP = 0;
+    public final static double HOPPER_kI = 0;
+    public final static double HOPPER_kD = 0;
+//feedforward constants
+    public final static double HOPPER_kS = 0;
+    public final static double HOPPER_kV = 0;
+    public final static double HOPPER_kA = 0;
+//motion profiler constants
+    public final static double HOPPER_CRUISE_VELOCITY = 0;
+    public final static double HOPPER_MAX_ACCELERATION = 0;
+    public final static double HOPPER_MAX_ALLOWED_PROFILER_ERROR = 0;
 
-    public final static double SETPOINT_RETRACTED_INCHES = 0;
-    public final static double SETPOINT_PARTIALLY_EXTENDED_INCHES = 4;
-    public final static double SETPOINT_EXTENDED_INCHES = 11.425;
-
-    public final static double HOPPER_VELOCITY_INCHESPERSECOND = 5; //TODO tune ts lowkey
-
-    public final static double kS = 0;
-    public final static double kV = 0;
-
-    public double extension = SETPOINT_RETRACTED_INCHES;
-    public SimpleMotorFeedforward hopperFeedforward = new SimpleMotorFeedforward(HopperConstants.kS, HopperConstants.kV);
   }
   public final class IntakeConstants {
     

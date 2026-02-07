@@ -15,10 +15,7 @@ public interface HopperIO {
     }
     /** Update the set of loggable inputs */
     public void updateInputs(HopperIOInputs inputs);
-   // public void hopperMotorSpeed(AngularVelocity velocity);
-    public void moveToLength(double length_inches);
-    public double velocityToVoltage(double velocity);
-    
+    public void goToPosition(double position);
     
 
     
