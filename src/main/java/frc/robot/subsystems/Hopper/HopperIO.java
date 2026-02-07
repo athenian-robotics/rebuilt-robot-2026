@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Hopper;
+package frc.robot.subsystems.hopper;
 
 import org.littletonrobotics.junction.AutoLog;
 
@@ -17,7 +17,10 @@ public interface HopperIO {
     }
     /** Update the set of loggable inputs */
     public void updateInputs(HopperIOInputs inputs);
-  
+    /**
+     * Goes the hopper to position 
+     * @param position in inches
+     */
     public void goToPosition(double position);
     
 
