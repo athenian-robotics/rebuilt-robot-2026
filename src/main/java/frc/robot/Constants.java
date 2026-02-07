@@ -134,4 +134,26 @@ public class Constants {
     public static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
     public static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
   }
+    
+  public final class IntakeConstants {
+  public final static int TALON_ID = 0;
+
+    public final static double INTAKE_WINCH_GEAR_RATIO = 10;
+    public final static double INTAKE_WINCH_CIRCUMFRENCE = 0.75 * Math.PI;
+   
+  
+//feedback constants
+    public final static double INTAKE_kP = 0;
+    public final static double INTAKE_kI = 0;
+    public final static double INTAKE_kD = 0;
+//feedforward constants
+    public final static double INTAKE_kS = 0;
+    public final static double INTAKE_kV = 0;
+    public final static double INTAKE_kA = 0;
+//motion profiler constants
+    public final static double INTAKE_CRUISE_VELOCITY = 0;
+    public final static double INTAKE_MAX_ACCELERATION = 0;
+    public final static double INTAKE_MAX_ALLOWED_PROFILER_ERROR = 0;
+
+  }
 }
