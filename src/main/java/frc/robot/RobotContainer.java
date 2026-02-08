@@ -17,10 +17,12 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.RuntimeConstants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.HopperIntakeCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -45,8 +47,8 @@ public class RobotContainer {
   // -- Subsystems --
   private final Drive drive;
   private final Vision vision;
-  private final Hopper hopper;
-  private final Intake intake;
+  private  Hopper hopper;
+  private  Intake intake;
 
   // -- Controllers --
   private final CommandJoystick driveJoystick =
@@ -132,6 +134,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureJoystickBindings() {
+    
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
@@ -139,6 +142,17 @@ public class RobotContainer {
             () -> -driveJoystick.getY(),
             () -> -driveJoystick.getX(),
             () -> -steerJoystick.getX()));
+    hopper.setDefaultCommand(
+      Commands.run(() -> {
+        if (driveJoystick.button(1).getAsBoolean()) {
+          HopperIntakeCommands.startingExtension(hopper, intake);
+        }else if(driveJoystick.button(2).getAsBoolean()){
+          HopperIntakeCommands.hopperRetract(hopper, intake);
+        }else(driveJoystick.button(3).getAsBoolean()){
+          HopperIntakeCommands.hopperExtend(hopper, intake);
+        }
+      }, hopper)
+    );
 
     // This allows for heading-based drive
     // drive.setDefaultCommand(
