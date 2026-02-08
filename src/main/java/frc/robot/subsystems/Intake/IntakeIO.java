@@ -1,3 +1,5 @@
+package frc.robot.subsystems.intake;
+
 import frc.robot.Constants.IntakeConstants;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -12,6 +14,5 @@ public interface IntakeIO {
   }
 
   public void updateInputs(IntakeIOInputs inputs);
-
   public void goToPosition(double rotations);
 }

@@ -142,6 +142,9 @@ public class Constants {
     public static final double INTAKE_FIRST_PULLEY_TO_SECOND_PULLEY_RATIO = 15 / 36;
     public static final double GEAR_ROTATIONS_TO_ARM_ROTATIONS =
         INTAKE_FIRST_PULLEY_TO_SECOND_PULLEY_RATIO / INTAKE_MOTOR_TO_FIRST_PULLEY_RATIO;
+    public static final double FULL_RETRACTION_DEGREES = 0;
+    public static final double FULL_EXTENSION_DEGREES = 120;
+    public static final double MAX_WIGGLE_DEGREES = 75;
 
     // feedback constants
     public static final double INTAKE_kP = 0;
