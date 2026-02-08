@@ -45,8 +45,8 @@ public class RobotContainer {
   // -- Subsystems --
   private final Drive drive;
   private final Vision vision;
-  private final Hopper hopper;
-  private final Intake intake;
+  private  Hopper hopper;
+  private  Intake intake;
 
   // -- Controllers --
   private final CommandJoystick driveJoystick =
