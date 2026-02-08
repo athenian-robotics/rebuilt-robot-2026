@@ -1,8 +1,6 @@
 package frc.robot;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
-
-import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.RobotBase;
 
 public class Constants {
@@ -63,7 +61,7 @@ public class Constants {
   }
 
   public final class DrivetrainConstants {
-    public static final LinearVelocity MAX_LINEAR_VELOCITY = MetersPerSecond.of(1);
+    public static final double MAX_LINEAR_VELOCITY = 1;
   }
 
   public final class DriveCommandsConstants {
@@ -76,5 +74,38 @@ public class Constants {
     public static final double FF_RAMP_RATE = 0.1; // Volts/Sec
     public static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
     public static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
+  }
+
+  public final class HopperConstants {
+    public final static int SPARK_ID = 0;
+
+    public final static double HOPPER_RETRACTED = 0;
+    public final static double HOPPER_PARTIAL = 4;
+    public final static double HOPPER_FULL = 11.425;
+
+    public final static double HOPPER_WINCH_GEAR_RATIO = 10;
+    public final static double HOPPER_WINCH_CIRCUMFRENCE = 0.75 * Math.PI;
+    public final static double HOPPER_POSITION_TO_ANGLE_CONVERSION = HOPPER_WINCH_GEAR_RATIO / HOPPER_WINCH_CIRCUMFRENCE;
+   
+  
+//feedback constants
+    public final static double HOPPER_kP = 0;
+    public final static double HOPPER_kI = 0;
+    public final static double HOPPER_kD = 0;
+//feedforward constants
+    public final static double HOPPER_kS = 0;
+    public final static double HOPPER_kV = 0;
+    public final static double HOPPER_kA = 0;
+//motion profiler constants
+    public final static double HOPPER_CRUISE_VELOCITY = 0;
+    public final static double HOPPER_MAX_ACCELERATION = 0;
+    public final static double HOPPER_MAX_ALLOWED_PROFILER_ERROR = 0;
+
+  }
+  public final class IntakeConstants {
+    
+    public final static double kS = 0;
+    public final static double kV = 0;
+
   }
 }
