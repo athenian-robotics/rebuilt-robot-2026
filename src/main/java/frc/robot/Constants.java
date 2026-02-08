@@ -1,9 +1,14 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -66,7 +71,59 @@ public class Constants {
   }
 
   public final class DrivetrainConstants {
-    public static final LinearVelocity MAX_LINEAR_VELOCITY = MetersPerSecond.of(1);
+    public static final double MAX_LINEAR_VELOCITY = 1;
+  }
+
+  public static final class LimelightConstants {
+    /** NetworkTables name configured on the camera. */
+    public static final String CAMERA_NAME = "limelight";
+
+    /**
+     * Transform from the robot origin (center of rotation on the floor) to the camera pose. The
+     * numbers below assume the camera sits 8 in forward, 0 in left/right, and 26 in above the floor
+     * with a slight upward tilt; update once final mounting values are known.
+     */
+    public static final Transform3d ROBOT_TO_CAMERA =
+        new Transform3d(
+            new Translation3d(Inches.of(11.5), Inches.of(0.0), Inches.of(7.5)),
+            new Rotation3d(0.0, Units.degreesToRadians(20.0), 0.0));
+    // TODO: update to the final measured translation/rotation from robot origin to camera.
+
+    /** Maximum pose ambiguity reported by Limelight to accept a measurement. */
+    public static final double MAX_POSE_AMBIGUITY =
+        0.2; // Lower value rejects noisy solves, raise if too many drops occur.
+    /** Minimum number of tags contributing to the solve to accept a pose. */
+    public static final int MIN_TAG_COUNT = 1; // Set to 2+ if single-tag jitter is problematic.
+
+    /**
+     * Baseline standard deviations (meters) for measurements that only use a single tag. Multi-tag
+     * solves will scale these values down dynamically.
+     */
+    public static final double SINGLE_TAG_XY_STDDEV =
+        0.45; // Reduce if the camera is steady on good tags.
+
+    public static final double SINGLE_TAG_THETA_STDDEV =
+        Units.degreesToRadians(7.5); // Adjust if heading noise is smaller/bigger.
+    /** Floor for the best possible standard deviation. */
+    public static final double MIN_XY_STDDEV = 0.05; // Safety floor for downstream pose estimators.
+
+    public static final double MIN_THETA_STDDEV =
+        Units.degreesToRadians(2.0); // Prevent unrealistically low heading noise.
+
+    /** Distance where we start to inflate std devs significantly (meters). */
+    public static final double DISTANCE_TRUST_FALLOFF_METERS =
+        4.5; // Tune to how vision accuracy drops off with range.
+
+    /** Maximum allowed pose translation error between vision and odometry before rejecting data. */
+    public static final double MAX_TRANSLATION_ERROR_METERS = 2.0;
+
+    /**
+     * Maximum allowed rotation error (radians) between vision and odometry before rejecting data.
+     */
+    public static final double MAX_ROTATION_ERROR_RADIANS = Units.degreesToRadians(30.0);
+
+    /** The maximum time before an observation is no longer considered fresh (seconds). */
+    public static final double FRESH_OBSERVATION_THRESHOLD = 0.5;
   }
 
   public final class DriveCommandsConstants {
@@ -116,5 +173,56 @@ public class Constants {
     public static final double GRAVITATIONAL_CONSTANT_MPS2 = 9.8;
     public static final double HUB_HEIGHT_FEET = 6.0;
     public static final double LAUNCH_HEIGHT_FEET = 2.5;
+  }
+
+  public final class IntakeConstants {
+    public static final int TALON_ID = 0;
+
+    public static final double INTAKE_MOTOR_TO_FIRST_PULLEY_RATIO = 60;
+    public static final double INTAKE_FIRST_PULLEY_TO_SECOND_PULLEY_RATIO = 15 / 36;
+    public static final double GEAR_ROTATIONS_TO_ARM_ROTATIONS =
+        INTAKE_FIRST_PULLEY_TO_SECOND_PULLEY_RATIO / INTAKE_MOTOR_TO_FIRST_PULLEY_RATIO;
+    public static final double FULL_RETRACTION_DEGREES = 0;
+    public static final double FULL_EXTENSION_DEGREES = 120;
+    public static final double MAX_WIGGLE_DEGREES = 75;
+
+    // feedback constants
+    public static final double INTAKE_kP = 0;
+    public static final double INTAKE_kI = 0;
+    public static final double INTAKE_kD = 0;
+    // feedforward constants
+    public static final double INTAKE_kS = 0;
+    public static final double INTAKE_kV = 0;
+    public static final double INTAKE_kA = 0;
+    // motion profiler constants
+    public static final double INTAKE_CRUISE_VELOCITY = 0;
+    public static final double INTAKE_MAX_ACCELERATION = 0;
+    public static final double INTAKE_MAX_ALLOWED_PROFILER_ERROR = 0;
+  }
+
+  public final class HopperConstants {
+    public final static int SPARK_ID = 0;
+
+    public final static double HOPPER_RETRACTED = 0;
+    public final static double HOPPER_PARTIAL = 4;
+    public final static double HOPPER_FULL = 11.425;
+
+    public final static double HOPPER_WINCH_GEAR_RATIO = 10;
+    public final static double HOPPER_WINCH_CIRCUMFRENCE = 0.75 * Math.PI;
+    public final static double HOPPER_POSITION_TO_ANGLE_CONVERSION = HOPPER_WINCH_GEAR_RATIO / HOPPER_WINCH_CIRCUMFRENCE;
+   
+  
+//feedback constants
+    public final static double HOPPER_kP = 0;
+    public final static double HOPPER_kI = 0;
+    public final static double HOPPER_kD = 0;
+//feedforward constants
+    public final static double HOPPER_kS = 0;
+    public final static double HOPPER_kV = 0;
+    public final static double HOPPER_kA = 0;
+//motion profiler constants
+    public final static double HOPPER_CRUISE_VELOCITY = 0;
+    public final static double HOPPER_MAX_ACCELERATION = 0;
+    public final static double HOPPER_MAX_ALLOWED_PROFILER_ERROR = 0;
   }
 }
