@@ -158,6 +158,7 @@ public class Constants {
     public static final double INTAKE_CRUISE_VELOCITY = 0;
     public static final double INTAKE_MAX_ACCELERATION = 0;
     public static final double INTAKE_MAX_ALLOWED_PROFILER_ERROR = 0;
+  }
   public final class HopperConstants {
     public final static int SPARK_ID = 0;
 
@@ -184,10 +185,5 @@ public class Constants {
     public final static double HOPPER_MAX_ALLOWED_PROFILER_ERROR = 0;
 
   }
-  public final class IntakeConstants {
-    
-    public final static double kS = 0;
-    public final static double kV = 0;
-
-  }
+  
 }
