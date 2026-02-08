@@ -176,9 +176,7 @@ public class RobotContainer {
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     operatorJoystick.button(ControllerConstants.PLACEHOLDER).onTrue(
-      indexer.runIndexer(indexer.getIndexerIO().getVoltage().equals(Voltage.ofBaseUnits(0, Volt))
-      ? IndexerConstants.MOTOR_VOLTAGE
-      : Voltage.ofBaseUnits(0, Volt)));
+      indexer.toggle());
 
     // Reset gyro to 0° when the drive joystick's trigger is pressed
     driveJoystick.button(ControllerConstants.TRIGGER).onTrue(

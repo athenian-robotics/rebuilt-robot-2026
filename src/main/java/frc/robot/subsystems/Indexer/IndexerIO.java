@@ -10,14 +10,15 @@ public interface IndexerIO {
 
     @AutoLog
     public static class IndexerIOInputs {
-        public Voltage appliedVoltage = Volts.of(0);
+        public double appliedVoltage = 0;
     }
     
     // Updates the logged inputs
     public default void updateInputs (IndexerIOInputs inputs) {}
 
     // Runs the indexer at the specified voltage
-    public default void setVoltage (Voltage voltage) {}
+    public default void setVoltage (double voltage) {}
 
-    public default Voltage getVoltage() {return null;}
+    /** Toggles the indexer between on and off */
+    public default void toggle () {};
 }

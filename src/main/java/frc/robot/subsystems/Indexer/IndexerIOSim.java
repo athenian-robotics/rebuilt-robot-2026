@@ -2,10 +2,13 @@ package frc.robot.subsystems.Indexer;
 
 import static edu.wpi.first.units.Units.Volts;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.units.measure.Voltage;
+import frc.robot.Constants.IndexerConstants;
 
 public class IndexerIOSim implements IndexerIO {
-    private Voltage appliedVoltage = Volts.of(0);
+    private double appliedVoltage = 0;
 
     @Override
     public void updateInputs(IndexerIOInputs inputs) {
@@ -13,8 +16,16 @@ public class IndexerIOSim implements IndexerIO {
     }
 
     @Override
-    public void setVoltage(Voltage voltage) {
+    public void setVoltage(double voltage) {
+        Logger.recordOutput("Indexer/Voltage", voltage);
         appliedVoltage = voltage;
+    }
+
+    @Override
+    public void toggle() {
+        double targetVoltage = appliedVoltage == 0 ? IndexerConstants.MOTOR_VOLTAGE : 0; 
+        Logger.recordOutput("Indexer/Voltage", targetVoltage);
+        appliedVoltage = targetVoltage;
     }
     
 }

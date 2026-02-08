@@ -23,12 +23,14 @@ public class Indexer extends SubsystemBase {
 
     /**
      * Run the indexer with a specified voltage.
-     * @param voltage The voltage at which to run the indexer
+     * @param voltage The voltage at which to run the indexer in volts
      * @return The command
      */
-    public Command runIndexer(Voltage voltage) {
+    public Command runIndexer(double voltage) {
         return new InstantCommand(() -> io.setVoltage(voltage), this);
     }
 
-    public IndexerIO getIndexerIO() {return io;}
+    public Command toggle () {
+        return new InstantCommand(() -> io.toggle(), this);
+    }
 }

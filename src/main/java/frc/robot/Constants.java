@@ -192,6 +192,6 @@ public class Constants {
 
   public final class IndexerConstants {
     public static final int MOTOR_ID = 1;
-    public static final Voltage MOTOR_VOLTAGE = Voltage.ofBaseUnits(3, Volt);
+    public static final double MOTOR_VOLTAGE = 3;
   }
 }

@@ -2,6 +2,8 @@ package frc.robot.subsystems.Indexer;
 
 import static edu.wpi.first.units.Units.Volts;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -10,7 +12,7 @@ import frc.robot.Constants.IndexerConstants;
 
 public class IndexerIOTalonFX implements IndexerIO {
     private final TalonFX motor;
-    private Voltage appliedVoltage = Volts.of(0);
+    private double appliedVoltage = 0;
 
     public IndexerIOTalonFX() {
         motor = new TalonFX(IndexerConstants.MOTOR_ID);
@@ -22,13 +24,17 @@ public class IndexerIOTalonFX implements IndexerIO {
     }
 
     @Override
-    public void setVoltage(Voltage voltage) {
+    public void setVoltage(double voltage) {
+        Logger.recordOutput("Indexer/Voltage", voltage);
         appliedVoltage = voltage;
         motor.setControl(new VoltageOut(voltage));
     }
-    
+
     @Override
-    public Voltage getVoltage() {
-        return appliedVoltage;
+    public void toggle() {
+        double targetVoltage = appliedVoltage == 0 ? IndexerConstants.MOTOR_VOLTAGE : 0; 
+        Logger.recordOutput("Indexer/Voltage", targetVoltage);
+        appliedVoltage = targetVoltage;
+        motor.setControl(new VoltageOut(targetVoltage));
     }
 }
