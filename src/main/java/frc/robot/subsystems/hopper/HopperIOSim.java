@@ -11,11 +11,11 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import frc.robot.Constants.HopperConstants;
 
-
+// TODO fully implement class
 public class HopperIOSim implements HopperIO {
     SparkMax motor = new SparkMax(HopperConstants.SPARK_ID, MotorType.kBrushless);
     DCMotor m = DCMotor.getNeo550(1);
-    motor.getClosedLoo
+    //motor.getClosedLoo
     
     private final SparkMaxSim hopperMotor = new SparkMaxSim(motor, m);
     private final SparkClosedLoopController pidController = motor.getClosedLoopController();
@@ -25,7 +25,7 @@ public class HopperIOSim implements HopperIO {
     /** Update the set of loggable inputs */
     public void updateInputs(HopperIOInputs inputs) {
         inputs.hopperMotor_Volts =  hopperMotor.getBusVoltage();
-        hopperMotor.
+        //hopperMotor.
         
     }
     public double positionToRotations(double position){
