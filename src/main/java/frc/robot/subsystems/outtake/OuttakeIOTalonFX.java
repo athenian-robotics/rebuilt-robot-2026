@@ -38,7 +38,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   public OuttakeIOTalonFX() {
     super();
 
-    hoodAngleDegEntry = NetworkTableInstance.getDefault().getDoubleTopic("/inputs/hoodAngleDeg").getEntry(OuttakeConstants.MAXIMUM_SHOT_ANGLE_DEG);
+    hoodAngleDegEntry = NetworkTableInstance.getDefault().getDoubleTopic("/Outtake/HoodAngleDeg").getEntry(OuttakeConstants.MAXIMUM_SHOT_ANGLE_DEG);
 
     logs = new OuttakeIOInputs();
     followShooter = new TalonFX(OuttakeConstants.LEFT_SHOOTER_MOTOR);
@@ -166,13 +166,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     // TODO: check in with drive team if we should try shot next update/tick if angle is empty
     // TODO: figure out how to account for blueside/redside when integrating this with pose estimation
     calculateAngle(currentPosition, OuttakeConstants.HUB_POSITION)
-      .ifPresent(
-        (angle) -> {
-          targetShotAngleDeg = angle;
-          hoodAngleDegEntry.set(angle);
-        }
-        
-    );
+      .ifPresent(this::setAngle);
   }
 
   public void setAngle(double angleDegrees) {

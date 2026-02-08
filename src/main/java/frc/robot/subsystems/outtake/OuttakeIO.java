@@ -40,6 +40,6 @@ public interface OuttakeIO extends Subsystem {
   /** Sets the target shot angle, which the hood will constantly move towards, measured ccw+ from horiontal */
   public void setAngle(double angleDegrees);
 
-  /** Sets the target angle based on the current network table value at /inputs/hoodAngleDeg */
+  /** Sets the target angle based on the current network table value at /Outtake/HoodAngleDeg */
   public void setAngleFromNT ();
 }

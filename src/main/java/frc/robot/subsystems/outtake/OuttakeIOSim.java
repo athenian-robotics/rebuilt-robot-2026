@@ -1,5 +1,7 @@
 package frc.robot.subsystems.outtake;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Translation2d;
 
 public class OuttakeIOSim implements OuttakeIO {
@@ -12,26 +14,22 @@ public class OuttakeIOSim implements OuttakeIO {
 
     @Override
     public void startFlywheel() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'startFlywheel'");
+        Logger.recordOutput("Outtake/FlywheelVoltage", 12);
     }
 
     @Override
     public void stopFlywheel() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'stopFlywheel'");
+        Logger.recordOutput("Outtake/FlywheelVoltage", 0);
     }
 
     @Override
     public void setMiddleWheelVoltage(double voltage) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setMiddleWheelVoltage'");
+        Logger.recordOutput("Outtake/MiddleWheelVoltage", voltage);
     }
 
     @Override
     public void setStarWheelVoltage(double voltage) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setStarWheelVoltage'");
+        Logger.recordOutput("Outtake/StarWheelVoltage", voltage);
     }
 
     @Override
