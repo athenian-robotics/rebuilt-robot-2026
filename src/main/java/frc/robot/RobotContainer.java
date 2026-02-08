@@ -14,6 +14,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -133,8 +134,7 @@ public class RobotContainer {
     //         () -> driveJoystick.getY(),
     //         () -> driveJoystick.getX(),
     //         () -> new Rotation2d(-steerJoystick.getY(), -steerJoystick.getX()),
-    //         () -> steerJoystick.getMagnitude() >=
-    // Constants.ControllerConstants.HEADING_DEADZONE));
+    //         () -> steerJoystick.getMagnitude() >= Constants.ControllerConstants.HEADING_DEADZONE));
 
     // // Lock to 0° when A button is held
     // controller
