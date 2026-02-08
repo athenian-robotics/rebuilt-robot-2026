@@ -136,7 +136,8 @@ public class Constants {
   }
 
   public final class IntakeConstants {
-    public static final int TALON_ID = 0;
+    public static final int ARM_ID = 0;
+    public static final int WHEEL_ID = 0;
 
     public static final double INTAKE_MOTOR_TO_FIRST_PULLEY_RATIO = 60;
     public static final double INTAKE_FIRST_PULLEY_TO_SECOND_PULLEY_RATIO = 15 / 36;
@@ -158,6 +159,9 @@ public class Constants {
     public static final double INTAKE_CRUISE_VELOCITY = 0;
     public static final double INTAKE_MAX_ACCELERATION = 0;
     public static final double INTAKE_MAX_ALLOWED_PROFILER_ERROR = 0;
+
+    public static final double WHEEL_VOLTAGE = 7;
+  }
   public final class HopperConstants {
     public final static int SPARK_ID = 0;
 
@@ -182,12 +186,6 @@ public class Constants {
     public final static double HOPPER_CRUISE_VELOCITY = 0;
     public final static double HOPPER_MAX_ACCELERATION = 0;
     public final static double HOPPER_MAX_ALLOWED_PROFILER_ERROR = 0;
-
-  }
-  public final class IntakeConstants {
-    
-    public final static double kS = 0;
-    public final static double kV = 0;
 
   }
 }
