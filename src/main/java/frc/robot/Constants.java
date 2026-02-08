@@ -63,6 +63,8 @@ public class Constants {
     public static final int MAINHAND_BOTTOM_LEFT = 14;
     public static final int MAINHAND_BOTTOM_MIDDLE = 15;
     public static final int MAINHAND_BOTTOM_RIGHT = 16;
+
+    public static final double HEADING_DEADZONE = 0.2;
   }
 
   public final class DrivetrainConstants {
@@ -71,8 +73,7 @@ public class Constants {
 
   public static final class LimelightConstants {
     /** NetworkTables name configured on the camera. */
-    public static final String CAMERA_NAME =
-        "limelight";
+    public static final String CAMERA_NAME = "limelight";
 
     /**
      * Transform from the robot origin (center of rotation on the floor) to the camera pose. The
@@ -109,5 +110,28 @@ public class Constants {
     /** Distance where we start to inflate std devs significantly (meters). */
     public static final double DISTANCE_TRUST_FALLOFF_METERS =
         4.5; // Tune to how vision accuracy drops off with range.
+
+    /** Maximum allowed pose translation error between vision and odometry before rejecting data. */
+    public static final double MAX_TRANSLATION_ERROR_METERS = 2.0;
+
+    /**
+     * Maximum allowed rotation error (radians) between vision and odometry before rejecting data.
+     */
+    public static final double MAX_ROTATION_ERROR_RADIANS = Units.degreesToRadians(30.0);
+
+    /** The maximum time before an observation is no longer considered fresh (seconds). */
+    public static final double FRESH_OBSERVATION_THRESHOLD = 0.5;
+  }
+
+  public final class DriveCommandsConstants {
+    public static final double DEADBAND = 0.1;
+    public static final double ANGLE_KP = 20.0;
+    public static final double ANGLE_KD = 0.4;
+    public static final double ANGLE_MAX_VELOCITY = 16.0;
+    public static final double ANGLE_MAX_ACCELERATION = 20.0;
+    public static final double FF_START_DELAY = 2.0; // Secs
+    public static final double FF_RAMP_RATE = 0.1; // Volts/Sec
+    public static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
+    public static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
   }
 }
