@@ -28,6 +28,8 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.hopper.Hopper;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -43,6 +45,8 @@ public class RobotContainer {
   // -- Subsystems --
   private final Drive drive;
   private final Vision vision;
+  private final Hopper hopper;
+  private final Intake intake;
 
   // -- Controllers --
   private final CommandJoystick driveJoystick =

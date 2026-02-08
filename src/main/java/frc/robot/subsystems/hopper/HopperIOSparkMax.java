@@ -27,4 +27,7 @@ public class HopperIOSparkMax implements HopperIO {
     public void goToPosition(double position_inches){
         pidController.setSetpoint(position_inches * HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION, SparkBase.ControlType.kMAXMotionPositionControl);
     }
+    public boolean atSetpoint(){
+        return pidController.isAtSetpoint();
+    }
 }

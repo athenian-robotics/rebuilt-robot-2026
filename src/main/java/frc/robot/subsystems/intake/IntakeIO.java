@@ -15,4 +15,5 @@ public interface IntakeIO {
 
   public void updateInputs(IntakeIOInputs inputs);
   public void goToPosition(double rotations);
+  public boolean atSetpoint();
 }

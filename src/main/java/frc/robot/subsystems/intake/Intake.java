@@ -28,4 +28,7 @@ public class Intake extends SubsystemBase {
     io.goToPosition(IntakeConstants.MAX_WIGGLE_DEGREES);
      // velocity feedback loop
   }
+  public boolean atSetpoint(){
+    return io.atSetpoint();
+  }
 }

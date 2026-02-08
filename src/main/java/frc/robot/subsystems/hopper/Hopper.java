@@ -35,5 +35,8 @@ public class Hopper extends SubsystemBase {
     public void full() {
         io.goToPosition(HopperConstants.HOPPER_FULL * HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION);
     }
+    public boolean atSetpoint(){
+        return atSetpoint();
+    }
 
 }
