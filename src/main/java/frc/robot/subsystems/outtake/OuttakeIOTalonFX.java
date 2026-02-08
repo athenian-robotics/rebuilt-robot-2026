@@ -17,6 +17,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.DoubleEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.OuttakeConstants;
 
@@ -31,8 +33,13 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   private double targetHeightOffsetMeters = 0.0;
   private double targetDistanceMeters = 0.0;
 
+  private DoubleEntry hoodAngleDegEntry;
+
   public OuttakeIOTalonFX() {
     super();
+
+    hoodAngleDegEntry = NetworkTableInstance.getDefault().getDoubleTopic("/inputs/hoodAngleDeg").getEntry(OuttakeConstants.MAXIMUM_SHOT_ANGLE_DEG);
+
     logs = new OuttakeIOInputs();
     followShooter = new TalonFX(OuttakeConstants.LEFT_SHOOTER_MOTOR);
     leadShooter = new TalonFX(OuttakeConstants.RIGHT_SHOOTER_MOTOR);
@@ -72,7 +79,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
    *
    * @param currentPosition the position to aim from
    * @param targetPosition the position to aim at
-   * @return the angle required to shoot into the hub from its location as an optional double
+   * @return the angle in degrees required to shoot into the hub from its location as an optional double
    */
   public OptionalDouble calculateAngle(Translation2d currentPosition, Translation2d targetPosition) {
     // The height offset from the robot hood to the target in meters because metric is better
@@ -114,7 +121,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
       / (gravity * distance)
     );
 
-    return OptionalDouble.of(angle);
+    return OptionalDouble.of(angle / (2*Math.PI) * 360);
   }
 
   @Override
@@ -160,7 +167,11 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     // TODO: figure out how to account for blueside/redside when integrating this with pose estimation
     calculateAngle(currentPosition, OuttakeConstants.HUB_POSITION)
       .ifPresent(
-        (angle) -> targetShotAngleDeg = angle
+        (angle) -> {
+          targetShotAngleDeg = angle;
+          hoodAngleDegEntry.set(angle);
+        }
+        
     );
   }
 
@@ -170,7 +181,14 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
       System.out.println("setAngle was passed an invalid angle");
       return;
     }
+    
+    hoodAngleDegEntry.set(angleDegrees);
 
     targetShotAngleDeg = angleDegrees;
+  }
+
+  @Override
+  public void setAngleFromNT() {
+    setAngle(hoodAngleDegEntry.get());
   }
 }

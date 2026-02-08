@@ -45,5 +45,11 @@ public class OuttakeIOSim implements OuttakeIO {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setAngle'");
     }
+
+    @Override
+    public void setAngleFromNT() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setAngleFromNT'");
+    }
     
 }
