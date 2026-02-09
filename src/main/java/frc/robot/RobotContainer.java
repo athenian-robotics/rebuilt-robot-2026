@@ -148,7 +148,7 @@ public class RobotContainer {
           HopperIntakeCommands.startingExtension(hopper, intake);
         }else if(driveJoystick.button(2).getAsBoolean()){
           HopperIntakeCommands.hopperRetract(hopper, intake);
-        }else(driveJoystick.button(3).getAsBoolean()){
+        }else if(driveJoystick.button(3).getAsBoolean()){
           HopperIntakeCommands.hopperExtend(hopper, intake);
         }
       }, hopper)

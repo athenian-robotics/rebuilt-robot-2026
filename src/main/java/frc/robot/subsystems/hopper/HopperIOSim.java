@@ -1,5 +1,11 @@
 package frc.robot.subsystems.hopper;
 
+import com.revrobotics.sim.SparkMaxSim;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+
 import edu.wpi.first.math.system.plant.DCMotor;
 
 import frc.robot.Constants.HopperConstants;
