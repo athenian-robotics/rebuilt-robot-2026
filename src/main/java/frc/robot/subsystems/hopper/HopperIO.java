@@ -9,7 +9,8 @@ public interface HopperIO {
     public static class HopperIOInputs{
         public double hopperExtension_Rotations = 0;
         public double hopperExtension_Inches = (hopperExtension_Rotations  / HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION);
-        public double hopperExtensionVelocity_inchesPerSecond = 0;
+       // public double hopperExtensionVelocity_inchesPerSecond = 0;
+        public double hopperExtensionVelocity_inchesPerSecond = 2;
         public double hopperMotor_Volts = 0;
         public double hopperMotor_Amps = 0;
         public double hopperSetpoint_Inches = 0;

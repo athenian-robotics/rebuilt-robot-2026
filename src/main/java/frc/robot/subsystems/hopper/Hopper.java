@@ -9,8 +9,9 @@ public class Hopper extends SubsystemBase {
 
     private HopperIO io;
     private HopperIOInputsAutoLogged inputs = new HopperIOInputsAutoLogged();
-    public Hopper(HopperIO io){
+    public Hopper(HopperIO io, HopperIOInputsAutoLogged inputs){
         this.io = io;
+        this.inputs = inputs;
     }
     @Override
     public void periodic() {

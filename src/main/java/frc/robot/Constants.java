@@ -157,7 +157,7 @@ public class Constants {
     // motion profiler constants
     public static final double INTAKE_CRUISE_VELOCITY = 1;
     public static final double INTAKE_MAX_ACCELERATION = 1;
-    public static final double INTAKE_MAX_ALLOWED_PROFILER_ERROR = 0.1;
+    public static final double INTAKE_MAX_ALLOWED_PROFILER_ERROR = 1;
   }
   public final class HopperConstants {
     public final static int SPARK_ID = 0;
@@ -182,7 +182,7 @@ public class Constants {
 //motion profiler constants
     public final static double HOPPER_CRUISE_VELOCITY = 1;
     public final static double HOPPER_MAX_ACCELERATION = 1;
-    public final static double HOPPER_MAX_ALLOWED_PROFILER_ERROR = 0.1;
+    public final static double HOPPER_MAX_ALLOWED_PROFILER_ERROR = 1;
 
   }
  
