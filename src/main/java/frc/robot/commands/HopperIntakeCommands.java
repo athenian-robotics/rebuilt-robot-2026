@@ -6,20 +6,17 @@ import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.intake.Intake;
 
 public class HopperIntakeCommands{
-    public Command startingExtension(Hopper hopper, Intake intake){
-        return Commands.runOnce(hopper::partial)
+    public static Command startingExtension(Hopper hopper, Intake intake){
+        return Commands.runOnce(hopper::partial, hopper, intake)
         .andThen(Commands.waitUntil(hopper::atSetpoint))
         .andThen(Commands.runOnce(hopper::full).alongWith(Commands.runOnce(intake::fullyExtend)));
     }
-   public Command hopperRetract(Hopper hopper, Intake intake){
-        return Commands.runOnce(intake::fullyExtend).andThen(Commands.waitUntil(intake::atSetpoint)
+   public static Command hopperRetract(Hopper hopper, Intake intake){
+        return Commands.runOnce(intake::fullyExtend, hopper, intake).andThen(Commands.waitUntil(intake::atSetpoint)
         .andThen(Commands.runOnce(hopper::retract)));
    }
-   public Command hopperExtend(Hopper hopper, Intake intake){
-        return Commands.runOnce(intake::fullyExtend).andThen(Commands.waitUntil(intake::atSetpoint)
+   public static Command hopperExtend(Hopper hopper, Intake intake){
+        return Commands.runOnce(intake::fullyExtend, hopper, intake).andThen(Commands.waitUntil(intake::atSetpoint)
         .andThen(Commands.runOnce(hopper::full)));
    }
-  
-
-    
 }
