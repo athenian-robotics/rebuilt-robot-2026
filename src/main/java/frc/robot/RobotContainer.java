@@ -31,7 +31,10 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.hopper.Hopper;
+import frc.robot.subsystems.hopper.HopperIO;
+import frc.robot.subsystems.hopper.HopperIOSparkMax;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -75,6 +78,8 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
+        hopper = new Hopper(new HopperIOSparkMax());
+        intake = new Intake(new IntakeIOTalonFX());
         break;
 
       case SIM:
@@ -88,6 +93,8 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
+        hopper = new Hopper(new HopperIOSparkMax());
+        intake = new Intake(new IntakeIOTalonFX());
         break;
 
       default:
@@ -142,17 +149,21 @@ public class RobotContainer {
             () -> -driveJoystick.getY(),
             () -> -driveJoystick.getX(),
             () -> -steerJoystick.getX()));
-    hopper.setDefaultCommand(
-      Commands.run(() -> {
-        if (driveJoystick.button(1).getAsBoolean()) {
-          HopperIntakeCommands.startingExtension(hopper, intake);
-        }else if(driveJoystick.button(2).getAsBoolean()){
-          HopperIntakeCommands.hopperRetract(hopper, intake);
-        }else if(driveJoystick.button(3).getAsBoolean()){
-          HopperIntakeCommands.hopperExtend(hopper, intake);
-        }
-      }, hopper)
-    );
+    // hopper.setDefaultCommand(
+    //   Commands.run(() -> {
+    //     if (driveJoystick.button(1).getAsBoolean()) {
+    //       HopperIntakeCommands.startingExtension(hopper, intake);
+    //     }else if(driveJoystick.button(2).getAsBoolean()){
+    //       HopperIntakeCommands.hopperRetract(hopper, intake);
+    //     }else if(driveJoystick.button(3).getAsBoolean()){
+    //       HopperIntakeCommands.hopperExtend(hopper, intake);
+    //     }
+    //   }, hopper)
+    // );
+      hopper.setDefaultCommand(HopperIntakeCommands.startingExtension(hopper, intake));
+
+
+  
 
     // This allows for heading-based drive
     // drive.setDefaultCommand(

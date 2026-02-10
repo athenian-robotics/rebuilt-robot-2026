@@ -34,5 +34,10 @@ public class HopperIOSim implements HopperIO {
     public void goToPosition(double position_inches){
         pidController.setSetpoint(positionToRotations(position_inches), SparkBase.ControlType.kMAXMotionPositionControl);
     }
+
+    @Override
+    public boolean atSetpoint() {
+        return pidController.isAtSetpoint();
+    }
    
 }

@@ -13,20 +13,25 @@ public class HopperIOSparkMax implements HopperIO {
     private final SparkClosedLoopController pidController = hopperMotor.getClosedLoopController();
     private final RelativeEncoder hopperEncoder = hopperMotor.getEncoder();
     
-    
+
     /** Update the set of loggable inputs */
     @Override
     public void updateInputs(HopperIOInputs inputs) {
+        System.out.println("fuckass robot");
         inputs.hopperMotor_Volts =  hopperMotor.getBusVoltage();
         inputs.hopperMotor_Amps = hopperMotor.getOutputCurrent();
         inputs.hopperExtension_Rotations = hopperEncoder.getPosition();
         inputs.hopperExtension_Inches = inputs.hopperExtension_Rotations / HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION;
+        inputs.hopperSetpoint_Inches = pidController.getSetpoint();
     }
    
     @Override
     public void goToPosition(double position_inches){
-        pidController.setSetpoint(position_inches * HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION, SparkBase.ControlType.kMAXMotionPositionControl);
+      //  pidController.setSetpoint(position_inches * HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION, SparkBase.ControlType.kMAXMotionPositionControl);
+      hopperMotor.set(0.4);
     }
+
+    @Override
     public boolean atSetpoint(){
         return pidController.isAtSetpoint();
     }

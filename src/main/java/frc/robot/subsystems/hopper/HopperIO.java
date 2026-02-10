@@ -12,6 +12,7 @@ public interface HopperIO {
         public double hopperExtensionVelocity_inchesPerSecond = 0;
         public double hopperMotor_Volts = 0;
         public double hopperMotor_Amps = 0;
+        public double hopperSetpoint_Inches = 0;
         //public double hopperFeedforward = new SimpleMotorFeedforward(HopperConstants.kS, HopperConstants.kV);
         
     }
@@ -23,7 +24,7 @@ public interface HopperIO {
      */
     public void goToPosition(double position);
     
-
+    public boolean atSetpoint();
     
 
         
