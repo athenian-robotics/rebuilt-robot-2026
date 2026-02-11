@@ -39,5 +39,10 @@ public class HopperIOSim implements HopperIO {
     public boolean atSetpoint() {
         return pidController.isAtSetpoint();
     }
+    @Override
+    public double getGoal() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getGoal'");
+    }
    
 }

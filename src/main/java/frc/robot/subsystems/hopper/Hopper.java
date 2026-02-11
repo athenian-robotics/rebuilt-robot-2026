@@ -6,17 +6,21 @@ import frc.robot.Constants.HopperConstants;
 import org.littletonrobotics.junction.Logger;
 
 public class Hopper extends SubsystemBase {
-
     private HopperIO io;
     private HopperIOInputsAutoLogged inputs = new HopperIOInputsAutoLogged();
-    public Hopper(HopperIO io, HopperIOInputsAutoLogged inputs){
+
+    private double setpoint = 0;
+
+    public Hopper(HopperIO io){
         this.io = io;
-        this.inputs = inputs;
+    
     }
     @Override
     public void periodic() {
+        double target = io.getGoal();
         io.updateInputs(inputs);
         Logger.processInputs("Hopper", inputs);
+        io.goToPosition(target);
     }
 
     /**
@@ -33,7 +37,8 @@ public class Hopper extends SubsystemBase {
      */
     public void partial() {
         System.out.println("good god");
-        io.goToPosition(HopperConstants.HOPPER_PARTIAL * HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION);
+        setpoint = HopperConstants.HOPPER_PARTIAL * HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION;
+        //io.goToPosition();
     }
     /**
      * Moves the hopper to max extension of {@value HopperConstants#HOPPER_FULL}

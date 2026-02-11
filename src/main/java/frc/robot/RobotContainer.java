@@ -17,11 +17,10 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.RuntimeConstants;
-import frc.robot.commands.DriveCommands;
+import frc.robot.commands.DriveCommands;  
 import frc.robot.commands.HopperIntakeCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
@@ -31,8 +30,6 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.hopper.Hopper;
-import frc.robot.subsystems.hopper.HopperIO;
-import frc.robot.subsystems.hopper.HopperIOInputsAutoLogged;
 import frc.robot.subsystems.hopper.HopperIOSparkMax;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIOTalonFX;
@@ -79,7 +76,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        hopper = new Hopper(new HopperIOSparkMax(), new HopperIOInputsAutoLogged());
+        hopper = new Hopper(new HopperIOSparkMax());
         intake = new Intake(new IntakeIOTalonFX());
         break;
 
@@ -94,7 +91,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
-        hopper = new Hopper(new HopperIOSparkMax(), new HopperIOInputsAutoLogged());
+        hopper = new Hopper(new HopperIOSparkMax());
         intake = new Intake(new IntakeIOTalonFX());
         break;
 
@@ -161,8 +158,8 @@ public class RobotContainer {
     //     }
     //   }, hopper)
     // );
-      hopper.setDefaultCommand(HopperIntakeCommands.startingExtension(hopper, intake));
-
+      // hopper.setDefaultCommand(HopperIntakeCommands.startingExtension(hopper, intake));
+      driveJoystick.button(1).onTrue(HopperIntakeCommands.fuck(hopper));
 
   
 
