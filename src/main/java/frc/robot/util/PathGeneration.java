@@ -1,7 +1,10 @@
 package frc.robot.util;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -58,6 +61,54 @@ public class PathGeneration {
   public Command pathfindTo(Pose2d targetPose, PathConstraints constraints) {
     // 0.0 is the goal end velocity (stop at the end)
     return AutoBuilder.pathfindToPose(targetPose, constraints, 0.0);
+  }
+
+  /**
+   * Generates a command to pathfind to a specific known location.
+   *
+   * @param location The target location of interest.
+   * @return The pathfinding command.
+   */
+  public Command pathfindToSimple(Location location, double endVelocity_MPS) {
+    return pathfindToSimple(location.getPose(), PathGenerationConstants.DEFAULT_CONSTRAINTS, endVelocity_MPS);
+  }
+
+  /**
+   * Generates a command to pathfind to a specific known location with custom constraints.
+   *
+   * @param location The target location of interest.
+   * @param constraints The path constraints to use.
+   * @return The pathfinding command.
+   */
+  public Command pathfindToSimple(Location location, PathConstraints constraints, double endVelocity_MPS) {
+    return pathfindToSimple(location.getPose(), constraints, endVelocity_MPS);
+  }
+
+  /**
+   * Generates a command to pathfind to an arbitrary pose.
+   *
+   * @param targetPose The target pose on the field.
+   * @return The pathfinding command using default constraints.
+   */
+  public Command pathfindToSimple(Pose2d targetPose) {
+    return pathfindToSimple(targetPose, PathGenerationConstants.DEFAULT_CONSTRAINTS, 0);
+  }
+
+  /**
+   * Generates a command to pathfind to an arbitrary pose with custom constraints.
+   *
+   * @param targetPose The target pose on the field.
+   * @param constraints The path constraints to use.
+   * @return The pathfinding command.
+   */
+  public Command pathfindToSimple(Pose2d targetPose, PathConstraints constraints, double endVelocity_MPS) {
+    // 0.0 is the goal end velocity (stop at the end)
+    return AutoBuilder.followPath(new PathPlannerPath(
+      PathPlannerPath.waypointsFromPoses(
+        new Pose2d(AutoBuilder.getCurrentPose().getTranslation(), targetPose.getTranslation().minus(AutoBuilder.getCurrentPose().getTranslation()).getAngle()),
+        new Pose2d(targetPose.getTranslation(), targetPose.getTranslation().minus(AutoBuilder.getCurrentPose().getTranslation()).getAngle())
+      ), constraints, null, new GoalEndState(endVelocity_MPS, targetPose.getRotation()))
+    );
   }
 
   /**

@@ -196,6 +196,11 @@ public class RobotContainer {
     driveJoystick
         .button(ControllerConstants.TRIGGER)
         .onTrue(pathGeneration.pathfindTo(new Pose2d()));
+
+    //Might work better
+    driveJoystick
+        .button(ControllerConstants.THUMB_BUTTON_RIGHT)
+        .onTrue(pathGeneration.pathfindToSimple(new Pose2d()));
   }
 
   /**
