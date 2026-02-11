@@ -172,17 +172,17 @@ public class Constants {
    
   
 //feedback constants
-    public final static double HOPPER_kP = 1;
-    public final static double HOPPER_kI = 1;
-    public final static double HOPPER_kD = 1;
+    public final static double HOPPER_kP = 0.3;
+    public final static double HOPPER_kI = 0.5;
+    public final static double HOPPER_kD = 0.1;
 //feedforward constants
-    public final static double HOPPER_kS = 1;
-    public final static double HOPPER_kV = 1;
-    public final static double HOPPER_kA = 1;
+    public final static double HOPPER_kS = .1;
+    public final static double HOPPER_kV = 0.5;
+    public final static double HOPPER_kA = 0.8;
 //motion profiler constants
     public final static double HOPPER_CRUISE_VELOCITY = 1;
     public final static double HOPPER_MAX_ACCELERATION = 1;
-    public final static double HOPPER_MAX_ALLOWED_PROFILER_ERROR = 1;
+    public final static double HOPPER_MAX_ALLOWED_PROFILER_ERROR = 0.001;
 
   }
  

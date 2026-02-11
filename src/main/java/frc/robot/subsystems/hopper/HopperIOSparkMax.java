@@ -18,8 +18,6 @@ public class HopperIOSparkMax implements HopperIO {
     private final SparkClosedLoopController pidController = hopperMotor.getClosedLoopController();
     private final RelativeEncoder hopperEncoder = hopperMotor.getEncoder();
 
-    private double setpoint = 0;
-
     public HopperIOSparkMax() {
         SparkMaxConfig cfg = new SparkMaxConfig();
 
@@ -52,14 +50,16 @@ public class HopperIOSparkMax implements HopperIO {
         inputs.hopperExtension_Rotations = hopperEncoder.getPosition();
         inputs.hopperExtension_Inches = inputs.hopperExtension_Rotations / HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION;
         inputs.hopperSetpoint_Inches = pidController.getSetpoint()/HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION;
+        inputs.hopperMAXMotionSetpoint_Inches = pidController.getMAXMotionSetpointPosition();
+        inputs.motorTemp = hopperMotor.getMotorTemperature();
         
     }
    
     @Override
     public void goToPosition(double position_inches){
-        setpoint = position_inches;
-        // System.out.println("fuckass robot");
+        System.out.println("fuckass robot");
         // pidController.setSetpoint(position_inches * HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION, SparkBase.ControlType.kMAXMotionPositionControl);
+        pidController.setSetpoint(position_inches, SparkBase.ControlType.kMAXMotionPositionControl);
         //  var err = pidController.setSetpoint(position_inches, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
         // System.out.println("STATUS".concat(err.toString()));
     }
@@ -70,5 +70,8 @@ public class HopperIOSparkMax implements HopperIO {
     }
     public double getGoal(){
         return pidController.getSetpoint();
+    }
+    public void setVoltage(){
+        this.setVoltage();
     }
 }

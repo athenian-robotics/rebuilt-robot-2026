@@ -17,10 +17,9 @@ public class Hopper extends SubsystemBase {
     }
     @Override
     public void periodic() {
-        double target = io.getGoal();
         io.updateInputs(inputs);
         Logger.processInputs("Hopper", inputs);
-        io.goToPosition(target);
+        io.goToPosition(setpoint);
     }
 
     /**
@@ -28,7 +27,7 @@ public class Hopper extends SubsystemBase {
      */
     public void retract() {
         System.out.println("fucking hell");
-        io.goToPosition(HopperConstants.HOPPER_RETRACTED * HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION);
+        setpoint = (HopperConstants.HOPPER_RETRACTED * HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION);
     }
     
 
@@ -45,7 +44,7 @@ public class Hopper extends SubsystemBase {
      */
     public void full() {
         System.out.println("oh no");
-        io.goToPosition(HopperConstants.HOPPER_FULL * HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION);
+        setpoint = (HopperConstants.HOPPER_FULL * HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION);
     }
     public boolean atSetpoint(){
         return io.atSetpoint();

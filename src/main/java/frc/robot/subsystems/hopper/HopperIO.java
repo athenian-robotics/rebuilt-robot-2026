@@ -15,7 +15,8 @@ public interface HopperIO {
         public double hopperMotor_Amps = 0;
         public double hopperSetpoint_Inches = 0;
         //public double hopperFeedforward = new SimpleMotorFeedforward(HopperConstants.kS, HopperConstants.kV);
-        
+        public double hopperMAXMotionSetpoint_Inches;
+        public double motorTemp;
     }
     /** Update the set of loggable inputs */
     public void updateInputs(HopperIOInputs inputs);
@@ -27,6 +28,7 @@ public interface HopperIO {
     
     public boolean atSetpoint();
     public double getGoal();
+    public void setVoltage();
     
 
         
