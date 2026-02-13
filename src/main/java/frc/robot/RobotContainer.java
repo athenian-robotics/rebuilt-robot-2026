@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.RuntimeConstants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.HopperIntakeCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -29,6 +30,7 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.hopper.Hopper;
+import frc.robot.subsystems.hopper.HopperIOSim;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
@@ -86,6 +88,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
+        hopper = new Hopper(new HopperIOSim());
         break;
 
       default:
@@ -139,6 +142,7 @@ public class RobotContainer {
             () -> -driveJoystick.getY(),
             () -> -driveJoystick.getX(),
             () -> -steerJoystick.getX()));
+    driveJoystick.button(1).onTrue(HopperIntakeCommands.go(hopper));
 
     // This allows for heading-based drive
     // drive.setDefaultCommand(

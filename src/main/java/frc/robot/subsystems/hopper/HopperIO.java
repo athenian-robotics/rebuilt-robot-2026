@@ -15,7 +15,7 @@ public interface HopperIO {
         //public double hopperFeedforward = new SimpleMotorFeedforward(HopperConstants.kS, HopperConstants.kV);
         
     }
-    /** Update the set of loggable inputs */
+     /** Update the set of loggable inputs */
     public void updateInputs(HopperIOInputs inputs);
     /**
      * Goes the hopper to position 
@@ -23,10 +23,7 @@ public interface HopperIO {
      */
     public void goToPosition(double position);
     
-
+    public boolean atSetpoint();
+    public double getGoal();
     
-
-        
-
-        // Constants (TODO move)
 }
