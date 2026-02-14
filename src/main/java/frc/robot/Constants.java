@@ -180,9 +180,9 @@ public class Constants {
     public final static double HOPPER_kV = 0;
     public final static double HOPPER_kA = 0;
 //motion profiler constants
-    public final static double HOPPER_CRUISE_VELOCITY = 0;
-    public final static double HOPPER_MAX_ACCELERATION = 0;
-    public final static double HOPPER_MAX_ALLOWED_PROFILER_ERROR = 0;
+    public final static double HOPPER_CRUISE_VELOCITY = 200;
+    public final static double HOPPER_MAX_ACCELERATION = 200;
+    public final static double HOPPER_MAX_ALLOWED_PROFILER_ERROR = 1;
 
   }
  
