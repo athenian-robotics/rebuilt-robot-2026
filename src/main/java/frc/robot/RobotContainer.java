@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.PathGenerationConstants.Location;
 import frc.robot.Constants.RuntimeConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
@@ -36,7 +37,7 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
-import frc.robot.Constants.PathGenerationConstants.Location;
+import frc.robot.util.PathGeneration;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -198,10 +199,10 @@ public class RobotContainer {
             Commands.runOnce(() -> System.out.println("Running path gen"))
                 .andThen(pathGeneration.pathfindTo(Location.TEST_POSE)));
 
-    //Might work better
+    // Might work better
     driveJoystick
         .button(ControllerConstants.THUMB_BUTTON_RIGHT)
-        .onTrue(pathGeneration.pathfindToSimple(Location.TEST_POSE, 0.0));
+        .onTrue(pathGeneration.pathfindToSimple(drive::getPose, Location.TEST_POSE, 0.0));
   }
 
   /**

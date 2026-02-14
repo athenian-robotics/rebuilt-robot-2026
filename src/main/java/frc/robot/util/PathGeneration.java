@@ -4,7 +4,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -14,6 +13,7 @@ import frc.robot.Constants.PathGenerationConstants;
 import frc.robot.Constants.PathGenerationConstants.Location;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class PathGeneration {
 
@@ -71,8 +71,13 @@ public class PathGeneration {
    * @param endVelocity_MPS The goal end velocity in meters per second.
    * @return The pathfinding command.
    */
-  public Command pathfindToSimple(Location location, double endVelocity_MPS) {
-    return pathfindToSimple(location.getPose(), PathGenerationConstants.DEFAULT_CONSTRAINTS, endVelocity_MPS);
+  public Command pathfindToSimple(
+      Supplier<Pose2d> currentPose, Location location, double endVelocity_MPS) {
+    return pathfindToSimple(
+        currentPose,
+        location.getPose(),
+        PathGenerationConstants.DEFAULT_CONSTRAINTS,
+        endVelocity_MPS);
   }
 
   /**
@@ -83,8 +88,12 @@ public class PathGeneration {
    * @param endVelocity_MPS The goal end velocity in meters per second.
    * @return The pathfinding command.
    */
-  public Command pathfindToSimple(Location location, PathConstraints constraints, double endVelocity_MPS) {
-    return pathfindToSimple(location.getPose(), constraints, endVelocity_MPS);
+  public Command pathfindToSimple(
+      Supplier<Pose2d> currentPose,
+      Location location,
+      PathConstraints constraints,
+      double endVelocity_MPS) {
+    return pathfindToSimple(currentPose, location.getPose(), constraints, endVelocity_MPS);
   }
 
   /**
@@ -93,8 +102,9 @@ public class PathGeneration {
    * @param targetPose The target pose on the field.
    * @return The pathfinding command using default constraints.
    */
-  public Command pathfindToSimple(Pose2d targetPose) {
-    return pathfindToSimple(targetPose, PathGenerationConstants.DEFAULT_CONSTRAINTS, 0);
+  public Command pathfindToSimple(Supplier<Pose2d> currentPose, Pose2d targetPose) {
+    return pathfindToSimple(
+        currentPose, targetPose, PathGenerationConstants.DEFAULT_CONSTRAINTS, 0);
   }
 
   /**
@@ -105,17 +115,23 @@ public class PathGeneration {
    * @param endVelocity_MPS The goal end velocity in meters per second.
    * @return The pathfinding command.
    */
-  public Command pathfindToSimple(Pose2d targetPose, PathConstraints constraints, double endVelocity_MPS) {
+  public Command pathfindToSimple(
+      Supplier<Pose2d> currentPose,
+      Pose2d targetPose,
+      PathConstraints constraints,
+      double endVelocity_MPS) {
     Translation2d currentTranslation = AutoBuilder.getCurrentPose().getTranslation();
     Translation2d targetTranslation = targetPose.getTranslation();
     Rotation2d angleToTarget = targetTranslation.minus(currentTranslation).getAngle();
 
-    return AutoBuilder.followPath(new PathPlannerPath(
-      PathPlannerPath.waypointsFromPoses(
-        new Pose2d(currentTranslation, angleToTarget),
-        new Pose2d(targetTranslation, angleToTarget)
-      ), constraints, null, new GoalEndState(endVelocity_MPS, targetPose.getRotation()))
-    );
+    return AutoBuilder.followPath(
+        new PathPlannerPath(
+            PathPlannerPath.waypointsFromPoses(
+                new Pose2d(currentTranslation, angleToTarget),
+                new Pose2d(targetTranslation, angleToTarget)),
+            constraints,
+            null,
+            new GoalEndState(endVelocity_MPS, targetPose.getRotation())));
   }
 
   /**
@@ -154,7 +170,8 @@ public class PathGeneration {
    * @return A ParallelDeadlineGroup containing the pathfinding command and the parallel command.
    */
   public Command pathfindToWithHook(Pose2d targetPose, Command parallelCommand) {
-    return pathfindToWithHook(targetPose, PathGenerationConstants.DEFAULT_CONSTRAINTS, parallelCommand);
+    return pathfindToWithHook(
+        targetPose, PathGenerationConstants.DEFAULT_CONSTRAINTS, parallelCommand);
   }
 
   /**

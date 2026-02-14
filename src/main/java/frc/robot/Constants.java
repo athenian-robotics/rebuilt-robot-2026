@@ -167,7 +167,8 @@ public class Constants {
     // Adjust these based on your robot's capabilities
     public static final double MAX_VELOCITY = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
     public static final double MAX_ACCELERATION = 7.9;
-    public static final double MAX_ANGULAR_VELOCITY = MAX_VELOCITY / Math.sqrt(Math.pow(0.273, 2) * 2);
+    public static final double MAX_ANGULAR_VELOCITY =
+        MAX_VELOCITY / Math.sqrt(Math.pow(0.273, 2) * 2);
     public static final double MAX_ANGULAR_ACCELERATION = Units.degreesToRadians(790);
 
     public static final PathConstraints DEFAULT_CONSTRAINTS =
