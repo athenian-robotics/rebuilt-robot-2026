@@ -167,7 +167,9 @@ public class Constants {
 
     public static final double ANGLE_CHANGER_STARTING_ANGLE_ROTATIONS = 0.2070902417;
 
-    public static final Translation2d HUB_POSITION = new Translation2d();
+    public static final Translation2d BLUE_HUB_POSITION = new Translation2d();
+    // TODO: Verify exact Red Hub coordinates (approx 16.54m, 0m for standard field)
+    public static final Translation2d RED_HUB_POSITION = new Translation2d(16.54, 0.0);
 
     public static final double OUTTAKE_VELOCITY_MPS = 14.5; //based on recalc in slack
     public static final double GRAVITATIONAL_CONSTANT_MPS2 = 9.8;
