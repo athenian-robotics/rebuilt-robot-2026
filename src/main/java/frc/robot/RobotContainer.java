@@ -142,7 +142,9 @@ public class RobotContainer {
             () -> -driveJoystick.getY(),
             () -> -driveJoystick.getX(),
             () -> -steerJoystick.getX()));
-    driveJoystick.button(1).onTrue(HopperIntakeCommands.go(hopper));
+    driveJoystick.button(1).onTrue(HopperIntakeCommands.goFull(hopper));
+    driveJoystick.button(2).onTrue(HopperIntakeCommands.goPartial(hopper));
+    driveJoystick.button(3).onTrue(HopperIntakeCommands.goRetract(hopper));
 
     // This allows for heading-based drive
     // drive.setDefaultCommand(

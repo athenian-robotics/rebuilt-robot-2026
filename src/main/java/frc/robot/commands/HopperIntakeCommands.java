@@ -19,8 +19,14 @@ public class HopperIntakeCommands{
         return Commands.runOnce(intake::fullyExtend).andThen(Commands.waitUntil(intake::atSetpoint)
         .andThen(Commands.runOnce(hopper::full)));
    }
-   public static Command go(Hopper hopper){
+   public static Command goFull(Hopper hopper){
      return Commands.runOnce(hopper::full);
+   }
+   public static Command goPartial(Hopper hopper){
+     return Commands.runOnce(hopper::partial);
+   }
+   public static Command goRetract(Hopper hopper){
+     return Commands.runOnce(hopper::retract);
    }
   
 

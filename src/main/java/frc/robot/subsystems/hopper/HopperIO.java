@@ -13,6 +13,7 @@ public interface HopperIO {
         public double hopperMotor_Volts = 0;
         public double hopperMotor_Amps = 0;
         public double hopperSetpoint_Inches = 0;
+        public double hopperIAccum = 0;
         //public double hopperFeedforward = new SimpleMotorFeedforward(HopperConstants.kS, HopperConstants.kV);
         
     }

@@ -65,7 +65,10 @@ public class HopperIOSim implements HopperIO {
     /** Update the set of loggable inputs */
     @Override
     public void updateInputs(HopperIOInputs inputs) {
+        
         simMotor.iterate(pidController.getMAXMotionSetpointVelocity(), 12, 0.02);
+        
+        inputs.hopperIAccum = pidController.getIAccum();
         
         inputs.hopperMotor_Volts =  simMotor.getBusVoltage();
         inputs.hopperMotor_Amps = simMotor.getMotorCurrent();
