@@ -59,11 +59,11 @@ public class HopperIOSparkMax implements HopperIO {
     public void goToPosition(double position_inches){
         System.out.println("fuckass robot");
         // pidController.setSetpoint(position_inches * HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION, SparkBase.ControlType.kMAXMotionPositionControl);
-        pidController.setSetpoint(position_inches, SparkBase.ControlType.kMAXMotionPositionControl);
-        //  var err = pidController.setSetpoint(position_inches, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+        //pidController.setSetpoint(position_inches, SparkBase.ControlType.kMAXMotionPositionControl);
+        pidController.setSetpoint(position_inches, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
         // System.out.println("STATUS".concat(err.toString()));
-    }
 
+    }
     @Override
     public boolean atSetpoint(){
         return pidController.isAtSetpoint();
