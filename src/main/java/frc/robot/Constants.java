@@ -176,7 +176,8 @@ public class Constants {
   }
 
   public final class IntakeConstants {
-    public static final int TALON_ID = 0;
+    public static final int ARM_ID = 0;
+    public static final int WHEEL_ID = 0;
 
     public static final double INTAKE_MOTOR_TO_FIRST_PULLEY_RATIO = 60;
     public static final double INTAKE_FIRST_PULLEY_TO_SECOND_PULLEY_RATIO = 15 / 36;
