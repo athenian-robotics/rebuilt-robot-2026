@@ -11,6 +11,10 @@ public class Intake extends SubsystemBase {
   private IntakeIO io;
   private IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
 
+  public Intake(IntakeIO io){
+    this.io = io;
+  }
+
   @Override
   public void periodic() {
     io.updateInputs(inputs);
@@ -18,6 +22,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void fullyExtend() {
+   
     io.goToPosition(IntakeConstants.FULL_EXTENSION_DEGREES); // position feedback loop
   }
   public void fullyRetract(){

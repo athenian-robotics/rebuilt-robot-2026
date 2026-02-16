@@ -11,6 +11,7 @@ public interface IntakeIO {
     public double armMotorRotations_Rotations = 0;
     public double armRotations_Rotations =
         armMotorRotations_Rotations * IntakeConstants.GEAR_ROTATIONS_TO_ARM_ROTATIONS;
+    public double armSetpoint = 0;
   }
 
   public void updateInputs(IntakeIOInputs inputs);

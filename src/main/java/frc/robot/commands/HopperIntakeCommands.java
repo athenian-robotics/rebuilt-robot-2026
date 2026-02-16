@@ -28,6 +28,12 @@ public class HopperIntakeCommands{
    public static Command goRetract(Hopper hopper){
      return Commands.runOnce(hopper::retract);
    }
+   public static Command intakeGoFull(Intake intake){
+    return Commands.runOnce(intake::fullyExtend);
+   }
+   public static Command intakeRetract(Intake intake){
+    return Commands.runOnce(intake::fullyRetract);
+   }
   
 
     

@@ -147,16 +147,16 @@ public class Constants {
     public static final double MAX_WIGGLE_DEGREES = 75;
 
     // feedback constants
-    public static final double INTAKE_kP = 0;
-    public static final double INTAKE_kI = 0;
-    public static final double INTAKE_kD = 0;
+    public static final double INTAKE_kP = 1;
+    public static final double INTAKE_kI = 1;
+    public static final double INTAKE_kD = 1;
     // feedforward constants
-    public static final double INTAKE_kS = 0;
-    public static final double INTAKE_kV = 0;
-    public static final double INTAKE_kA = 0;
+    public static final double INTAKE_kS = 1;
+    public static final double INTAKE_kV = 1;
+    public static final double INTAKE_kA = 1;
     // motion profiler constants
-    public static final double INTAKE_CRUISE_VELOCITY = 0;
-    public static final double INTAKE_MAX_ACCELERATION = 0;
+    public static final double INTAKE_CRUISE_VELOCITY = 1;
+    public static final double INTAKE_MAX_ACCELERATION = 1;
     public static final double INTAKE_MAX_ALLOWED_PROFILER_ERROR = 0;
   }
   public final class HopperConstants {
@@ -180,8 +180,8 @@ public class Constants {
     public final static double HOPPER_kV = 0;
     public final static double HOPPER_kA = 0;
 //motion profiler constants
-    public final static double HOPPER_CRUISE_VELOCITY = 1500;
-    public final static double HOPPER_MAX_ACCELERATION = 20000;
+    public final static double HOPPER_CRUISE_VELOCITY = 1000;
+    public final static double HOPPER_MAX_ACCELERATION = 1000;
     public final static double HOPPER_MAX_ALLOWED_PROFILER_ERROR = 0.1;
 
   }

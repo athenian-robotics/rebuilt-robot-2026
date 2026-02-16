@@ -31,7 +31,10 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.hopper.HopperIOSim;
+import frc.robot.subsystems.hopper.HopperIOSparkMax;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIOSim;
+import frc.robot.subsystems.intake.IntakeIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -89,6 +92,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
         hopper = new Hopper(new HopperIOSim());
+        intake = new Intake(new IntakeIOSim());
         break;
 
       default:
@@ -145,6 +149,7 @@ public class RobotContainer {
     driveJoystick.button(1).onTrue(HopperIntakeCommands.goFull(hopper));
     driveJoystick.button(2).onTrue(HopperIntakeCommands.goPartial(hopper));
     driveJoystick.button(3).onTrue(HopperIntakeCommands.goRetract(hopper));
+    driveJoystick.button(4).onTrue(HopperIntakeCommands.intakeGoFull(intake));
 
     // This allows for heading-based drive
     // drive.setDefaultCommand(
