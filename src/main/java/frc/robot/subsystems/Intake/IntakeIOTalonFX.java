@@ -1,4 +1,4 @@
-package frc.robot.subsystems.intake;
+package frc.robot.subsystems.Intake;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -6,6 +6,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.subsystems.intake.IntakeIOInputsAutoLogged;
 
 public class IntakeIOTalonFX implements IntakeIO {
   private final TalonFX armMotor = new TalonFX(IntakeConstants.TALON_ID);
@@ -29,7 +30,7 @@ public class IntakeIOTalonFX implements IntakeIO {
   }
 
   /** Update the set of loggable inputs */
-  @Override
+
   public void updateInputs(IntakeIOInputs inputs) {
     inputs.armMotor_Voltage_Volts = (armMotor.getMotorVoltage().getValueAsDouble());
     inputs.armMotor_Current_Amps = armMotor.getTorqueCurrent().getValueAsDouble();
@@ -42,6 +43,12 @@ public class IntakeIOTalonFX implements IntakeIO {
   public void goToPosition(double armRotations_Degrees) {
     final MotionMagicVoltage m_request = new MotionMagicVoltage(0);
     armMotor.setControl(m_request.withPosition(Units.degreesToRotations(armRotations_Degrees)  / IntakeConstants.GEAR_ROTATIONS_TO_ARM_ROTATIONS));
+  }
+
+  @Override
+  public void updateInputs(IntakeIOInputsAutoLogged inputs) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'updateInputs'");
   }
 
 }

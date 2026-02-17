@@ -240,6 +240,35 @@ public class Constants {
     public static final int MOTOR_ID = 1;
     public static final double MOTOR_VOLTAGE = 3;
   }
+  
+  public final class ClimbConstants {
+    public final static int TALON_ID = 0;
+    public final static double GEARBOX_REDUCTION = 1 / 60;
+    public final static double GEAR_REDUCTION = 42 / 60;
+    public final static double CLIMB_WINCH_DIAMETER = 0.75;
+    public final static double ROTATIONS_TO_LENGTH = 
+    GEARBOX_REDUCTION 
+    * GEAR_REDUCTION 
+    * Math.PI 
+    * CLIMB_WINCH_DIAMETER;
+    
+    //feedback constants
+    public final static double CLIMB_kP = 0;
+    public final static double CLIMB_kI = 0;
+    public final static double CLIMB_kD = 0;
+    
+    //feedforward constants
+    public final static double CLIMB_kS = 0;
+    public final static double CLIMB_kV = 0;
+    public final static double CLIMB_kA = 0;
+    public final static double CLIMB_kG = 0;
+
+    //motion profiler constants
+    //motion profiler constants
+    public final static double CLIMB_CRUISE_VELOCITY = 0;
+    public final static double CLIMB_MAX_ACCELERATION = 0;
+    public final static double CLIMB_MAX_ALLOWED_PROFILER_ERROR = 0;
+  }
 
   public final class PathGenerationConstants {
 
