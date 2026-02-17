@@ -4,7 +4,6 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.ClimbConstants;
 public class climbIOTalonFX implements climbIO{
       private final TalonFX climbMotor = new TalonFX(ClimbConstants.TALON_ID);
@@ -37,10 +36,13 @@ public class climbIOTalonFX implements climbIO{
         inputs.climbMotorVelocity_rotationsPerSecond * ClimbConstants.ROTATIONS_TO_LENGTH;
     }
 
-    @Override
-    public void goToPosition(double position) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'goToPosition'");
-    }
+    
+  public void goToPositionRotations(double extension_rotations) {
+    final MotionMagicVoltage m_request = new MotionMagicVoltage(0);
+    climbMotor.setControl(m_request.withPosition(extension_rotations));
+  }
+  public void goToPosition(double extension_inches){
+    goToPositionRotations(extension_inches / ClimbConstants.ROTATIONS_TO_LENGTH);
+  }
     
 }

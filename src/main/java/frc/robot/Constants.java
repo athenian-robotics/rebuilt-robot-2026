@@ -252,6 +252,10 @@ public class Constants {
     * Math.PI 
     * CLIMB_WINCH_DIAMETER;
     
+    public final static double FULL_RETRACTION = 0;
+    public final static double FULL_EXTENSION = 0;
+
+
     //feedback constants
     public final static double CLIMB_kP = 0;
     public final static double CLIMB_kI = 0;
