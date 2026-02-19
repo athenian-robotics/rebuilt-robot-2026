@@ -17,8 +17,8 @@ public interface IntakeIO {
     public double wheelMotorVelocity_RotationsPerSecond = 0;
   }
 
-  public void updateInputs(IntakeIOInputs inputs);
-  public void goToPosition(double rotations);
-  public void startIntake();
-  public void stopIntake();
+  public default void updateInputs(IntakeIOInputs inputs) {}
+  public default void goToPosition(double rotations) {}
+  public default void startIntake() {}
+  public default void stopIntake() {}
 }

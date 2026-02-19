@@ -1,17 +1,12 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Volt;
-import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.LinearVelocity;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotBase;
 
 public class Constants {
@@ -142,11 +137,12 @@ public class Constants {
   }
 
   public final class OuttakeConstants {
-    public static final int RIGHT_SHOOTER_MOTOR = -1;
-    public static final int LEFT_SHOOTER_MOTOR = -1;
-    public static final int MIDDLE_WHEEL_MOTOR = -1;
-    public static final int STAR_WHEEL_MOTOR = -1;
-    public static final int ANGLE_CHANGER_MOTOR = -1;
+    // motor ids
+    public static final int RIGHT_SHOOTER_MOTOR = 27;
+    public static final int LEFT_SHOOTER_MOTOR = 22;
+    public static final int MIDDLE_WHEEL_MOTOR = 24;
+    public static final int STAR_WHEEL_MOTOR = 23;
+    public static final int ANGLE_CHANGER_MOTOR = 0;
 
     public static final double MIDDLE_WHEEL_TO_SHOOTER_VOLTS = 2;
     public static final double MIDDLE_WHEEL_TO_GROUND_VOLTS = -2;
@@ -179,8 +175,9 @@ public class Constants {
   }
 
   public final class IntakeConstants {
-    public static final int ARM_ID = 0;
-    public static final int WHEEL_ID = 0;
+    // motors
+    public static final int ARM_ID = 26;
+    public static final int WHEEL_ID = 25;
 
     public static final double INTAKE_MOTOR_TO_FIRST_PULLEY_RATIO = 60;
     public static final double INTAKE_FIRST_PULLEY_TO_SECOND_PULLEY_RATIO = 15 / 36;
@@ -202,6 +199,8 @@ public class Constants {
     public static final double INTAKE_CRUISE_VELOCITY = 0;
     public static final double INTAKE_MAX_ACCELERATION = 0;
     public static final double INTAKE_MAX_ALLOWED_PROFILER_ERROR = 0;
+
+    public static final double WHEEL_VOLTAGE = 3;
   }
 
   public final class HopperConstants {
@@ -232,7 +231,11 @@ public class Constants {
   }
 
   public final class IndexerConstants {
-    public static final int MOTOR_ID = 1;
+    public static final int MOTOR_ID = 2;
     public static final double MOTOR_VOLTAGE = 3;
+  }
+
+  public final class CANConstants {
+    public static final String CANIVORE_NAME = "can"; // 7733663E3353385320202034382203FF
   }
 }
