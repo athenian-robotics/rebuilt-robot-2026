@@ -32,6 +32,7 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.hopper.HopperIOSparkMax;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
@@ -159,7 +160,10 @@ public class RobotContainer {
     //   }, hopper)
     // );
       // hopper.setDefaultCommand(HopperIntakeCommands.startingExtension(hopper, intake));
-      driveJoystick.button(1).onTrue(HopperIntakeCommands.fuck(hopper));
+      driveJoystick.button(1).onTrue(HopperIntakeCommands.startingExtension(hopper, intake));
+      driveJoystick.button(2).onTrue(HopperIntakeCommands.hopperRetract(hopper, intake));
+      driveJoystick.button(3).onTrue(HopperIntakeCommands.hopperExtend(hopper, intake));
+      driveJoystick.button(4).onTrue(HopperIntakeCommands.intakeWiggle(hopper, intake));
 
   
 
