@@ -18,10 +18,13 @@ public class Intake extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Intake", inputs);
   }
-
+  /**fully extends the intake from {@value IntakeConstants#FULL_RETRACTION_DEGREES} degrees 
+   * to {@value IntakeConstants#FULL_EXTENSION_DEGREES} degrees*/
   public void fullyExtend() {
     io.goToPosition(IntakeConstants.FULL_EXTENSION_DEGREES); // position feedback loop
   }
+  /**fully retracts the intake from {@value IntakeConstants#FULL_EXTENSION_DEGREES} degrees 
+   * to {@value IntakeConstants#FULL_RETRACTION_DEGREES} degrees*/
   public void fullyRetract(){
     io.goToPosition(IntakeConstants.FULL_RETRACTION_DEGREES);
   }
