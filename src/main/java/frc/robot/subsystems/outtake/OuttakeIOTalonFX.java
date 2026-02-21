@@ -200,6 +200,6 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
 
   @Override
   public void runSysId(double voltage) {
-
+    sysIdVoltage = voltage;
   }
 }
