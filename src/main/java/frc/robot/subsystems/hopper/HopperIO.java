@@ -19,16 +19,16 @@ public interface HopperIO {
         public double motorTemp;
     }
     /** Update the set of loggable inputs */
-    public void updateInputs(HopperIOInputs inputs);
+    public default void updateInputs(HopperIOInputs inputs){};
     /**
      * Goes the hopper to position 
      * @param position in inches
      */
-    public void goToPosition(double position);
+    public default void goToPosition(double position){};
     
-    public boolean atSetpoint();
-    public double getGoal();
-    public void setVoltage();
+    public default boolean atSetpoint(){return false;};
+    public default double getGoal(){return 0.0;};
+    public default void setVoltage(){};
     
 
         

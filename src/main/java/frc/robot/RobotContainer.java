@@ -29,10 +29,10 @@ import frc.robot.Constants.RuntimeConstants;
 import frc.robot.commands.DriveCommands;  
 import frc.robot.commands.HopperIntakeCommands;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.Indexer.Indexer;
-import frc.robot.subsystems.Indexer.IndexerIO;
-import frc.robot.subsystems.Indexer.IndexerIOSim;
-import frc.robot.subsystems.Indexer.IndexerIOTalonFX;
+import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.indexer.IndexerIO;
+import frc.robot.subsystems.indexer.IndexerIOSim;
+import frc.robot.subsystems.indexer.IndexerIOTalonFX;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -40,8 +40,11 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.hopper.Hopper;
+import frc.robot.subsystems.hopper.HopperIO;
+import frc.robot.subsystems.hopper.HopperIOSim;
 import frc.robot.subsystems.hopper.HopperIOSparkMax;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
@@ -107,8 +110,8 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
-        hopper = new Hopper(new HopperIOSparkMax());
-        intake = new Intake(new IntakeIOTalonFX());
+        hopper = new Hopper(new HopperIOSim());
+        intake = new Intake(new IntakeIOSim());
         indexer = new Indexer(new IndexerIOSim());
         break;
 
@@ -124,6 +127,8 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         indexer = new Indexer(new IndexerIO() {});
+        hopper = new Hopper(new HopperIO() {});
+        intake = new Intake(new IntakeIO() {});
     }
 
     // Set up auto routines

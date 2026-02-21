@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Indexer;
+package frc.robot.subsystems.indexer;
 
 import static edu.wpi.first.units.Units.Volts;
 

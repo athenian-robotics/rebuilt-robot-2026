@@ -57,7 +57,6 @@ public class HopperIOSparkMax implements HopperIO {
    
     @Override
     public void goToPosition(double position_inches){
-        System.out.println("fuckass robot");
         // pidController.setSetpoint(position_inches * HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION, SparkBase.ControlType.kMAXMotionPositionControl);
         //pidController.setSetpoint(position_inches, SparkBase.ControlType.kMAXMotionPositionControl);
         pidController.setSetpoint(position_inches, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
