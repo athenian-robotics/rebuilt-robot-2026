@@ -65,7 +65,6 @@ public class RobotContainer {
   private final Hopper hopper;
   private final Intake intake;
   private final Indexer indexer;
-  private final Intake intake;
 
   // -- Controllers --
   private final CommandJoystick driveJoystick =
