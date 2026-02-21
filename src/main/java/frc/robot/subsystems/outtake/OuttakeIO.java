@@ -15,6 +15,7 @@ public interface OuttakeIO extends Subsystem {
     public double currentAngularVelocityDegPerSecond = 0.0;
     /** Distance to the target in feet */
     public double targetDistanceFeet = 0.0;
+    public double angleChangerVoltage = 0.0;
   }
 
   /** Updates logs; util for AdvantageScope
@@ -42,4 +43,6 @@ public interface OuttakeIO extends Subsystem {
 
   /** Sets the target angle based on the current network table value at /Outtake/HoodAngleDeg */
   public void setAngleFromNT ();
+
+  public default void runSysId(double voltage) {};
 }

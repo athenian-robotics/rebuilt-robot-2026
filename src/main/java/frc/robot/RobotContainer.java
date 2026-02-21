@@ -17,7 +17,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,23 +25,30 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.IndexerConstants;
 import frc.robot.Constants.RuntimeConstants;
-import frc.robot.commands.DriveCommands;
+import frc.robot.commands.DriveCommands;  
+import frc.robot.commands.HopperIntakeCommands;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.Indexer.Indexer;
-import frc.robot.subsystems.Indexer.IndexerIO;
-import frc.robot.subsystems.Indexer.IndexerIOSim;
-import frc.robot.subsystems.Indexer.IndexerIOTalonFX;
+import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.indexer.IndexerIO;
+import frc.robot.subsystems.indexer.IndexerIOSim;
+import frc.robot.subsystems.indexer.IndexerIOTalonFX;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.hopper.Hopper;
+import frc.robot.subsystems.hopper.HopperIO;
+import frc.robot.subsystems.hopper.HopperIOSim;
+import frc.robot.subsystems.hopper.HopperIOSparkMax;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOSim;
+import frc.robot.subsystems.intake.IntakeIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
-
-import static edu.wpi.first.units.Units.Volt;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -56,6 +62,8 @@ public class RobotContainer {
   // -- Subsystems --
   private final Drive drive;
   private final Vision vision;
+  private final Hopper hopper;
+  private final Intake intake;
   private final Indexer indexer;
 
   // -- Controllers --
@@ -83,7 +91,9 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
+        hopper = new Hopper(new HopperIOSparkMax());
         indexer = new Indexer(new IndexerIOTalonFX());
+        intake = new Intake(new IntakeIOTalonFX());
         break;
 
       case SIM:
@@ -97,6 +107,8 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
+        hopper = new Hopper(new HopperIOSim());
+        intake = new Intake(new IntakeIOSim());
         indexer = new Indexer(new IndexerIOSim());
         break;
 
@@ -112,6 +124,8 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         indexer = new Indexer(new IndexerIO() {});
+        hopper = new Hopper(new HopperIO() {});
+        intake = new Intake(new IntakeIO() {});
     }
 
     // Set up auto routines
@@ -144,6 +158,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureJoystickBindings() {
+    
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
@@ -151,6 +166,24 @@ public class RobotContainer {
             () -> -driveJoystick.getY(),
             () -> -driveJoystick.getX(),
             () -> -steerJoystick.getX()));
+    // hopper.setDefaultCommand(
+    //   Commands.run(() -> {
+    //     if (driveJoystick.button(1).getAsBoolean()) {
+    //       HopperIntakeCommands.startingExtension(hopper, intake);
+    //     }else if(driveJoystick.button(2).getAsBoolean()){
+    //       HopperIntakeCommands.hopperRetract(hopper, intake);
+    //     }else if(driveJoystick.button(3).getAsBoolean()){
+    //       HopperIntakeCommands.hopperExtend(hopper, intake);
+    //     }
+    //   }, hopper)
+    // );
+      // hopper.setDefaultCommand(HopperIntakeCommands.startingExtension(hopper, intake));
+      driveJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).onTrue(HopperIntakeCommands.startingExtension(hopper, intake));
+      driveJoystick.button(ControllerConstants.MAINHAND_BOTTOM_MIDDLE).onTrue(HopperIntakeCommands.hopperRetract(hopper, intake));
+      driveJoystick.button(ControllerConstants.MAINHAND_BOTTOM_RIGHT).onTrue(HopperIntakeCommands.hopperExtend(hopper, intake));
+      driveJoystick.button(ControllerConstants.MAINHAND_TOP_LEFT).onTrue(HopperIntakeCommands.intakeWiggle(hopper, intake));
+
+  
 
     // This allows for heading-based drive
     // drive.setDefaultCommand(
@@ -175,9 +208,16 @@ public class RobotContainer {
     // // Switch to X pattern when X button is pressed
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
-    operatorJoystick.button(ControllerConstants.PLACEHOLDER).onTrue(
-      indexer.toggle());
+    System.out.println("Bindings configured");
+    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).onTrue(Commands.print("First print").andThen(
+      indexer.toggle().andThen(Commands.print("Indexer toggled"))));
 
+    /**
+    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).onTrue(
+      intake.runIntake()
+    );
+    */
+    
     // Reset gyro to 0° when the drive joystick's trigger is pressed
     driveJoystick.button(ControllerConstants.TRIGGER).onTrue(
             Commands.runOnce(

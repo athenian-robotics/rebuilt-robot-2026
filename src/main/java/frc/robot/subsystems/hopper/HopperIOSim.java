@@ -1,14 +1,13 @@
 package frc.robot.subsystems.hopper;
 
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-
-import edu.wpi.first.math.system.plant.DCMotor;
-
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+
+import edu.wpi.first.math.system.plant.DCMotor;
+
 import frc.robot.Constants.HopperConstants;
 
 // TODO fully implement class
@@ -34,6 +33,16 @@ public class HopperIOSim implements HopperIO {
     }
     public void goToPosition(double position_inches){
         pidController.setSetpoint(positionToRotations(position_inches), SparkBase.ControlType.kMAXMotionPositionControl);
+    }
+
+    @Override
+    public boolean atSetpoint() {
+        return pidController.isAtSetpoint();
+    }
+    @Override
+    public double getGoal() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getGoal'");
     }
    
 }

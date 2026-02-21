@@ -24,6 +24,10 @@ public class Intake extends SubsystemBase {
   private SysIdRoutine sysId = new SysIdRoutine(sysIdConfig, sysIdMechanism);
   
   
+  
+  public Intake(IntakeIO io){
+    this.io = io;
+  }
 
   @Override
   public void periodic() {
@@ -33,17 +37,23 @@ public class Intake extends SubsystemBase {
   /**fully extends the intake from {@value IntakeConstants#FULL_RETRACTION_DEGREES} degrees 
    * to {@value IntakeConstants#FULL_EXTENSION_DEGREES} degrees*/
   public void fullyExtend() {
+    System.out.println("full extension");
     io.goToPosition(IntakeConstants.FULL_EXTENSION_DEGREES); // position feedback loop
   }
   /**fully retracts the intake from {@value IntakeConstants#FULL_EXTENSION_DEGREES} degrees 
    * to {@value IntakeConstants#FULL_RETRACTION_DEGREES} degrees*/
   public void fullyRetract(){
+    System.out.println("full retraction");
     io.goToPosition(IntakeConstants.FULL_RETRACTION_DEGREES);
   }
 
   public void wiggleUp() {
+    System.out.println("wiggle up");
     io.goToPosition(IntakeConstants.MAX_WIGGLE_DEGREES);
      // velocity feedback loop
+  }
+  public boolean atSetpoint(){
+    return io.atSetpoint();
   }
 
   public Command runIntake() {

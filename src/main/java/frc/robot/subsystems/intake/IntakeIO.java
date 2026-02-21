@@ -22,4 +22,9 @@ public interface IntakeIO {
   public void startIntake();
   public void stopIntake();
   public default void runSysId(double voltage) {};
+  public default void updateInputs(IntakeIOInputs inputs){};
+  public default void goToPosition(double rotations){};
+  public default boolean atSetpoint(){return false;};
+  public default void startIntake(){};
+  public default void stopIntake(){};
 }
