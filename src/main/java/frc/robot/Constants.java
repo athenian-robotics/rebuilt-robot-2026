@@ -192,9 +192,9 @@ public class Constants {
     public static final double VELOCITY = 0;
 
     // feedback constants
-    public static final double INTAKE_kP = 0;
-    public static final double INTAKE_kI = 0;
-    public static final double INTAKE_kD = 0;
+    public static final double INTAKE_kP = 1;
+    public static final double INTAKE_kI = 1;
+    public static final double INTAKE_kD = 1;
     // feedforward constants
     public static final double INTAKE_kS = 0;
     public static final double INTAKE_kV = 0;
@@ -239,4 +239,6 @@ public class Constants {
     public static final int MOTOR_ID = 1;
     public static final double MOTOR_VOLTAGE = 3;
   }
+ 
 }
+
