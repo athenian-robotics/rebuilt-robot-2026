@@ -79,6 +79,9 @@ public class IntakeIOTalonFX implements IntakeIO {
     final MotionMagicVoltage m_request = new MotionMagicVoltage(0);
     armMotor.setControl(m_request.withPosition(Units.degreesToRotations(armRotations_Degrees)  / IntakeConstants.GEAR_ROTATIONS_TO_ARM_ROTATIONS));
   }
+  public boolean atSetpoint(){
+    return armMotor.getMotionMagicAtTarget().getValue();
+  }
 
   @Override
   public void startIntake() {

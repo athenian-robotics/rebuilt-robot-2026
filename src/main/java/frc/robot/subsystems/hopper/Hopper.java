@@ -6,10 +6,13 @@ import frc.robot.Constants.HopperConstants;
 import org.littletonrobotics.junction.Logger;
 
 public class Hopper extends SubsystemBase {
-
     private HopperIO io;
     private HopperIOInputsAutoLogged inputs = new HopperIOInputsAutoLogged();
 
+    public Hopper(HopperIO io){
+        this.io = io;
+    
+    }
     @Override
     public void periodic() {
         io.updateInputs(inputs);
@@ -22,18 +25,23 @@ public class Hopper extends SubsystemBase {
     public void retract() {
         io.goToPosition(HopperConstants.HOPPER_RETRACTED * HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION);
     }
+    
 
     /**
      * Moves the hopper to {@value HopperConstants#HOPPER_PARTIAL} inches
      */
     public void partial() {
         io.goToPosition(HopperConstants.HOPPER_PARTIAL * HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION);
+        //io.goToPosition();
     }
     /**
      * Moves the hopper to max extension of {@value HopperConstants#HOPPER_FULL}
      */
     public void full() {
         io.goToPosition(HopperConstants.HOPPER_FULL * HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION);
+    }
+    public boolean atSetpoint(){
+        return io.atSetpoint();
     }
 
 }
