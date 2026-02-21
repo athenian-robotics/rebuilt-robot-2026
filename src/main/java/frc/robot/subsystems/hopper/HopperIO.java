@@ -2,6 +2,7 @@ package frc.robot.subsystems.hopper;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Constants.HopperConstants;
 
 public interface HopperIO {
@@ -28,7 +29,8 @@ public interface HopperIO {
     
     public default boolean atSetpoint(){return false;};
     public default double getGoal(){return 0.0;};
-    public default void setVoltage(){};
+    public default void runSysid(double voltage) {}
+    public default void periodic() {}
     
 
         
