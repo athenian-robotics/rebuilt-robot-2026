@@ -64,6 +64,9 @@ public class IntakeIOTalonFX implements IntakeIO {
   /** Update the set of loggable inputs */
   @Override
   public void updateInputs(IntakeIOInputs inputs) {
+    if (sysIdVoltage != 0){
+      armMotor.setControl(new VoltageOut(sysIdVoltage));
+    }
     inputs.armMotorVoltage_Volts = armMotor.getMotorVoltage().getValueAsDouble();
     inputs.armMotorCurrent_Amps = armMotor.getTorqueCurrent().getValueAsDouble();
     inputs.armMotorRotations_Rotations = armMotor.getPosition().getValueAsDouble();
