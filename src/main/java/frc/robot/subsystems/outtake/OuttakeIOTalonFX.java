@@ -141,6 +141,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     inputs.currentAngularVelocityDegPerSecond = currentAngularVelocityDegPerSecond;
     inputs.targetShotAngleDegrees = targetShotAngleDeg;
     inputs.targetDistanceFeet = Units.metersToFeet(targetDistanceMeters);
+    inputs.angleChangerVoltage = angleChanger.getMotorVoltage().getValueAsDouble();
   }
 
   public void startFlywheel() {
@@ -200,6 +201,6 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
 
   @Override
   public void runSysId(double voltage) {
-
+    sysIdVoltage = voltage;
   }
 }
