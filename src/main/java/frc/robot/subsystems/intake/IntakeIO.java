@@ -21,4 +21,5 @@ public interface IntakeIO {
   public void goToPosition(double rotations);
   public void startIntake();
   public void stopIntake();
+  public default void runSysId(double voltage) {};
 }
