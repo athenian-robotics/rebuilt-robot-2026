@@ -37,6 +37,8 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
 
   private DoubleEntry hoodAngleDegEntry;
 
+  private double sysIdVoltage = 0.0;
+
   public OuttakeIOTalonFX() {
     super();
 
@@ -76,6 +78,10 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     currentAngleDeg = angleChanger.getPosition().getValue().in(Degrees) * OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO;
     // Update the current angular velocity by getting the motor velocity and multiplying by gear ratio
     currentAngularVelocityDegPerSecond = angleChanger.getVelocity().getValue().in(DegreesPerSecond) * OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO;
+  
+    if (sysIdVoltage != 0.0) {
+      angleChanger.setControl(new VoltageOut(sysIdVoltage));
+    }
   }
 
   /**
@@ -190,5 +196,10 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   @Override
   public void setAngleFromNT() {
     setAngle(hoodAngleDegEntry.get());
+  }
+
+  @Override
+  public void runSysId(double voltage) {
+
   }
 }

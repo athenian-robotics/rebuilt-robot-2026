@@ -29,7 +29,7 @@ public interface HopperIO {
     
     public default boolean atSetpoint(){return false;};
     public default double getGoal(){return 0.0;};
-    public default void runSysid(double voltage) {}
+    public default void runSysId(double voltage) {}
     public default void periodic() {}
     
 

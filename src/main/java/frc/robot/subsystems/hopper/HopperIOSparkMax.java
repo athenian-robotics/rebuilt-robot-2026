@@ -86,7 +86,7 @@ public class HopperIOSparkMax implements HopperIO {
     }
 
     @Override
-    public void runSysid(double voltage) {
+    public void runSysId(double voltage) {
         sysidVoltage = voltage;
     }
 }

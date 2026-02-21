@@ -42,4 +42,6 @@ public interface OuttakeIO extends Subsystem {
 
   /** Sets the target angle based on the current network table value at /Outtake/HoodAngleDeg */
   public void setAngleFromNT ();
+
+  public default void runSysId(double voltage) {};
 }

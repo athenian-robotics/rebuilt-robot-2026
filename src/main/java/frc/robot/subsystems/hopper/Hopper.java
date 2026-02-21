@@ -22,7 +22,7 @@ public class Hopper extends SubsystemBase {
         
         Config sysIdConfig = new Config(Volts.per(Seconds).of(.5), Volts.of(3), Seconds.of(5),
             (state) -> Logger.recordOutput("Hopper/SysIdState", state.toString()));
-        Mechanism sysIdMechanism = new Mechanism((volts) -> io.runSysid(volts.in(Volts)), null, this);
+        Mechanism sysIdMechanism = new Mechanism((volts) -> io.runSysId(volts.in(Volts)), null, this);
 
         sysId = new SysIdRoutine(sysIdConfig, sysIdMechanism);
     }
@@ -60,14 +60,14 @@ public class Hopper extends SubsystemBase {
 
     /** Returns a command to run a quasistatic test in the specified direction. */
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return run(() -> io.runSysid(0.0))
+        return run(() -> io.runSysId(0.0))
             .withTimeout(1.0)
             .andThen(sysId.quasistatic(direction));
         }
 
     /** Returns a command to run a dynamic test in the specified direction. */
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        return run(() -> io.runSysid(0.0)).withTimeout(1.0).andThen(sysId.dynamic(direction));
+        return run(() -> io.runSysId(0.0)).withTimeout(1.0).andThen(sysId.dynamic(direction));
     }
 
 }
