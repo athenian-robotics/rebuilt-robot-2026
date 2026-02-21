@@ -8,8 +8,11 @@ import java.util.OptionalDouble;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
@@ -24,7 +27,6 @@ import frc.robot.Constants.OuttakeConstants;
 
 public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   private final TalonFX leadShooter, followShooter, middleWheel, starWheel, angleChanger;
-  private final OuttakeIOInputs logs;
 
   private double targetShotAngleDeg = OuttakeConstants.STARTING_SHOT_ANGLE_DEG;
 
@@ -35,12 +37,13 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
 
   private DoubleEntry hoodAngleDegEntry;
 
+  private double sysIdVoltage = 0.0;
+
   public OuttakeIOTalonFX() {
     super();
 
     hoodAngleDegEntry = NetworkTableInstance.getDefault().getDoubleTopic("/Outtake/HoodAngleDeg").getEntry(OuttakeConstants.MAXIMUM_SHOT_ANGLE_DEG);
 
-    logs = new OuttakeIOInputs();
     followShooter = new TalonFX(OuttakeConstants.LEFT_SHOOTER_MOTOR);
     leadShooter = new TalonFX(OuttakeConstants.RIGHT_SHOOTER_MOTOR);
 
@@ -55,6 +58,19 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     // Represents the starting position of the hood
     angleChanger.setPosition(OuttakeConstants.ANGLE_CHANGER_STARTING_ANGLE_ROTATIONS / OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO);
     currentAngleDeg = OuttakeConstants.ANGLE_CHANGER_STARTING_ANGLE_ROTATIONS * 360;
+
+    Slot0Configs angleChangerControl = new Slot0Configs();
+    angleChangerControl.kP = OuttakeConstants.HOOD_ANGLE_KP;
+    angleChangerControl.kD = OuttakeConstants.HOOD_ANGLE_KD;
+    angleChangerControl.kS = OuttakeConstants.HOOD_ANGLE_KS;
+    angleChangerControl.kV = OuttakeConstants.HOOD_ANGLE_KV;
+    angleChangerControl.kA = OuttakeConstants.HOOD_ANGLE_KA;
+    angleChanger.getConfigurator().apply(angleChangerControl);
+
+    MotionMagicConfigs angleChangerMotionProfile = new MotionMagicConfigs();
+    angleChangerMotionProfile.MotionMagicCruiseVelocity = OuttakeConstants.HOOD_ANGLE_CRUISE_VELOCITY_RPS;
+    angleChangerMotionProfile.MotionMagicAcceleration = OuttakeConstants.HOOD_ANGLE_MAX_ACCELERATION_RPSPS;
+    angleChanger.getConfigurator().apply(angleChangerMotionProfile);
   }
 
   public void periodic() {
@@ -62,16 +78,10 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     currentAngleDeg = angleChanger.getPosition().getValue().in(Degrees) * OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO;
     // Update the current angular velocity by getting the motor velocity and multiplying by gear ratio
     currentAngularVelocityDegPerSecond = angleChanger.getVelocity().getValue().in(DegreesPerSecond) * OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO;
-
-    // Calculate the angle error from target position to actual position
-    double angleError = targetShotAngleDeg - currentAngleDeg;
-    double angularVelocityError = 0 - currentAngularVelocityDegPerSecond;
-
-    // PID logic
-    double appliedVoltage = (angleError * OuttakeConstants.HOOD_ANGLE_KP) + (angularVelocityError * OuttakeConstants.HOOD_ANGLE_KD);
-    Logger.recordOutput("Outtake/AngleVoltage", appliedVoltage);
-
-    angleChanger.setControl(new VoltageOut(appliedVoltage));
+  
+    if (sysIdVoltage != 0.0 && currentAngleDeg > OuttakeConstants.MINIMUM_SHOT_ANGLE_DEG) {
+      angleChanger.setControl(new VoltageOut(sysIdVoltage));
+    }
   }
 
   /**
@@ -131,6 +141,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     inputs.currentAngularVelocityDegPerSecond = currentAngularVelocityDegPerSecond;
     inputs.targetShotAngleDegrees = targetShotAngleDeg;
     inputs.targetDistanceFeet = Units.metersToFeet(targetDistanceMeters);
+    inputs.angleChangerVoltage = angleChanger.getMotorVoltage().getValueAsDouble();
   }
 
   public void startFlywheel() {
@@ -155,11 +166,11 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
 
   public void setAngleAtTarget(Translation2d currentPosition) {
     if (currentPosition.getMeasureX().in(Feet) > OuttakeConstants.OPPOSITE_TEAM_LIMIT_FEET) {
-      targetShotAngleDeg = OuttakeConstants.OPPOSITE_TEAM_SHOT_ANGLE_DEG;
+      setAngle(OuttakeConstants.OPPOSITE_TEAM_SHOT_ANGLE_DEG);
       return;
     } 
     if (currentPosition.getMeasureX().in(Feet) > OuttakeConstants.MIDFIELD_LIMIT_FEET) {
-      targetShotAngleDeg = OuttakeConstants.MIDFIELD_SHOT_ANGLE_DEG;
+      setAngle(OuttakeConstants.MIDFIELD_SHOT_ANGLE_DEG);
       return;
     }
     
@@ -179,10 +190,17 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     hoodAngleDegEntry.set(angleDegrees);
 
     targetShotAngleDeg = angleDegrees;
+
+    angleChanger.setControl(new MotionMagicDutyCycle(angleDegrees / OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO));
   }
 
   @Override
   public void setAngleFromNT() {
     setAngle(hoodAngleDegEntry.get());
+  }
+
+  @Override
+  public void runSysId(double voltage) {
+    sysIdVoltage = voltage;
   }
 }

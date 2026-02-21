@@ -44,10 +44,5 @@ public class HopperIOSim implements HopperIO {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getGoal'");
     }
-    @Override
-    public void setVoltage() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setVoltage'");
-    }
    
 }

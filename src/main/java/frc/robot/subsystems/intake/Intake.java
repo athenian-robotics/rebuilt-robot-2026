@@ -24,9 +24,11 @@ public class Intake extends SubsystemBase {
   private SysIdRoutine sysId = new SysIdRoutine(sysIdConfig, sysIdMechanism);
   
   
+  
   public Intake(IntakeIO io){
     this.io = io;
   }
+
   @Override
   public void periodic() {
     io.updateInputs(inputs);
