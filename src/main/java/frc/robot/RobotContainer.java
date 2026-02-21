@@ -65,8 +65,8 @@ public class RobotContainer {
   // -- Subsystems --
   private final Drive drive;
   private final Vision vision;
-  private  Hopper hopper;
-  private  Intake intake;
+  private final Hopper hopper;
+  private final Intake intake;
   private final Indexer indexer;
 
   // -- Controllers --
