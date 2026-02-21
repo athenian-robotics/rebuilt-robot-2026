@@ -21,7 +21,8 @@ import frc.robot.Constants.IntakeConstants;
 public class IntakeIOTalonFX implements IntakeIO {
   private final TalonFX armMotor = new TalonFX(IntakeConstants.ARM_ID);
   private final TalonFX wheelMotor = new TalonFX(IntakeConstants.WHEEL_ID);
-  private final CANcoder hello = new CANcoder(67);
+  
+  private double sysIdVoltage = 0.0;
 
 
   // private final PIDController feedback = new PIDController
@@ -63,6 +64,9 @@ public class IntakeIOTalonFX implements IntakeIO {
   /** Update the set of loggable inputs */
   @Override
   public void updateInputs(IntakeIOInputs inputs) {
+    if (sysIdVoltage != 0){
+      armMotor.setControl(new VoltageOut(sysIdVoltage));
+    }
     inputs.armMotorVoltage_Volts = armMotor.getMotorVoltage().getValueAsDouble();
     inputs.armMotorCurrent_Amps = armMotor.getTorqueCurrent().getValueAsDouble();
     inputs.armMotorRotations_Rotations = armMotor.getPosition().getValueAsDouble();
@@ -91,5 +95,10 @@ public class IntakeIOTalonFX implements IntakeIO {
   @Override
   public void stopIntake() {
     wheelMotor.setControl(new VoltageOut(0));
+  }
+
+  @Override
+  public void runSysId(double voltage) {
+    sysIdVoltage = voltage;
   }
 }

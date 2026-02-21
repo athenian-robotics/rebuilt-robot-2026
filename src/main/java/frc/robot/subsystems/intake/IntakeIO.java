@@ -16,10 +16,10 @@ public interface IntakeIO {
     public double wheelMotorCurrent_Amps = 0;
     public double wheelMotorVelocity_RotationsPerSecond = 0;
   }
-
   public default void updateInputs(IntakeIOInputs inputs){};
   public default void goToPosition(double rotations){};
   public default boolean atSetpoint(){return false;};
   public default void startIntake(){};
   public default void stopIntake(){};
+  public default void runSysId(double voltage) {};
 }
