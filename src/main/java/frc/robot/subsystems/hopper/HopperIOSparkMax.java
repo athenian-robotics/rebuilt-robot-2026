@@ -2,6 +2,11 @@ package frc.robot.subsystems.hopper;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
+import edu.wpi.first.units.measure.Voltage;
+
+import static edu.wpi.first.units.Units.Volts;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
@@ -17,6 +22,7 @@ public class HopperIOSparkMax implements HopperIO {
     private final SparkMax hopperMotor = new SparkMax(HopperConstants.SPARK_ID, MotorType.kBrushless);
     private final SparkClosedLoopController pidController = hopperMotor.getClosedLoopController();
     private final RelativeEncoder hopperEncoder = hopperMotor.getEncoder();
+    private double sysidVoltage = 0.0;
 
     public HopperIOSparkMax() {
         SparkMaxConfig cfg = new SparkMaxConfig();
@@ -40,6 +46,13 @@ public class HopperIOSparkMax implements HopperIO {
         hopperMotor.configure(cfg, com.revrobotics.ResetMode.kNoResetSafeParameters, com.revrobotics.PersistMode.kNoPersistParameters);
     }
 
+    @Override
+    public void periodic() {
+        if (sysidVoltage != 0.0) {
+            hopperMotor.setVoltage(sysidVoltage);
+        }
+    }
+
     /** Update the set of loggable inputs */
     @Override
     public void updateInputs(HopperIOInputs inputs) {
@@ -59,18 +72,21 @@ public class HopperIOSparkMax implements HopperIO {
     public void goToPosition(double position_inches){
         // pidController.setSetpoint(position_inches * HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION, SparkBase.ControlType.kMAXMotionPositionControl);
         //pidController.setSetpoint(position_inches, SparkBase.ControlType.kMAXMotionPositionControl);
-        pidController.setSetpoint(position_inches, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+        pidController.setSetpoint(position_inches * HopperConstants.HOPPER_POSITION_TO_ANGLE_CONVERSION, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
         // System.out.println("STATUS".concat(err.toString()));
-
     }
+
     @Override
     public boolean atSetpoint(){
         return pidController.isAtSetpoint();
     }
+
     public double getGoal(){
         return pidController.getSetpoint();
     }
-    public void setVoltage(){
-        this.setVoltage();
+
+    @Override
+    public void runSysId(double voltage) {
+        sysidVoltage = voltage;
     }
 }

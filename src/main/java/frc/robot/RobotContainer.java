@@ -17,7 +17,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -50,8 +49,6 @@ import frc.robot.subsystems.intake.IntakeIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
-
-import static edu.wpi.first.units.Units.Volt;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -95,8 +92,8 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         hopper = new Hopper(new HopperIOSparkMax());
-        intake = new Intake(new IntakeIOTalonFX());
         indexer = new Indexer(new IndexerIOTalonFX());
+        intake = new Intake(new IntakeIOTalonFX());
         break;
 
       case SIM:
@@ -211,9 +208,16 @@ public class RobotContainer {
     // // Switch to X pattern when X button is pressed
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
-    operatorJoystick.button(ControllerConstants.PLACEHOLDER).onTrue(
-      indexer.toggle());
+    System.out.println("Bindings configured");
+    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).onTrue(Commands.print("First print").andThen(
+      indexer.toggle().andThen(Commands.print("Indexer toggled"))));
 
+    /**
+    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).onTrue(
+      intake.runIntake()
+    );
+    */
+    
     // Reset gyro to 0° when the drive joystick's trigger is pressed
     driveJoystick.button(ControllerConstants.TRIGGER).onTrue(
             Commands.runOnce(

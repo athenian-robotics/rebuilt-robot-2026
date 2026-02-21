@@ -1,10 +1,7 @@
 package frc.robot.subsystems.indexer;
 
-import static edu.wpi.first.units.Units.Volts;
-
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Constants.IndexerConstants;
 
 public class IndexerIOSim implements IndexerIO {

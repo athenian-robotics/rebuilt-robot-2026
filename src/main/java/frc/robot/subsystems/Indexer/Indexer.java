@@ -2,7 +2,6 @@ package frc.robot.subsystems.indexer;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IndexerConstants;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -44,8 +43,10 @@ public class Indexer extends SubsystemBase {
      */
     public Command toggle () {
         return Commands.either(
-            Commands.runOnce(() -> io.setVoltage(0)), // If on 
-            Commands.runOnce(() -> io.setVoltage(IndexerConstants.MOTOR_VOLTAGE)), // if off
+            Commands.runOnce(() -> {io.setVoltage(0);
+                state = state.OFF;}), // If on 
+            Commands.runOnce(() -> {io.setVoltage(-IndexerConstants.MOTOR_VOLTAGE);
+                state = state.ON;}), // if off
             () -> this.state == State.ON);
     }
 }

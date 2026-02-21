@@ -12,9 +12,11 @@ public class Intake extends SubsystemBase {
 
   private IntakeIO io;
   private IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
+  
   public Intake(IntakeIO io){
     this.io = io;
   }
+
   @Override
   public void periodic() {
     io.updateInputs(inputs);
