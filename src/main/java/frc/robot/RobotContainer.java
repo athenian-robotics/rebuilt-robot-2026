@@ -181,10 +181,10 @@ public class RobotContainer {
     //   }, hopper)
     // );
       // hopper.setDefaultCommand(HopperIntakeCommands.startingExtension(hopper, intake));
-      driveJoystick.button(1).onTrue(HopperIntakeCommands.startingExtension(hopper, intake));
-      driveJoystick.button(2).onTrue(HopperIntakeCommands.hopperRetract(hopper, intake));
-      driveJoystick.button(3).onTrue(HopperIntakeCommands.hopperExtend(hopper, intake));
-      driveJoystick.button(4).onTrue(HopperIntakeCommands.intakeWiggle(hopper, intake));
+      driveJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).onTrue(HopperIntakeCommands.startingExtension(hopper, intake));
+      driveJoystick.button(ControllerConstants.MAINHAND_BOTTOM_MIDDLE).onTrue(HopperIntakeCommands.hopperRetract(hopper, intake));
+      driveJoystick.button(ControllerConstants.MAINHAND_BOTTOM_RIGHT).onTrue(HopperIntakeCommands.hopperExtend(hopper, intake));
+      driveJoystick.button(ControllerConstants.MAINHAND_TOP_LEFT).onTrue(HopperIntakeCommands.intakeWiggle(hopper, intake));
 
   
 
