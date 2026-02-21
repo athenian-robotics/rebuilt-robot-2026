@@ -79,7 +79,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     // Update the current angular velocity by getting the motor velocity and multiplying by gear ratio
     currentAngularVelocityDegPerSecond = angleChanger.getVelocity().getValue().in(DegreesPerSecond) * OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO;
   
-    if (sysIdVoltage != 0.0) {
+    if (sysIdVoltage != 0.0 && currentAngleDeg > OuttakeConstants.MINIMUM_SHOT_ANGLE_DEG) {
       angleChanger.setControl(new VoltageOut(sysIdVoltage));
     }
   }
