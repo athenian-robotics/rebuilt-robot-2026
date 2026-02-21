@@ -1,5 +1,7 @@
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.intake.IntakeIOInputsAutoLogged;
@@ -18,11 +20,14 @@ public class Intake extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Intake", inputs);
   }
-
+  /**fully extends the intake from {@value IntakeConstants#FULL_RETRACTION_DEGREES} degrees 
+   * to {@value IntakeConstants#FULL_EXTENSION_DEGREES} degrees*/
   public void fullyExtend() {
     System.out.println("one must have a mind of winter");
     io.goToPosition(IntakeConstants.FULL_EXTENSION_DEGREES); // position feedback loop
   }
+  /**fully retracts the intake from {@value IntakeConstants#FULL_EXTENSION_DEGREES} degrees 
+   * to {@value IntakeConstants#FULL_RETRACTION_DEGREES} degrees*/
   public void fullyRetract(){
     System.out.println("we need hot goss");
     io.goToPosition(IntakeConstants.FULL_RETRACTION_DEGREES);
@@ -35,5 +40,8 @@ public class Intake extends SubsystemBase {
   }
   public boolean atSetpoint(){
     return io.atSetpoint();
+
+  public Command runIntake() {
+    return Commands.startEnd(io::startIntake, io::stopIntake, this);
   }
 }
