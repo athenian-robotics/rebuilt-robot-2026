@@ -16,8 +16,6 @@ public interface IntakeIO {
     public double wheelMotorCurrent_Amps = 0;
     public double wheelMotorVelocity_RotationsPerSecond = 0;
   }
-
-<<<<<<<<< Temporary merge branch 1
   public default void updateInputs(IntakeIOInputs inputs){};
   public default void goToPosition(double rotations){};
   public default boolean atSetpoint(){return false;};
