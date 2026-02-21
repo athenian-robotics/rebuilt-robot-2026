@@ -5,6 +5,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -18,7 +19,8 @@ import frc.robot.Constants.IntakeConstants;
 
 
 public class IntakeIOTalonFX implements IntakeIO {
-  private final TalonFX armMotor = new TalonFX(IntakeConstants.TALON_ID);
+  private final TalonFX armMotor = new TalonFX(IntakeConstants.ARM_ID);
+  private final TalonFX wheelMotor = new TalonFX(IntakeConstants.WHEEL_ID);
   private final CANcoder hello = new CANcoder(67);
 
 
@@ -61,11 +63,15 @@ public class IntakeIOTalonFX implements IntakeIO {
   /** Update the set of loggable inputs */
   @Override
   public void updateInputs(IntakeIOInputs inputs) {
-    inputs.armMotor_Voltage_Volts = (armMotor.getMotorVoltage().getValueAsDouble());
-    inputs.armMotor_Current_Amps = armMotor.getTorqueCurrent().getValueAsDouble();
+    inputs.armMotorVoltage_Volts = armMotor.getMotorVoltage().getValueAsDouble();
+    inputs.armMotorCurrent_Amps = armMotor.getTorqueCurrent().getValueAsDouble();
     inputs.armMotorRotations_Rotations = armMotor.getPosition().getValueAsDouble();
     inputs.armRotations_Rotations = 
         inputs.armMotorRotations_Rotations * IntakeConstants.GEAR_ROTATIONS_TO_ARM_ROTATIONS;
+
+    inputs.wheelMotorVoltage_Volts = wheelMotor.getMotorVoltage().getValueAsDouble();
+    inputs.wheelMotorCurrent_Amps = wheelMotor.getTorqueCurrent().getValueAsDouble();
+    inputs.wheelMotorVelocity_RotationsPerSecond = wheelMotor.getVelocity().getValueAsDouble();
   }
 
   @Override
@@ -74,4 +80,13 @@ public class IntakeIOTalonFX implements IntakeIO {
     armMotor.setControl(m_request.withPosition(Units.degreesToRotations(armRotations_Degrees)  / IntakeConstants.GEAR_ROTATIONS_TO_ARM_ROTATIONS));
   }
 
+  @Override
+  public void startIntake() {
+    wheelMotor.setControl(new VoltageOut(IntakeConstants.WHEEL_VOLTAGE));
+  }
+
+  @Override
+  public void stopIntake() {
+    wheelMotor.setControl(new VoltageOut(0));
+  }
 }
