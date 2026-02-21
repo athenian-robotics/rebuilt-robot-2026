@@ -12,8 +12,8 @@ public class Intake extends SubsystemBase {
 
   private IntakeIO io;
   private IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
-
-  public Intake(IntakeIO io) {
+  
+  public Intake(IntakeIO io){
     this.io = io;
   }
 
@@ -22,17 +22,26 @@ public class Intake extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Intake", inputs);
   }
-
+  /**fully extends the intake from {@value IntakeConstants#FULL_RETRACTION_DEGREES} degrees 
+   * to {@value IntakeConstants#FULL_EXTENSION_DEGREES} degrees*/
   public void fullyExtend() {
+    System.out.println("full extension");
     io.goToPosition(IntakeConstants.FULL_EXTENSION_DEGREES); // position feedback loop
   }
+  /**fully retracts the intake from {@value IntakeConstants#FULL_EXTENSION_DEGREES} degrees 
+   * to {@value IntakeConstants#FULL_RETRACTION_DEGREES} degrees*/
   public void fullyRetract(){
+    System.out.println("full retraction");
     io.goToPosition(IntakeConstants.FULL_RETRACTION_DEGREES);
   }
 
   public void wiggleUp() {
+    System.out.println("wiggle up");
     io.goToPosition(IntakeConstants.MAX_WIGGLE_DEGREES);
      // velocity feedback loop
+  }
+  public boolean atSetpoint(){
+    return io.atSetpoint();
   }
 
   public Command runIntake() {

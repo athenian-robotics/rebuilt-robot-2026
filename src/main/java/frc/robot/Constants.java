@@ -192,15 +192,17 @@ public class Constants {
     public static final double FULL_RETRACTION_DEGREES = 0;
     public static final double FULL_EXTENSION_DEGREES = 120;
     public static final double MAX_WIGGLE_DEGREES = 75;
+    public static final double VELOCITY = 0;
 
     // feedback constants
-    public static final double INTAKE_kP = 0;
-    public static final double INTAKE_kI = 0;
-    public static final double INTAKE_kD = 0;
+    public static final double INTAKE_kP = 1;
+    public static final double INTAKE_kI = 1;
+    public static final double INTAKE_kD = 1;
     // feedforward constants
     public static final double INTAKE_kS = 0;
     public static final double INTAKE_kV = 0;
     public static final double INTAKE_kA = 0;
+    public static final double INTAKE_kG = 0;
     // motion profiler constants
     public static final double INTAKE_CRUISE_VELOCITY = 0;
     public static final double INTAKE_MAX_ACCELERATION = 0;
@@ -245,3 +247,4 @@ public class Constants {
     public static final String CANIVORE_NAME = "can"; // 7733663E3353385320202034382203FF
   }
 }
+
