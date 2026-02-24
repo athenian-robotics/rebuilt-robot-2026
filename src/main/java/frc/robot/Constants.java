@@ -142,7 +142,7 @@ public class Constants {
     public static final int LEFT_SHOOTER_MOTOR = 22;
     public static final int MIDDLE_WHEEL_MOTOR = 24;
     public static final int STAR_WHEEL_MOTOR = 23;
-    public static final int ANGLE_CHANGER_MOTOR = 0;
+    public static final int ANGLE_CHANGER_MOTOR = 50;
 
     public static final double MIDDLE_WHEEL_TO_SHOOTER_VOLTS = 2;
     public static final double MIDDLE_WHEEL_TO_GROUND_VOLTS = -2;
@@ -239,7 +239,7 @@ public class Constants {
   }
 
   public final class IndexerConstants {
-    public static final int MOTOR_ID = 2;
+    public static final int MOTOR_ID = 52;
     public static final double MOTOR_VOLTAGE = 3;
   }
 
