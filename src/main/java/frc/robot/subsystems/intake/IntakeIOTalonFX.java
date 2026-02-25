@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -14,13 +15,14 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.IntakeConstants;
 
 
 
 public class IntakeIOTalonFX implements IntakeIO {
-  private final TalonFX armMotor = new TalonFX(IntakeConstants.ARM_ID);
-  private final TalonFX wheelMotor = new TalonFX(IntakeConstants.WHEEL_ID);
+  private final TalonFX armMotor = new TalonFX(IntakeConstants.ARM_ID, new CANBus(CANConstants.CANIVORE_NAME));
+  private final TalonFX wheelMotor = new TalonFX(IntakeConstants.WHEEL_ID, new CANBus(CANConstants.CANIVORE_NAME));
   private final CANcoder hello = new CANcoder(67);
 
 

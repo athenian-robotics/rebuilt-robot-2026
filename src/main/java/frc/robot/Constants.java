@@ -144,10 +144,10 @@ public class Constants {
     public static final int STAR_WHEEL_MOTOR = 23;
     public static final int ANGLE_CHANGER_MOTOR = 50;
 
-    public static final double MIDDLE_WHEEL_TO_SHOOTER_VOLTS = 2;
-    public static final double MIDDLE_WHEEL_TO_GROUND_VOLTS = -2;
-    public static final double STAR_WHEEL_TO_GROUND_VOLTS = 2;
-    public static final double STAR_WHEEL_TO_SHOOTER_VOLTS = 2;
+    public static final double MIDDLE_WHEEL_TO_SHOOTER_VOLTS = 6;
+    public static final double MIDDLE_WHEEL_TO_GROUND_VOLTS = -6;
+    public static final double STAR_WHEEL_TO_GROUND_VOLTS = 6;
+    public static final double STAR_WHEEL_TO_SHOOTER_VOLTS = 6;
     public static final double FLYWHEEL_VOLTS = 12;
 
     public static final double MINIMUM_SHOT_ANGLE_DEG = 48.782882;
@@ -159,7 +159,7 @@ public class Constants {
     public static final double MIDFIELD_LIMIT_FEET = 0.0;
     public static final double OPPOSITE_TEAM_LIMIT_FEET = 0.0;
 
-    public static final double ANGLE_CHANGER_GEAR_RATIO = 1 / 16;
+    public static final double ANGLE_CHANGER_GEAR_RATIO = 1.0 / 16.0;
 
     public static final double HOOD_ANGLE_KP = 1.0;
     public static final double HOOD_ANGLE_KD = 0.1;
@@ -186,7 +186,7 @@ public class Constants {
     public static final int WHEEL_ID = 25;
 
     public static final double INTAKE_MOTOR_TO_FIRST_PULLEY_RATIO = 60;
-    public static final double INTAKE_FIRST_PULLEY_TO_SECOND_PULLEY_RATIO = 15 / 36;
+    public static final double INTAKE_FIRST_PULLEY_TO_SECOND_PULLEY_RATIO = 15.0 / 36.0;
     public static final double GEAR_ROTATIONS_TO_ARM_ROTATIONS =
         INTAKE_FIRST_PULLEY_TO_SECOND_PULLEY_RATIO / INTAKE_MOTOR_TO_FIRST_PULLEY_RATIO;
     public static final double FULL_RETRACTION_DEGREES = 0;
@@ -208,7 +208,7 @@ public class Constants {
     public static final double INTAKE_MAX_ACCELERATION = 0;
     public static final double INTAKE_MAX_ALLOWED_PROFILER_ERROR = 0;
 
-    public static final double WHEEL_VOLTAGE = 3;
+    public static final double WHEEL_VOLTAGE = 6;
   }
 
   public final class HopperConstants {

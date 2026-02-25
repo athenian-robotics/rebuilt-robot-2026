@@ -46,6 +46,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeIOTalonFX;
+import frc.robot.subsystems.outtake.Outtake;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -65,6 +66,7 @@ public class RobotContainer {
   private final Hopper hopper;
   private final Intake intake;
   private final Indexer indexer;
+  private final Outtake outtake;
 
   // -- Controllers --
   private final CommandJoystick driveJoystick =
@@ -94,6 +96,7 @@ public class RobotContainer {
         hopper = new Hopper(new HopperIOSparkMax());
         indexer = new Indexer(new IndexerIOTalonFX());
         intake = new Intake(new IntakeIOTalonFX());
+        outtake = new Outtake();
         break;
 
       case SIM:
@@ -110,6 +113,7 @@ public class RobotContainer {
         hopper = new Hopper(new HopperIOSim());
         intake = new Intake(new IntakeIOSim());
         indexer = new Indexer(new IndexerIOSim());
+        outtake = null;
         break;
 
       default:
@@ -126,6 +130,7 @@ public class RobotContainer {
         indexer = new Indexer(new IndexerIO() {});
         hopper = new Hopper(new HopperIO() {});
         intake = new Intake(new IntakeIO() {});
+        outtake = null;
     }
 
     // Set up auto routines
@@ -225,7 +230,15 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
                 .ignoringDisable(true));
+
+    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).whileTrue(
+            intake.runIntake().ignoringDisable(true));
+
+    if (outtake != null) {
+      outtake.setDefaultCommand(outtake.aimWithJoystick(operatorJoystick::getY));
+    }
   }
+  
   
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
