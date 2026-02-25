@@ -240,7 +240,7 @@ public class Constants {
 
   public final class IndexerConstants {
     public static final int MOTOR_ID = 52;
-    public static final double MOTOR_VOLTAGE = 3;
+    public static final double MOTOR_VOLTAGE = 6.0;
   }
 
   public final class CANConstants {

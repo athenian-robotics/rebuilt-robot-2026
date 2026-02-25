@@ -209,8 +209,7 @@ public class RobotContainer {
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     System.out.println("Bindings configured");
-    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).onTrue(Commands.print("First print").andThen(
-      indexer.toggle().andThen(Commands.print("Indexer toggled"))));
+    operatorJoystick.button(ControllerConstants.TRIGGER).onTrue(indexer.toggle());
 
     /**
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).onTrue(
@@ -227,7 +226,7 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
   }
-
+  
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

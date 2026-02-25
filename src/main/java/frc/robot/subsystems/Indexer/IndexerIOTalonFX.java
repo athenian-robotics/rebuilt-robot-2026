@@ -29,5 +29,6 @@ public class IndexerIOTalonFX implements IndexerIO {
         Logger.recordOutput("Indexer/Voltage", voltage);
         appliedVoltage = voltage;
         motor.setControl(new VoltageOut(voltage));
+        System.out.println("Set voltage");
     }
 }
