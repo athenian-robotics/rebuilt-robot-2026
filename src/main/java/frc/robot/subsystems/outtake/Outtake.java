@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 import frc.robot.Constants.OuttakeConstants;
+import java.util.function.DoubleSupplier;
 
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
@@ -85,6 +86,25 @@ public class Outtake extends SubsystemBase {
             io.setStarWheelVoltage(0);
         },
         this);
+  }
+
+  /**
+   * Maps joystick Y input to hood angle across the configured min/max range.
+   *
+   * @param joystickY joystick axis in [-1, 1]
+   * @return command that continuously tracks joystick position
+   */
+  public Command aimWithJoystick(DoubleSupplier joystickY) {
+    return run(
+        () -> {
+          // Invert axis so pushing forward increases the command value.
+          double invertedY = -joystickY.getAsDouble();
+          double normalized = (invertedY + 1.0) / 2.0;
+          double angleRange =
+              OuttakeConstants.MAXIMUM_SHOT_ANGLE_DEG - OuttakeConstants.MINIMUM_SHOT_ANGLE_DEG;
+          double targetAngle = OuttakeConstants.MINIMUM_SHOT_ANGLE_DEG + (normalized * angleRange);
+          io.setAngle(targetAngle);
+        });
   }
 
   /** Returns a command to run a quasistatic test in the specified direction. */

@@ -7,13 +7,13 @@ public final class BuildConstants {
   public static final String MAVEN_GROUP = "";
   public static final String MAVEN_NAME = "rebuilt-robot-2026";
   public static final String VERSION = "unspecified";
-  public static final int GIT_REVISION = 144;
-  public static final String GIT_SHA = "a6d519793599d90f686a5f5961800577dc0ea4e4";
-  public static final String GIT_DATE = "2026-02-21 17:44:09 EST";
-  public static final String GIT_BRANCH = "stuff-from-arc-template";
-  public static final String BUILD_DATE = "2026-02-21 17:51:34 EST";
-  public static final long BUILD_UNIX_TIME = 1771714294440L;
-  public static final int DIRTY = 0;
+  public static final int GIT_REVISION = 148;
+  public static final String GIT_SHA = "acca050f8b86407a6b37ef8a200b1d4252103d6e";
+  public static final String GIT_DATE = "2026-02-24 20:00:48 EST";
+  public static final String GIT_BRANCH = "real-testing";
+  public static final String BUILD_DATE = "2026-02-24 20:48:39 EST";
+  public static final long BUILD_UNIX_TIME = 1771984119520L;
+  public static final int DIRTY = 1;
 
   private BuildConstants(){}
 }

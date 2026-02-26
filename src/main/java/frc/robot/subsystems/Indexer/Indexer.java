@@ -44,9 +44,9 @@ public class Indexer extends SubsystemBase {
     public Command toggle () {
         return Commands.either(
             Commands.runOnce(() -> {io.setVoltage(0);
-                state = state.OFF;}), // If on 
+                state = state.OFF;}), // If on toggle off
             Commands.runOnce(() -> {io.setVoltage(-IndexerConstants.MOTOR_VOLTAGE);
-                state = state.ON;}), // if off
+                state = state.ON;}), // if off toggle on
             () -> this.state == State.ON);
     }
 }
