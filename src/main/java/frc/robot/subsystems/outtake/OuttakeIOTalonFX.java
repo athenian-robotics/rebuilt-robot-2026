@@ -8,6 +8,7 @@ import java.util.OptionalDouble;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -23,6 +24,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.OuttakeConstants;
 
 public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
@@ -44,16 +46,16 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
 
     hoodAngleDegEntry = NetworkTableInstance.getDefault().getDoubleTopic("/Outtake/HoodAngleDeg").getEntry(OuttakeConstants.MAXIMUM_SHOT_ANGLE_DEG);
 
-    followShooter = new TalonFX(OuttakeConstants.LEFT_SHOOTER_MOTOR);
-    leadShooter = new TalonFX(OuttakeConstants.RIGHT_SHOOTER_MOTOR);
+    followShooter = new TalonFX(OuttakeConstants.LEFT_SHOOTER_MOTOR, new CANBus(CANConstants.CANIVORE_NAME));
+    leadShooter = new TalonFX(OuttakeConstants.RIGHT_SHOOTER_MOTOR, new CANBus(CANConstants.CANIVORE_NAME));
 
     followShooter.setControl(
         new Follower(OuttakeConstants.RIGHT_SHOOTER_MOTOR, MotorAlignmentValue.Opposed));
     
     leadShooter.getConfigurator().apply(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast)); // To make re-spinning up faster
-    middleWheel = new TalonFX(OuttakeConstants.MIDDLE_WHEEL_MOTOR);
-    starWheel = new TalonFX(OuttakeConstants.STAR_WHEEL_MOTOR);
-    angleChanger = new TalonFX(OuttakeConstants.ANGLE_CHANGER_MOTOR);
+    middleWheel = new TalonFX(OuttakeConstants.MIDDLE_WHEEL_MOTOR, new CANBus(CANConstants.CANIVORE_NAME));
+    starWheel = new TalonFX(OuttakeConstants.STAR_WHEEL_MOTOR, new CANBus(CANConstants.CANIVORE_NAME));
+    angleChanger = new TalonFX(OuttakeConstants.ANGLE_CHANGER_MOTOR, new CANBus(CANConstants.CANIVORE_NAME));
 
     // Represents the starting position of the hood
     angleChanger.setPosition(OuttakeConstants.ANGLE_CHANGER_STARTING_ANGLE_ROTATIONS / OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO);

@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.PathGenerationConstants.Location;
 import frc.robot.Constants.IndexerConstants;
+import frc.robot.Constants.OuttakeConstants;
 import frc.robot.Constants.RuntimeConstants;
 import frc.robot.commands.DriveCommands;  
 import frc.robot.commands.HopperIntakeCommands;
@@ -268,10 +269,14 @@ public class RobotContainer {
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).whileTrue(
             intake.runIntake().ignoringDisable(true));
 
+    operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).whileTrue(outtake.sendBallsToShooter());
     if (outtake != null) {
       outtake.setDefaultCommand(outtake.aimWithJoystick(operatorJoystick::getY));
     }
-  }
+    
+    }
+    
+
   
   
   /**
