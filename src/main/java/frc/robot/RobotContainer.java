@@ -270,12 +270,10 @@ public class RobotContainer {
             intake.runIntake().ignoringDisable(true));
 
     operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).whileTrue(outtake.sendBallsToShooter());
-    if (outtake != null) {
-      outtake.setDefaultCommand(outtake.aimWithJoystick(operatorJoystick::getY));
+
+    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_LEFT).whileTrue(outtake.aimWithJoystick(() -> operatorJoystick.getY()));
     }
-    
-    }
-    
+
 
   
   

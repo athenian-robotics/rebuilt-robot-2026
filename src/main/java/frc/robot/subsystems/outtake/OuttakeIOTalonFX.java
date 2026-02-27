@@ -193,7 +193,9 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
 
     targetShotAngleDeg = angleDegrees;
 
-    angleChanger.setControl(new MotionMagicDutyCycle(angleDegrees / OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO));
+    MotionMagicDutyCycle magic = new MotionMagicDutyCycle(angleDegrees / OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO);
+
+    angleChanger.setControl(magic);
   }
 
   @Override

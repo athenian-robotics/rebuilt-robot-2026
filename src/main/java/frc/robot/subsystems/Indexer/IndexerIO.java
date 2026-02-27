@@ -1,10 +1,6 @@
 package frc.robot.subsystems.indexer;
 
-import static edu.wpi.first.units.Units.Volts;
-
 import org.littletonrobotics.junction.AutoLog;
-
-import edu.wpi.first.units.measure.Voltage;
 
 public interface IndexerIO {
 
@@ -17,5 +13,6 @@ public interface IndexerIO {
     public default void updateInputs (IndexerIOInputs inputs) {}
 
     // Runs the indexer at the specified voltage
+    
     public default void setVoltage (double voltage) {}
 }
