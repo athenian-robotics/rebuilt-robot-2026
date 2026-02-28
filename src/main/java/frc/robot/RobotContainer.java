@@ -48,6 +48,9 @@ import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeIOTalonFX;
 import frc.robot.subsystems.outtake.Outtake;
+import frc.robot.subsystems.outtake.OuttakeIO;
+import frc.robot.subsystems.outtake.OuttakeIOSim;
+import frc.robot.subsystems.outtake.OuttakeIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -99,7 +102,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         hopper = new Hopper(new HopperIOSparkMax());
         intake = new Intake(new IntakeIOTalonFX());
-        outtake = new Outtake();
+        outtake = new Outtake(new OuttakeIOTalonFX());
         break;
 
       case SIM:
@@ -131,7 +134,7 @@ public class RobotContainer {
                 new ModuleIO() {});
         hopper = new Hopper(new HopperIO() {});
         intake = new Intake(new IntakeIO() {});
-        outtake = null;
+        outtake = new Outtake(new OuttakeIO() {});
     }
 
     pathGeneration = new PathGeneration();
@@ -180,12 +183,12 @@ public class RobotContainer {
   private void configureJoystickBindings() {
     
     // Default command, normal field-relative drive
-    drive.setDefaultCommand(
-        DriveCommands.joystickDrive(
-            drive,
-            () -> -driveJoystick.getY(),
-            () -> -driveJoystick.getX(),
-            () -> -steerJoystick.getX()));
+    // drive.setDefaultCommand(
+    //     DriveCommands.joystickDrive(
+    //         drive,
+    //         () -> -driveJoystick.getY(),
+    //         () -> -driveJoystick.getX(),
+    //         () -> -steerJoystick.getX()));
     // hopper.setDefaultCommand(
     //   Commands.run(() -> {
     //     if (driveJoystick.button(1).getAsBoolean()) {
@@ -263,9 +266,11 @@ public class RobotContainer {
 
     operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).whileTrue(outtake.sendBallsToShooter());
 
-    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_LEFT).whileTrue(outtake.aimWithJoystick(() -> operatorJoystick.getY()));
+    operatorJoystick.button(ControllerConstants.TRIGGER).whileTrue(outtake.aimWithJoystick(() -> operatorJoystick.getY()));
 
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).whileTrue(outtake.startFlywheel());
+    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_LEFT).whileTrue(outtake.stopFlywheel());
+
     }
 
 

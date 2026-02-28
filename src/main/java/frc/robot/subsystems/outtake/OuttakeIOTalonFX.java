@@ -3,6 +3,7 @@ package frc.robot.subsystems.outtake;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Feet;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import java.util.OptionalDouble;
 
@@ -20,6 +21,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleEntry;
@@ -50,6 +52,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
 
     followShooter = new TalonFX(OuttakeConstants.LEFT_SHOOTER_MOTOR, new CANBus(CANConstants.CANIVORE_NAME));
     leadShooter = new TalonFX(OuttakeConstants.RIGHT_SHOOTER_MOTOR, new CANBus(CANConstants.CANIVORE_NAME));
+    flywheelController = new BangBangController();
 
     followShooter.setControl(
         new Follower(OuttakeConstants.RIGHT_SHOOTER_MOTOR, MotorAlignmentValue.Opposed));
@@ -77,17 +80,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     angleChangerMotionProfile.MotionMagicAcceleration = OuttakeConstants.HOOD_ANGLE_MAX_ACCELERATION_RPSPS;
     angleChanger.getConfigurator().apply(angleChangerMotionProfile);
 
-    Slot0Configs flywheelControl = new Slot0Configs();
-    flywheelControl.kS = OuttakeConstants.FLYWHEEL_KS;
-    flywheelControl.kV = OuttakeConstants.FLYWHEEL_KV;
-    flywheelControl.kA = OuttakeConstants.FLYWHEEL_KA;
-    leadShooter.getConfigurator().apply(flywheelControl);
 
-    MotionMagicConfigs flywheelMotionProfile = new MotionMagicConfigs();
-    flywheelMotionProfile.MotionMagicAcceleration = OuttakeConstants.FLYWHEEL_MAX_ACCELERATION_RPSPS;
-    flywheelMotionProfile.MotionMagicJerk = OuttakeConstants.FLYWHEEL_MAX_JERK_RPSPSPS;
-
-      leadShooter.getConfigurator().apply(flywheelMotionProfile);
   }
   public void periodic() {
     // Update the current angle by getting the motor position and multiplying by gear ratio
@@ -98,7 +91,10 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     if (sysIdVoltage != 0.0 && currentAngleDeg > OuttakeConstants.MINIMUM_SHOT_ANGLE_DEG) {
       angleChanger.setControl(new VoltageOut(sysIdVoltage));
     }
+    leadShooter.setControl(new VoltageOut(-12 * flywheelController.calculate(leadShooter.getVelocity().getValue().in(RotationsPerSecond), setpoint)));
+    
   }
+  
 
   /**
    * Calculates how to aim the shooter to hit a target.
@@ -164,16 +160,15 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
  
 
   public void startFlywheel() {
-    final MotionMagicVelocityVoltage m_request = new MotionMagicVelocityVoltage(0);
-    m_request.Acceleration = 2;
-    leadShooter.setControl(m_request.withVelocity(OuttakeConstants.FLYWHEEL_VELOCITY_RPS));
-
+    setpoint = OuttakeConstants.FLYWHEEL_VELOCITY_RPS;
     Logger.recordOutput("Outtake/FlywheelVoltage", leadShooter.getMotorVoltage().getValue());
+    System.out.println(leadShooter.getMotorVoltage().getValue());
   }
 
   public void stopFlywheel() {
-    leadShooter.set(0.0);
+    setpoint = 0.0;
     Logger.recordOutput("Outtake/FlywheelVoltage", 0.0);
+   
   }
 
   public void setMiddleWheelVoltage(double voltage) {
