@@ -29,7 +29,7 @@ import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.OuttakeConstants;
 
 public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
-  private final TalonFX leadShooter, followShooter, middleWheel, starWheel, angleChanger;
+  private final TalonFX leadShooter, followShooter, middleWheel, angleChanger, indexerMotor;
 
   private double targetShotAngleDeg = OuttakeConstants.STARTING_SHOT_ANGLE_DEG;
 
@@ -44,6 +44,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
 
   public OuttakeIOTalonFX() {
     super();
+    indexerMotor = new TalonFX(OuttakeConstants.STAR_WHEEL_MOTOR, new CANBus(CANConstants.CANIVORE_NAME)); //indexer AND star wheel motor
 
     hoodAngleDegEntry = NetworkTableInstance.getDefault().getDoubleTopic("/Outtake/HoodAngleDeg").getEntry(OuttakeConstants.MAXIMUM_SHOT_ANGLE_DEG);
 
@@ -55,7 +56,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     
     leadShooter.getConfigurator().apply(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast)); // To make re-spinning up faster
     middleWheel = new TalonFX(OuttakeConstants.MIDDLE_WHEEL_MOTOR, new CANBus(CANConstants.CANIVORE_NAME));
-    starWheel = new TalonFX(OuttakeConstants.STAR_WHEEL_MOTOR, new CANBus(CANConstants.CANIVORE_NAME));
+
     angleChanger = new TalonFX(OuttakeConstants.ANGLE_CHANGER_MOTOR, new CANBus(CANConstants.CANIVORE_NAME));
  
 
@@ -157,10 +158,14 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     inputs.targetShotAngleDegrees = targetShotAngleDeg;
     inputs.targetDistanceFeet = Units.metersToFeet(targetDistanceMeters);
     inputs.angleChangerVoltage = angleChanger.getMotorVoltage().getValueAsDouble();
+    inputs.indexerVoltage = indexerMotor.getMotorVoltage().getValueAsDouble();
   }
+
+ 
 
   public void startFlywheel() {
     final MotionMagicVelocityVoltage m_request = new MotionMagicVelocityVoltage(0);
+    m_request.Acceleration = 2;
     leadShooter.setControl(m_request.withVelocity(OuttakeConstants.FLYWHEEL_VELOCITY_RPS));
 
     Logger.recordOutput("Outtake/FlywheelVoltage", leadShooter.getMotorVoltage().getValue());
@@ -176,9 +181,9 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     Logger.recordOutput("Outtake/MiddleWheelVoltage", voltage);
   }
 
-  public void setStarWheelVoltage(double voltage) {
-    starWheel.setControl(new VoltageOut(voltage));
-    Logger.recordOutput("Outtake/StarWheelVoltage", voltage);
+  public void setIndexerVoltage(double voltage) {
+    indexerMotor.setControl(new VoltageOut(voltage));
+    Logger.recordOutput("Outtake/indexerMotorVoltage", voltage);
   }
 
   public void setAngleAtTarget(Translation2d currentPosition) {

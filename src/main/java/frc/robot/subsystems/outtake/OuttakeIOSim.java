@@ -27,10 +27,7 @@ public class OuttakeIOSim implements OuttakeIO {
         Logger.recordOutput("Outtake/MiddleWheelVoltage", voltage);
     }
 
-    @Override
-    public void setStarWheelVoltage(double voltage) {
-        Logger.recordOutput("Outtake/StarWheelVoltage", voltage);
-    }
+    
 
     @Override
     public void setAngleAtTarget(Translation2d currentPosition) {
@@ -48,6 +45,12 @@ public class OuttakeIOSim implements OuttakeIO {
     public void setAngleFromNT() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setAngleFromNT'");
+    }
+
+    @Override
+    public void setIndexerVoltage(double voltage) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setIndexerVoltage'");
     }
     
 }

@@ -2,6 +2,7 @@ package frc.robot.subsystems.outtake;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,6 +21,12 @@ public class Outtake extends SubsystemBase {
   private final OuttakeIO io;
   private final OuttakeIOInputsAutoLogged inputs;
   private final SysIdRoutine sysId;
+  private State indexerState = State.OFF;
+
+    private enum State {
+        ON,
+        OFF
+    }
 
   public Outtake() {
     io = new OuttakeIOTalonFX();
@@ -69,11 +76,11 @@ public class Outtake extends SubsystemBase {
     return new StartEndCommand(
         () -> {
           io.setMiddleWheelVoltage(-OuttakeConstants.MIDDLE_WHEEL_TO_SHOOTER_VOLTS);
-          io.setStarWheelVoltage(-OuttakeConstants.STAR_WHEEL_TO_SHOOTER_VOLTS);
+          io.setIndexerVoltage(-OuttakeConstants.STAR_WHEEL_TO_SHOOTER_VOLTS);
         },
         () -> {
           io.setMiddleWheelVoltage(0);
-          io.setStarWheelVoltage(0);
+          io.setIndexerVoltage(0);
         },
         this);
   }
@@ -82,11 +89,11 @@ public class Outtake extends SubsystemBase {
     return new StartEndCommand(
         () -> {
             io.setMiddleWheelVoltage(OuttakeConstants.MIDDLE_WHEEL_TO_GROUND_VOLTS);
-            io.setStarWheelVoltage(OuttakeConstants.STAR_WHEEL_TO_GROUND_VOLTS);
+            io.setIndexerVoltage(OuttakeConstants.STAR_WHEEL_TO_GROUND_VOLTS);
         },
         () -> {
             io.setMiddleWheelVoltage(0);
-            io.setStarWheelVoltage(0);
+            io.setIndexerVoltage(0);
         },
         this);
   }
@@ -119,5 +126,27 @@ public class Outtake extends SubsystemBase {
     /** Returns a command to run a dynamic test in the specified direction. */
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return run(() -> io.runSysId(0.0)).withTimeout(1.0).andThen(sysId.dynamic(direction));
+    }
+
+    /**
+     * Run the indexer with a specified voltage. For use in 
+     * @param voltage The voltage at which to run the indexer in volts
+     * @return The command
+     */
+    public Command runIndexer(double voltage) {
+        return new InstantCommand(() -> io.setIndexerVoltage(voltage), this);
+    }
+
+    /**
+     * Toggles the indexer between on and off
+     * @return The command to do this
+     */
+    public Command toggleIndexer () {
+        return Commands.either(
+            Commands.runOnce(() -> {io.setIndexerVoltage(0);
+                indexerState = indexerState.OFF;}), // If on toggle off
+            Commands.runOnce(() -> {io.setIndexerVoltage(-OuttakeConstants.INDEXER_MOTOR_VOLTAGE);
+                indexerState = indexerState.ON;}), // if off toggle on
+            () -> this.indexerState == State.ON);
     }
 }
