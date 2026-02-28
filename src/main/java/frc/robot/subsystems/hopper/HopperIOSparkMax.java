@@ -40,10 +40,14 @@ public class HopperIOSparkMax implements HopperIO {
             .kV(HopperConstants.HOPPER_kV)
             .kA(HopperConstants.HOPPER_kA)
             .kS(HopperConstants.HOPPER_kS);
+
         cfg.closedLoop
             .pid(HopperConstants.HOPPER_kP, HopperConstants.HOPPER_kI, HopperConstants.HOPPER_kD);
-
-        hopperMotor.configure(cfg, com.revrobotics.ResetMode.kNoResetSafeParameters, com.revrobotics.PersistMode.kNoPersistParameters);
+        
+            //This is commented because it caused errors in the red text errors /////////////////////////////////////////////////
+        //     hopperMotor.configure(cfg, 
+        // com.revrobotics.ResetMode.kNoResetSafeParameters, 
+        // com.revrobotics.PersistMode.kNoPersistParameters);
     }
 
     @Override

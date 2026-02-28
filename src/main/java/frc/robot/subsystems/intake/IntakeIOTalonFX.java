@@ -23,8 +23,6 @@ import frc.robot.Constants.IntakeConstants;
 public class IntakeIOTalonFX implements IntakeIO {
   private final TalonFX armMotor = new TalonFX(IntakeConstants.ARM_ID, new CANBus(CANConstants.CANIVORE_NAME));
   private final TalonFX wheelMotor = new TalonFX(IntakeConstants.WHEEL_ID, new CANBus(CANConstants.CANIVORE_NAME));
-  private final CANcoder hello = new CANcoder(67);
-
 
   // private final PIDController feedback = new PIDController
   // (IntakeConstants.INTAKE_kP, 

@@ -53,6 +53,9 @@ public class Outtake extends SubsystemBase {
   public Command enterShootMode(double shotAngleDeg) {
     return new InstantCommand(io::startFlywheel).andThen(new InstantCommand(() -> io.setAngle(shotAngleDeg)));
   }
+  public Command startFlywheel(){
+    return new InstantCommand(io::startFlywheel);
+  }
 
   public Command lowerHood() {
     return new InstantCommand(() -> io.setAngle(OuttakeConstants.MAXIMUM_SHOT_ANGLE_DEG));
@@ -95,8 +98,7 @@ public class Outtake extends SubsystemBase {
    * @return command that continuously tracks joystick position
    */
   public Command aimWithJoystick(DoubleSupplier joystickY) {
-    return run(
-        () -> {
+    return new StartEndCommand(() -> {
           // Invert axis so pushing forward increases the command value.
           double invertedY = -joystickY.getAsDouble();
           double normalized = (invertedY + 1.0) / 2.0;
@@ -104,7 +106,7 @@ public class Outtake extends SubsystemBase {
               OuttakeConstants.MAXIMUM_SHOT_ANGLE_DEG - OuttakeConstants.MINIMUM_SHOT_ANGLE_DEG;
           double targetAngle = OuttakeConstants.MINIMUM_SHOT_ANGLE_DEG + (normalized * angleRange);
           io.setAngle(targetAngle);
-        });
+        }, () -> io.stopAngleChanging(), this);
   }
 
   /** Returns a command to run a quasistatic test in the specified direction. */

@@ -45,4 +45,6 @@ public interface OuttakeIO extends Subsystem {
   public void setAngleFromNT ();
 
   public default void runSysId(double voltage) {};
+
+  public default void stopAngleChanging() {}
 }

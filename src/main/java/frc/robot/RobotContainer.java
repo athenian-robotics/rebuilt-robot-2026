@@ -254,24 +254,26 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    // Should return the bot to its initial position
-    driveJoystick
-        .button(ControllerConstants.TRIGGER)
-        .whileTrue(
-            Commands.runOnce(() -> System.out.println("Running path gen"))
-                .andThen(pathGeneration.pathfindTo(Location.TEST_POSE)));
+    // // Should return the bot to its initial position
+    // driveJoystick
+    //     .button(ControllerConstants.TRIGGER)
+    //     .whileTrue(
+    //         Commands.runOnce(() -> System.out.println("Running path gen"))
+    //             .andThen(pathGeneration.pathfindTo(Location.TEST_POSE)));
 
     // Might work better
     driveJoystick
         .button(ControllerConstants.THUMB_BUTTON_RIGHT)
         .onTrue(pathGeneration.pathfindToSimple(drive::getPose, Location.TEST_POSE, 0.0));
 
-    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).whileTrue(
-            intake.runIntake().ignoringDisable(true));
+   // operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).whileTrue(
+            //intake.runIntake().ignoringDisable(true));
 
     operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).whileTrue(outtake.sendBallsToShooter());
 
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_LEFT).whileTrue(outtake.aimWithJoystick(() -> operatorJoystick.getY()));
+
+    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).whileTrue(outtake.startFlywheel());
     }
 
 

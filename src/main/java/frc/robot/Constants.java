@@ -157,7 +157,17 @@ public class Constants {
     public static final double MIDDLE_WHEEL_TO_GROUND_VOLTS = -3;
     public static final double STAR_WHEEL_TO_GROUND_VOLTS = 3;
     public static final double STAR_WHEEL_TO_SHOOTER_VOLTS = 3;
-    public static final double FLYWHEEL_VOLTS = 12;
+    public static final double FLYWHEEL_VOLTS = 9;
+
+    public static final double FLYWHEEL_KS = 0.0;
+    public static final double FLYWHEEL_KV = 0.0;
+    public static final double FLYWHEEL_KA = 0.0;
+
+    
+    public static final double FLYWHEEL_MAX_ACCELERATION_RPSPS = 0.0;
+    public static final double FLYWHEEL_MAX_JERK_RPSPSPS = 0.0;
+    public static final double FLYWHEEL_MAX_ERROR_RPS = 0.0;
+    public static final double FLYWHEEL_VELOCITY_RPS = 40.0;
 
     public static final double MINIMUM_SHOT_ANGLE_DEG = 48.782882;
     public static final double MAXIMUM_SHOT_ANGLE_DEG = 74.552487;
@@ -170,7 +180,7 @@ public class Constants {
 
     public static final double ANGLE_CHANGER_GEAR_RATIO = 1.0 / 16.0;
 
-    public static final double HOOD_ANGLE_KP = 1.0;
+    public static final double HOOD_ANGLE_KP = 0.1;
     public static final double HOOD_ANGLE_KD = 0.1;
     public static final double HOOD_ANGLE_KS = 0.5;
     public static final double HOOD_ANGLE_KV = 1.0;
@@ -221,7 +231,7 @@ public class Constants {
   }
 
   public final class HopperConstants {
-    public final static int SPARK_ID = 0;
+    public final static int SPARK_ID = 10;
 
     public final static double HOPPER_RETRACTED = 0;
     public final static double HOPPER_PARTIAL = 4;
@@ -233,13 +243,13 @@ public class Constants {
    
   
     //feedback constants
-    public final static double HOPPER_kP = 0;
-    public final static double HOPPER_kI = 0;
-    public final static double HOPPER_kD = 0;
+    public final static double HOPPER_kP = 1;
+    public final static double HOPPER_kI = 1;
+    public final static double HOPPER_kD = 1;
     //feedforward constants
-    public final static double HOPPER_kS = 0;
-    public final static double HOPPER_kV = 0;
-    public final static double HOPPER_kA = 0;
+    public final static double HOPPER_kS = 1;
+    public final static double HOPPER_kV = 1;
+    public final static double HOPPER_kA = 1;
     //motion profiler constants
     public final static double HOPPER_CRUISE_VELOCITY = 0;
     public final static double HOPPER_MAX_ACCELERATION = 0;
