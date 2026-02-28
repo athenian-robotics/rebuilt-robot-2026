@@ -3,6 +3,7 @@ package frc.robot.subsystems.outtake;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Feet;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import java.util.OptionalDouble;
 
@@ -92,7 +93,8 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     if (sysIdVoltage != 0.0 && currentAngleDeg > OuttakeConstants.MINIMUM_SHOT_ANGLE_DEG) {
       angleChanger.setControl(new VoltageOut(sysIdVoltage));
     }
-    leadShooter.setControl(new VoltageOut(12 * flywheelController.calculate(setpoint)));
+    leadShooter.setControl(new VoltageOut(-12 * flywheelController.calculate(leadShooter.getVelocity().getValue().in(RotationsPerSecond), setpoint)));
+    
   }
   
 
@@ -155,7 +157,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     inputs.targetDistanceFeet = Units.metersToFeet(targetDistanceMeters);
     inputs.angleChangerVoltage = angleChanger.getMotorVoltage().getValueAsDouble();
     inputs.setpoint_RPS = setpoint;
-
+    inputs.flywheel_RPS = leadShooter.getVelocity().getValue().in(RotationsPerSecond);
   }
 
   public void startFlywheel() {
