@@ -16,35 +16,38 @@ public interface OuttakeIO extends Subsystem {
     /** Distance to the target in feet */
     public double targetDistanceFeet = 0.0;
     public double angleChangerVoltage = 0.0;
+    public double setpoint_RPS = 0.0;
   }
 
   /** Updates logs; util for AdvantageScope
    * @param inputs inputs from previous iteration
    */
-  public void updateInputs(OuttakeIOInputs inputs);
+  public default void updateInputs(OuttakeIOInputs inputs) {};
 
   /** Causes the flywheel to start spinning up */
-  public void startFlywheel();
+  public default void startFlywheel() {};
 
   /** Causes the flywheel to coast */
-  public void stopFlywheel();
+  public default void stopFlywheel() {};
 
   /** Causes the "middle" wheel to spin using specified voltage */
-  public void setMiddleWheelVoltage(double voltage);
+  public default void setMiddleWheelVoltage(double voltage) {};
 
   /** Causes the star wheel to spin using specified voltage */
-  public void setStarWheelVoltage(double voltage);
+  public default void setStarWheelVoltage(double voltage) {};
 
   /** Sets the target shot angle, which the hood will constantly move towards, to be targeting the target */
-  public void setAngleAtTarget(Translation2d currentPosition);
+  public default void setAngleAtTarget(Translation2d currentPosition) {};
 
   /** Sets the target shot angle, which the hood will constantly move towards, measured ccw+ from horiontal */
-  public void setAngle(double angleDegrees);
+  public default void setAngle(double angleDegrees) {};
 
   /** Sets the target angle based on the current network table value at /Outtake/HoodAngleDeg */
-  public void setAngleFromNT ();
+  public default void setAngleFromNT () {};
 
   public default void runSysId(double voltage) {};
 
   public default void stopAngleChanging() {}
+
+  public default void periodic () {}
 }

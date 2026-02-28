@@ -2,6 +2,7 @@ package frc.robot.subsystems.outtake;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,8 +22,8 @@ public class Outtake extends SubsystemBase {
   private final OuttakeIOInputsAutoLogged inputs;
   private final SysIdRoutine sysId;
 
-  public Outtake() {
-    io = new OuttakeIOTalonFX();
+  public Outtake(OuttakeIO io) {
+    this.io = io;
     inputs = new OuttakeIOInputsAutoLogged();
 
     Config sysIdConfig = new Config(Volts.per(Seconds).of(.5), Volts.of(3), Seconds.of(5),
@@ -34,6 +35,7 @@ public class Outtake extends SubsystemBase {
 
   public void periodic() {
     io.updateInputs(inputs);
+    io.periodic();
     Logger.processInputs("Outtake", inputs);
   }
 
@@ -98,7 +100,7 @@ public class Outtake extends SubsystemBase {
    * @return command that continuously tracks joystick position
    */
   public Command aimWithJoystick(DoubleSupplier joystickY) {
-    return new StartEndCommand(() -> {
+    return Commands.run(() -> {
           // Invert axis so pushing forward increases the command value.
           double invertedY = -joystickY.getAsDouble();
           double normalized = (invertedY + 1.0) / 2.0;
@@ -106,7 +108,7 @@ public class Outtake extends SubsystemBase {
               OuttakeConstants.MAXIMUM_SHOT_ANGLE_DEG - OuttakeConstants.MINIMUM_SHOT_ANGLE_DEG;
           double targetAngle = OuttakeConstants.MINIMUM_SHOT_ANGLE_DEG + (normalized * angleRange);
           io.setAngle(targetAngle);
-        }, () -> io.stopAngleChanging(), this);
+        }, this);
   }
 
   /** Returns a command to run a quasistatic test in the specified direction. */
