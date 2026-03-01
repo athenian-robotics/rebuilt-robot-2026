@@ -33,10 +33,6 @@ import frc.robot.Constants.RuntimeConstants;
 import frc.robot.commands.DriveCommands;  
 import frc.robot.commands.HopperIntakeCommands;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.indexer.Indexer;
-import frc.robot.subsystems.indexer.IndexerIO;
-import frc.robot.subsystems.indexer.IndexerIOSim;
-import frc.robot.subsystems.indexer.IndexerIOTalonFX;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -76,7 +72,6 @@ public class RobotContainer {
   private final Vision vision;
   private final Hopper hopper;
   private final Intake intake;
-  private final Indexer indexer;
   private final PathGeneration pathGeneration;
   private final Outtake outtake;
 
@@ -106,7 +101,6 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         hopper = new Hopper(new HopperIOSparkMax());
-        indexer = new Indexer(new IndexerIOTalonFX());
         intake = new Intake(new IntakeIOTalonFX());
         outtake = new Outtake(new OuttakeIOTalonFX());
         break;
@@ -124,8 +118,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackRight));
         hopper = new Hopper(new HopperIOSim());
         intake = new Intake(new IntakeIOSim());
-        indexer = new Indexer(new IndexerIOSim());
-        outtake = new Outtake(new OuttakeIOSim());
+        outtake = null;
         break;
 
       default:
@@ -139,7 +132,6 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
-        indexer = new Indexer(new IndexerIO() {});
         hopper = new Hopper(new HopperIO() {});
         intake = new Intake(new IntakeIO() {});
         outtake = new Outtake(new OuttakeIO() {});
@@ -240,7 +232,7 @@ public class RobotContainer {
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     System.out.println("Bindings configured");
-    operatorJoystick.button(ControllerConstants.TRIGGER).onTrue(indexer.toggle());
+    operatorJoystick.button(ControllerConstants.TRIGGER).onTrue(outtake.toggleIndexer());
 
     /**
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).onTrue(

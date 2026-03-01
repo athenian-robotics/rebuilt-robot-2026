@@ -16,6 +16,7 @@ public interface OuttakeIO extends Subsystem {
     /** Distance to the target in feet */
     public double targetDistanceFeet = 0.0;
     public double angleChangerVoltage = 0.0;
+    public double indexerVoltage = 0.0;
     public double setpoint_RPS = 0.0;
     public double flywheel_RPS = 0.0;
   }
@@ -34,8 +35,9 @@ public interface OuttakeIO extends Subsystem {
   /** Causes the "middle" wheel to spin using specified voltage */
   public default void setMiddleWheelVoltage(double voltage) {};
 
-  /** Causes the star wheel to spin using specified voltage */
-  public default void setStarWheelVoltage(double voltage) {};
+  /** Causes the indexer AND star wheel to spin using specified voltage */
+
+  public void setIndexerVoltage(double voltage);
 
   /** Sets the target shot angle, which the hood will constantly move towards, to be targeting the target */
   public default void setAngleAtTarget(Translation2d currentPosition) {};
