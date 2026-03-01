@@ -76,6 +76,7 @@ public class Outtake extends SubsystemBase {
   public Command sendBallsToShooter() {
     return new StartEndCommand(
         () -> {
+          System.out.println("things!");
           io.setMiddleWheelVoltage(-OuttakeConstants.MIDDLE_WHEEL_TO_SHOOTER_VOLTS);
           io.setIndexerVoltage(-OuttakeConstants.STAR_WHEEL_TO_SHOOTER_VOLTS);
         },

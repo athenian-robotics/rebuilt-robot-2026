@@ -216,7 +216,7 @@ public class RobotContainer {
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
 
-    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).onTrue(outtake.toggleIndexer());
+    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).toggleOnTrue(outtake.sendBallsToShooter());
 
     /**
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).onTrue(

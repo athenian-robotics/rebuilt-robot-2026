@@ -163,6 +163,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     inputs.setpoint_RPS = setpoint;
     inputs.flywheel_RPS = leadShooter.getVelocity().getValue().in(RotationsPerSecond);
     inputs.armEncoderAngle_rot = angleChanger.getPosition().getValueAsDouble();
+    inputs.middleWheelVoltage = middleWheel.getMotorVoltage().getValueAsDouble();
   }
 
  
@@ -179,6 +180,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
    
   }
 
+  @Override
   public void setMiddleWheelVoltage(double voltage) {
     middleWheel.setControl(new VoltageOut(voltage));
     Logger.recordOutput("Outtake/MiddleWheelVoltage", voltage);

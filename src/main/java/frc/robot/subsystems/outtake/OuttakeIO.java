@@ -21,6 +21,7 @@ public interface OuttakeIO extends Subsystem {
     public double indexerVoltage = 0.0;
     public double setpoint_RPS = 0.0;
     public double flywheel_RPS = 0.0;
+    public double middleWheelVoltage = 0.0;
   }
 
   /** Updates logs; util for AdvantageScope
