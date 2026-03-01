@@ -266,10 +266,10 @@ public class RobotContainer {
     //         Commands.runOnce(() -> System.out.println("Running path gen"))
     //             .andThen(pathGeneration.pathfindTo(Location.TEST_POSE)));
 
-    // Might work better
-    driveJoystick
-        .button(ControllerConstants.THUMB_BUTTON_RIGHT)
-        .onTrue(pathGeneration.pathfindToSimple(drive::getPose, Location.TEST_POSE, 0.0));
+    // // Might work better
+    // driveJoystick
+    //     .button(ControllerConstants.THUMB_BUTTON_RIGHT)
+    //     .onTrue(pathGeneration.pathfindToSimple(drive::getPose, Location.TEST_POSE, 0.0));
 
    // operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).whileTrue(
             //intake.runIntake().ignoringDisable(true));
@@ -281,8 +281,9 @@ public class RobotContainer {
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).whileTrue(outtake.startFlywheel());
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_LEFT).whileTrue(outtake.stopFlywheel());
     operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_RIGHT).onTrue(HopperIntakeCommands.intakeGo(intake));
+    operatorJoystick.button(ControllerConstants.TRIGGER).toggleOnTrue(intake.runIntake());
 
-    }
+  }
 
 
   
