@@ -23,7 +23,8 @@ public class Intake extends SubsystemBase {
     Logger.processInputs("Intake", inputs);
   }
   /**fully extends the intake from {@value IntakeConstants#FULL_RETRACTION_DEGREES} degrees 
-   * to {@value IntakeConstants#FULL_EXTENSION_DEGREES} degrees*/
+   * to {@value IntakeConstants#FULL_EXTENSION_DEGREES} degrees
+ * @return */
   public void fullyExtend() {
     System.out.println("full extension");
     io.goToPosition(IntakeConstants.FULL_EXTENSION_DEGREES); // position feedback loop

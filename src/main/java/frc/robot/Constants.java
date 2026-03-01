@@ -155,13 +155,16 @@ public class Constants {
 
     public static final double MIDDLE_WHEEL_TO_SHOOTER_VOLTS = 3;
     public static final double MIDDLE_WHEEL_TO_GROUND_VOLTS = -3;
-    public static final double STAR_WHEEL_TO_GROUND_VOLTS = 3;
-    public static final double STAR_WHEEL_TO_SHOOTER_VOLTS = 3;
+    public static final double STAR_WHEEL_TO_GROUND_VOLTS = 6;
+    public static final double STAR_WHEEL_TO_SHOOTER_VOLTS = 6;
     public static final double FLYWHEEL_VOLTS = 9;
 
     public static final double FLYWHEEL_KS = 0.0;
     public static final double FLYWHEEL_KV = 0.0;
     public static final double FLYWHEEL_KA = 0.0;
+
+    public static final int INDEXER_MOTOR_ID = 52;
+    public static final double INDEXER_MOTOR_VOLTAGE = 6.0;
 
     
     public static final double FLYWHEEL_MAX_ACCELERATION_RPSPS = 0.0;
