@@ -283,6 +283,15 @@ public class RobotContainer {
     operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_RIGHT).onTrue(HopperIntakeCommands.intakeGo(intake));
     operatorJoystick.button(ControllerConstants.TRIGGER).toggleOnTrue(intake.runIntake());
 
+    driveJoystick.button(ControllerConstants.TRIGGER).whileTrue(
+        DriveCommands.joystickDriveAtAngle(
+            drive, 
+            () -> -driveJoystick.getY(),
+            () -> -driveJoystick.getX(), 
+            () -> {
+                return OuttakeConstants.HUB_POSITION.minus(drive.getPose().getTranslation()).getAngle();
+            })
+    );
   }
 
 
