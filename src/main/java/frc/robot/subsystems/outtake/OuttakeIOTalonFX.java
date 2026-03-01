@@ -32,6 +32,8 @@ import frc.robot.Constants.OuttakeConstants;
 
 public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   private final TalonFX leadShooter, followShooter, middleWheel, angleChanger, indexerMotor;
+  private final BangBangController flywheelController;
+  private double setpoint = 0.0;
 
   private double targetShotAngleDeg = OuttakeConstants.STARTING_SHOT_ANGLE_DEG;
 
@@ -155,6 +157,8 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     inputs.targetDistanceFeet = Units.metersToFeet(targetDistanceMeters);
     inputs.angleChangerVoltage = angleChanger.getMotorVoltage().getValueAsDouble();
     inputs.indexerVoltage = indexerMotor.getMotorVoltage().getValueAsDouble();
+    inputs.setpoint_RPS = setpoint;
+    inputs.flywheel_RPS = leadShooter.getVelocity().getValue().in(RotationsPerSecond);
   }
 
  
