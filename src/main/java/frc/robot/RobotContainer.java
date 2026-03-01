@@ -215,8 +215,8 @@ public class RobotContainer {
     // // Switch to X pattern when X button is pressed
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
-    System.out.println("Bindings configured");
-    operatorJoystick.button(ControllerConstants.TRIGGER).onTrue(outtake.toggleIndexer());
+
+    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).onTrue(outtake.toggleIndexer());
 
     /**
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).onTrue(
@@ -225,7 +225,7 @@ public class RobotContainer {
     */
     
     // Reset gyro to 0° when the drive joystick's trigger is pressed
-    driveJoystick.button(ControllerConstants.TRIGGER).onTrue(
+    steerJoystick.button(ControllerConstants.TRIGGER).onTrue(
             Commands.runOnce(
                     () ->
                         drive.setPose(
@@ -250,7 +250,7 @@ public class RobotContainer {
 
     operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).whileTrue(outtake.sendBallsToShooter());
 
-    operatorJoystick.button(ControllerConstants.TRIGGER).whileTrue(outtake.aimWithJoystick(() -> operatorJoystick.getY()));
+    operatorJoystick.button(ControllerConstants.OFFHAND_TOP_RIGHT).whileTrue(outtake.aimWithJoystick(() -> operatorJoystick.getY()));
 
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).whileTrue(outtake.startFlywheel());
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_LEFT).whileTrue(outtake.stopFlywheel());
