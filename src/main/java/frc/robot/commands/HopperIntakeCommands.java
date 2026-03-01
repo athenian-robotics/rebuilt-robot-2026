@@ -25,5 +25,8 @@ public class HopperIntakeCommands{
      .andThen(Commands.runOnce(intake::wiggleUp))
      .andThen(Commands.runOnce(intake::fullyExtend));
    }
-  
+
+   public static Command intakeGo(Intake intake){
+     return Commands.runOnce(intake::fullyExtend);
+   }
 }

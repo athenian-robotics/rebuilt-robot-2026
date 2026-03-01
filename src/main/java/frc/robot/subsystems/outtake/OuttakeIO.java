@@ -37,7 +37,7 @@ public interface OuttakeIO extends Subsystem {
 
   /** Causes the indexer AND star wheel to spin using specified voltage */
 
-  public void setIndexerVoltage(double voltage);
+  public default void setIndexerVoltage(double voltage){};
 
   /** Sets the target shot angle, which the hood will constantly move towards, to be targeting the target */
   public default void setAngleAtTarget(Translation2d currentPosition) {};
@@ -53,4 +53,5 @@ public interface OuttakeIO extends Subsystem {
   public default void stopAngleChanging() {}
 
   public default void periodic () {}
+
 }
