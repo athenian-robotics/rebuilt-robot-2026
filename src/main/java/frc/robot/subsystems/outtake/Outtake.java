@@ -34,7 +34,7 @@ public class Outtake extends SubsystemBase {
 
     Config sysIdConfig = new Config(Volts.per(Seconds).of(.15), Volts.of(0.5), Seconds.of(5),
             (state) -> Logger.recordOutput("Outtake/SysIdState", state.toString()));
-    Mechanism sysIdMechanism = new Mechanism((volts) -> io.runSysId(volts.in(Volts)), null, this);
+    Mechanism sysIdMechanism = new Mechanism((volts) -> io.runSysId(volts.in(Volts)), io::sysIDLog, this);
 
     sysId = new SysIdRoutine(sysIdConfig, sysIdMechanism);
   }

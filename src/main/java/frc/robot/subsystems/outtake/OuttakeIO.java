@@ -1,6 +1,7 @@
 package frc.robot.subsystems.outtake;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -54,5 +55,7 @@ public interface OuttakeIO extends Subsystem {
   public default void stopAngleChanging() {}
 
   public default void periodic () {}
+
+  public default void sysIDLog (SysIdRoutineLog log) {}
 
 }

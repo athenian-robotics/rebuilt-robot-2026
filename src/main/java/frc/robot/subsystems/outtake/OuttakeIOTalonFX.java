@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Feet;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 
 import java.util.OptionalDouble;
 
@@ -26,6 +27,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.OuttakeConstants;
@@ -94,7 +96,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     } else {
       angleChanger.setControl(new VoltageOut(0));
     }
-    leadShooter.setControl(new VoltageOut(-12 * flywheelController.calculate(leadShooter.getVelocity().getValue().in(RotationsPerSecond), setpoint)));
+    leadShooter.setControl(new VoltageOut(-12 * flywheelController.calculate(-leadShooter.getVelocity().getValue().in(RotationsPerSecond), setpoint)));
     
   }
   
@@ -231,5 +233,10 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   @Override
   public void runSysId(double voltage) {
     sysIdVoltage = voltage;
+  }
+
+  @Override
+  public void sysIDLog(SysIdRoutineLog log) {
+      log.motor("angle").voltage(Volts.of(sysIdVoltage)).angularPosition(Degrees.of(currentAngleDeg)).angularVelocity(DegreesPerSecond.of(currentAngularVelocityDegPerSecond));
   }
 }

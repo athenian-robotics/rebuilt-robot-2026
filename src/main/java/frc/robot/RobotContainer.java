@@ -225,7 +225,7 @@ public class RobotContainer {
     */
     
     // Reset gyro to 0° when the drive joystick's trigger is pressed
-    steerJoystick.button(ControllerConstants.TRIGGER).onTrue(
+    steerJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).onTrue(
             Commands.runOnce(
                     () ->
                         drive.setPose(
@@ -248,7 +248,7 @@ public class RobotContainer {
    // operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).whileTrue(
             //intake.runIntake().ignoringDisable(true));
 
-    operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).whileTrue(outtake.sendBallsToShooter());
+    steerJoystick.button(ControllerConstants.TRIGGER).whileTrue(outtake.sendBallsToShooter());
 
     operatorJoystick.button(ControllerConstants.OFFHAND_TOP_RIGHT).whileTrue(outtake.aimWithJoystick(() -> operatorJoystick.getY()));
 

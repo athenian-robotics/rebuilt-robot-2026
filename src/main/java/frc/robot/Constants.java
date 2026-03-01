@@ -153,7 +153,7 @@ public class Constants {
     public static final int STAR_WHEEL_MOTOR = 23;
     public static final int ANGLE_CHANGER_MOTOR = 50;
 
-    public static final double MIDDLE_WHEEL_TO_SHOOTER_VOLTS = 3;
+    public static final double MIDDLE_WHEEL_TO_SHOOTER_VOLTS = 6;
     public static final double MIDDLE_WHEEL_TO_GROUND_VOLTS = -3;
     public static final double STAR_WHEEL_TO_GROUND_VOLTS = 6;
     public static final double STAR_WHEEL_TO_SHOOTER_VOLTS = 6;
