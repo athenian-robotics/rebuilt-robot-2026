@@ -31,7 +31,6 @@ import frc.robot.Constants.IndexerConstants;
 import frc.robot.Constants.OuttakeConstants;
 import frc.robot.Constants.RuntimeConstants;
 import frc.robot.commands.DriveCommands;  
-import frc.robot.commands.HopperIntakeCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -39,10 +38,6 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
-import frc.robot.subsystems.hopper.Hopper;
-import frc.robot.subsystems.hopper.HopperIO;
-import frc.robot.subsystems.hopper.HopperIOSim;
-import frc.robot.subsystems.hopper.HopperIOSparkMax;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSim;
@@ -70,7 +65,6 @@ public class RobotContainer {
   // -- Subsystems --
   private final Drive drive;
   private final Vision vision;
-  private final Hopper hopper;
   private final Intake intake;
   private final PathGeneration pathGeneration;
   private final Outtake outtake;
@@ -100,7 +94,6 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        hopper = new Hopper(new HopperIOSparkMax());
         intake = new Intake(new IntakeIOTalonFX());
         outtake = new Outtake(new OuttakeIOTalonFX());
         break;
@@ -116,7 +109,6 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
-        hopper = new Hopper(new HopperIOSim());
         intake = new Intake(new IntakeIOSim());
         outtake = null;
         break;
@@ -132,7 +124,6 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
-        hopper = new Hopper(new HopperIO() {});
         intake = new Intake(new IntakeIO() {});
         outtake = new Outtake(new OuttakeIO() {});
     }
@@ -199,23 +190,6 @@ public class RobotContainer {
             () -> -driveJoystick.getY(),
             () -> -driveJoystick.getX(),
             () -> -steerJoystick.getX()));
-    // hopper.setDefaultCommand(
-    //   Commands.run(() -> {
-    //     if (driveJoystick.button(1).getAsBoolean()) {
-    //       HopperIntakeCommands.startingExtension(hopper, intake);
-    //     }else if(driveJoystick.button(2).getAsBoolean()){
-    //       HopperIntakeCommands.hopperRetract(hopper, intake);
-    //     }else if(driveJoystick.button(3).getAsBoolean()){
-    //       HopperIntakeCommands.hopperExtend(hopper, intake);
-    //     }
-    //   }, hopper)
-    // );
-      // hopper.setDefaultCommand(HopperIntakeCommands.startingExtension(hopper, intake));
-      driveJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).onTrue(HopperIntakeCommands.startingExtension(hopper, intake));
-      driveJoystick.button(ControllerConstants.MAINHAND_BOTTOM_MIDDLE).onTrue(HopperIntakeCommands.hopperRetract(hopper, intake));
-      driveJoystick.button(ControllerConstants.MAINHAND_BOTTOM_RIGHT).onTrue(HopperIntakeCommands.hopperExtend(hopper, intake));
-      driveJoystick.button(ControllerConstants.MAINHAND_TOP_LEFT).onTrue(HopperIntakeCommands.intakeWiggle(hopper, intake));
-
   
 
     // This allows for heading-based drive
@@ -280,7 +254,6 @@ public class RobotContainer {
 
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).whileTrue(outtake.startFlywheel());
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_LEFT).whileTrue(outtake.stopFlywheel());
-    operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_RIGHT).onTrue(HopperIntakeCommands.intakeGo(intake));
     operatorJoystick.button(ControllerConstants.TRIGGER).toggleOnTrue(intake.runIntake());
     operatorJoystick
         .button(ControllerConstants.MAINHAND_TOP_RIGHT)

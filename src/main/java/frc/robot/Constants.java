@@ -234,33 +234,6 @@ public class Constants {
     public static final double WHEEL_VOLTAGE = 6;
   }
 
-  public final class HopperConstants {
-    public final static int SPARK_ID = 10;
-
-    public final static double HOPPER_RETRACTED = 0;
-    public final static double HOPPER_PARTIAL = 4;
-    public final static double HOPPER_FULL = 11.425;
-
-    public final static double HOPPER_WINCH_GEAR_RATIO = 10;
-    public final static double HOPPER_WINCH_CIRCUMFRENCE = 0.75 * Math.PI;
-    public final static double HOPPER_POSITION_TO_ANGLE_CONVERSION = HOPPER_WINCH_GEAR_RATIO / HOPPER_WINCH_CIRCUMFRENCE;
-   
-  
-    //feedback constants
-    public final static double HOPPER_kP = 1;
-    public final static double HOPPER_kI = 1;
-    public final static double HOPPER_kD = 1;
-    //feedforward constants
-    public final static double HOPPER_kS = 1;
-    public final static double HOPPER_kV = 1;
-    public final static double HOPPER_kA = 1;
-    //motion profiler constants
-    public final static double HOPPER_CRUISE_VELOCITY = 0;
-    public final static double HOPPER_MAX_ACCELERATION = 0;
-    public final static double HOPPER_MAX_ALLOWED_PROFILER_ERROR = 0;
-
-  }
-
   public final class IndexerConstants {
     public static final int MOTOR_ID = 52;
     public static final double MOTOR_VOLTAGE = 6.0;
