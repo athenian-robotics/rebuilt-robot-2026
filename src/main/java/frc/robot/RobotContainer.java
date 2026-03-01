@@ -270,6 +270,7 @@ public class RobotContainer {
 
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).whileTrue(outtake.startFlywheel());
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_LEFT).whileTrue(outtake.stopFlywheel());
+    operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_RIGHT).onTrue(HopperIntakeCommands.intakeGo(intake));
 
     }
 
