@@ -213,6 +213,7 @@ public class Constants {
         INTAKE_FIRST_PULLEY_TO_SECOND_PULLEY_RATIO / INTAKE_MOTOR_TO_FIRST_PULLEY_RATIO;
     public static final double FULL_RETRACTION_DEGREES = 0;
     public static final double FULL_EXTENSION_DEGREES = 120;
+    public static final double HOPPER_OPEN_DEGREES = FULL_EXTENSION_DEGREES;
     public static final double MAX_WIGGLE_DEGREES = 75;
     public static final double VELOCITY = 0;
 

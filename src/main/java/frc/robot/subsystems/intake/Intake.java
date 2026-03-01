@@ -29,6 +29,14 @@ public class Intake extends SubsystemBase {
     System.out.println("full extension");
     io.goToPosition(IntakeConstants.FULL_EXTENSION_DEGREES); // position feedback loop
   }
+  /**
+   * Opens the intake arm far enough to push the hopper out before the hopper subsystem
+   * is removed, matching the desired {@link IntakeConstants#HOPPER_OPEN_DEGREES}.
+   */
+  public void openHopper() {
+    System.out.println("opening hopper with intake");
+    io.goToPosition(IntakeConstants.HOPPER_OPEN_DEGREES);
+  }
   /**fully retracts the intake from {@value IntakeConstants#FULL_EXTENSION_DEGREES} degrees 
    * to {@value IntakeConstants#FULL_RETRACTION_DEGREES} degrees*/
   public void fullyRetract(){
