@@ -35,7 +35,7 @@ import frc.robot.Constants.OuttakeConstants;
 public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   private final TalonFX leadShooter, followShooter, middleWheel, angleChanger, indexerMotor;
   private final BangBangController flywheelController;
-  private double setpoint = 0.0;
+  private double flywheelSetpointRPS = 0.0;
 
   private double targetShotAngleDeg = OuttakeConstants.STARTING_SHOT_ANGLE_DEG;
 
@@ -96,8 +96,12 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     } else {
       angleChanger.setControl(new VoltageOut(0));
     }
-    leadShooter.setControl(new VoltageOut(-12 * flywheelController.calculate(-leadShooter.getVelocity().getValue().in(RotationsPerSecond), setpoint)));
     
+    if (flywheelSetpointRPS != 0.0) {
+      leadShooter.setControl(new VoltageOut(-12 * flywheelController.calculate(-leadShooter.getVelocity().getValue().in(RotationsPerSecond), flywheelSetpointRPS)));
+    } else {
+      leadShooter.set(0);
+    }
   }
   
 
@@ -160,7 +164,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     inputs.targetDistanceFeet = Units.metersToFeet(targetDistanceMeters);
     inputs.angleChangerVoltage = angleChanger.getMotorVoltage().getValueAsDouble();
     inputs.indexerVoltage = indexerMotor.getMotorVoltage().getValueAsDouble();
-    inputs.setpoint_RPS = setpoint;
+    inputs.setpoint_RPS = flywheelSetpointRPS;
     inputs.flywheel_RPS = leadShooter.getVelocity().getValue().in(RotationsPerSecond);
     inputs.armEncoderAngle_rot = angleChanger.getPosition().getValueAsDouble();
     inputs.middleWheelVoltage = middleWheel.getMotorVoltage().getValueAsDouble();
@@ -169,13 +173,13 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
  
 
   public void startFlywheel() {
-    setpoint = OuttakeConstants.FLYWHEEL_VELOCITY_RPS;
+    flywheelSetpointRPS = OuttakeConstants.FLYWHEEL_VELOCITY_RPS;
     Logger.recordOutput("Outtake/FlywheelVoltage", leadShooter.getMotorVoltage().getValue());
     System.out.println(leadShooter.getMotorVoltage().getValue());
   }
 
   public void stopFlywheel() {
-    setpoint = 0.0;
+    flywheelSetpointRPS = 0.0;
     Logger.recordOutput("Outtake/FlywheelVoltage", 0.0);
    
   }
