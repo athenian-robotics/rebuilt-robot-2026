@@ -170,7 +170,7 @@ public class Constants {
     public static final double FLYWHEEL_MAX_ACCELERATION_RPSPS = 0.0;
     public static final double FLYWHEEL_MAX_JERK_RPSPSPS = 0.0;
     public static final double FLYWHEEL_MAX_ERROR_RPS = 0.0;
-    public static final double FLYWHEEL_VELOCITY_RPS = 40.0;
+    public static final double FLYWHEEL_VELOCITY_RPS = 80.0;
 
     public static final double MINIMUM_SHOT_ANGLE_DEG = 48.782882;
     public static final double MAXIMUM_SHOT_ANGLE_DEG = 74.552487;
