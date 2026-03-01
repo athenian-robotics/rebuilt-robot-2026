@@ -14,6 +14,7 @@ public interface OuttakeIO extends Subsystem {
     /** The current angular velocity of the hood in degrees per second */
     public double currentAngularVelocityDegPerSecond = 0.0;
     /** Distance to the target in feet */
+    public double armEncoderAngle_rot = 0.0;
     public double targetDistanceFeet = 0.0;
     public double angleChangerVoltage = 0.0;
     public double setpoint_RPS = 0.0;

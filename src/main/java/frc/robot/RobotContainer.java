@@ -175,6 +175,16 @@ public class RobotContainer {
         "Turn SysId (Dynamic Forward)", drive.sysIdDynamicRotate(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Turn SysId (Dynamic Reverse)", drive.sysIdDynamicRotate(SysIdRoutine.Direction.kReverse));
+    autoChooser.addOption(
+        "Outtake SysId (Quasistatic Forward)",
+        outtake.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    autoChooser.addOption(
+        "Outtake SysId (Quasistatic Reverse)",
+        outtake.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    autoChooser.addOption(
+        "Outtake SysId (Dynamic Forward)", outtake.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    autoChooser.addOption(
+        "Outtake SysId (Dynamic Reverse)", outtake.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
     configureJoystickBindings();
@@ -191,12 +201,12 @@ public class RobotContainer {
   private void configureJoystickBindings() {
     
     // Default command, normal field-relative drive
-    // drive.setDefaultCommand(
-    //     DriveCommands.joystickDrive(
-    //         drive,
-    //         () -> -driveJoystick.getY(),
-    //         () -> -driveJoystick.getX(),
-    //         () -> -steerJoystick.getX()));
+    drive.setDefaultCommand(
+        DriveCommands.joystickDrive(
+            drive,
+            () -> -driveJoystick.getY(),
+            () -> -driveJoystick.getX(),
+            () -> -steerJoystick.getX()));
     // hopper.setDefaultCommand(
     //   Commands.run(() -> {
     //     if (driveJoystick.button(1).getAsBoolean()) {

@@ -81,9 +81,8 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     angleChangerMotionProfile.MotionMagicCruiseVelocity = OuttakeConstants.HOOD_ANGLE_CRUISE_VELOCITY_RPS;
     angleChangerMotionProfile.MotionMagicAcceleration = OuttakeConstants.HOOD_ANGLE_MAX_ACCELERATION_RPSPS;
     angleChanger.getConfigurator().apply(angleChangerMotionProfile);
-
-
   }
+
   public void periodic() {
     // Update the current angle by getting the motor position and multiplying by gear ratio
     currentAngleDeg = angleChanger.getPosition().getValue().in(Degrees) * OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO;
@@ -92,6 +91,8 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   
     if (sysIdVoltage != 0.0 && currentAngleDeg > OuttakeConstants.MINIMUM_SHOT_ANGLE_DEG) {
       angleChanger.setControl(new VoltageOut(sysIdVoltage));
+    } else {
+      angleChanger.setControl(new VoltageOut(0));
     }
     leadShooter.setControl(new VoltageOut(-12 * flywheelController.calculate(leadShooter.getVelocity().getValue().in(RotationsPerSecond), setpoint)));
     
@@ -158,6 +159,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     inputs.angleChangerVoltage = angleChanger.getMotorVoltage().getValueAsDouble();
     inputs.setpoint_RPS = setpoint;
     inputs.flywheel_RPS = leadShooter.getVelocity().getValue().in(RotationsPerSecond);
+    inputs.armEncoderAngle_rot = angleChanger.getPosition().getValueAsDouble();
   }
 
   public void startFlywheel() {

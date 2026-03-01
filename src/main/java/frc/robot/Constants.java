@@ -180,11 +180,11 @@ public class Constants {
 
     public static final double ANGLE_CHANGER_GEAR_RATIO = 1.0 / 16.0;
 
-    public static final double HOOD_ANGLE_KP = 0.1;
-    public static final double HOOD_ANGLE_KD = 0.1;
-    public static final double HOOD_ANGLE_KS = 0.5;
-    public static final double HOOD_ANGLE_KV = 1.0;
-    public static final double HOOD_ANGLE_KA = 0.0;
+    public static final double HOOD_ANGLE_KP = 0;
+    public static final double HOOD_ANGLE_KD = 0;
+    public static final double HOOD_ANGLE_KS = 0;
+    public static final double HOOD_ANGLE_KV = 0;
+    public static final double HOOD_ANGLE_KA = 0;
 
     public static final double HOOD_ANGLE_CRUISE_VELOCITY_RPS = 0.2;
     public static final double HOOD_ANGLE_MAX_ACCELERATION_RPSPS = 1.0;
