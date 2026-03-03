@@ -11,6 +11,8 @@ import java.util.OptionalDouble;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -19,6 +21,7 @@ import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -68,7 +71,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
  
 
     // Represents the starting position of the hood
-    angleChanger.setPosition(OuttakeConstants.ANGLE_CHANGER_STARTING_ANGLE_ROTATIONS / OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO);
+    angleChanger.setPosition(OuttakeConstants.ANGLE_CHANGER_STARTING_ANGLE_ROTATIONS);
     currentAngleDeg = OuttakeConstants.ANGLE_CHANGER_STARTING_ANGLE_ROTATIONS * 360;
 
     Slot0Configs angleChangerControl = new Slot0Configs();
@@ -77,19 +80,23 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     angleChangerControl.kS = OuttakeConstants.HOOD_ANGLE_KS;
     angleChangerControl.kV = OuttakeConstants.HOOD_ANGLE_KV;
     angleChangerControl.kA = OuttakeConstants.HOOD_ANGLE_KA;
+    angleChangerControl.kG = OuttakeConstants.HOOD_ANGLE_KG;
+    angleChangerControl.GravityType = GravityTypeValue.Arm_Cosine;
     angleChanger.getConfigurator().apply(angleChangerControl);
 
     MotionMagicConfigs angleChangerMotionProfile = new MotionMagicConfigs();
     angleChangerMotionProfile.MotionMagicCruiseVelocity = OuttakeConstants.HOOD_ANGLE_CRUISE_VELOCITY_RPS;
     angleChangerMotionProfile.MotionMagicAcceleration = OuttakeConstants.HOOD_ANGLE_MAX_ACCELERATION_RPSPS;
     angleChanger.getConfigurator().apply(angleChangerMotionProfile);
+
+    angleChanger.getConfigurator().apply(new FeedbackConfigs().withSensorToMechanismRatio(OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO));
   }
 
   public void periodic() {
     // Update the current angle by getting the motor position and multiplying by gear ratio
-    currentAngleDeg = angleChanger.getPosition().getValue().in(Degrees) * OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO;
+    currentAngleDeg = angleChanger.getPosition().getValue().in(Degrees);
     // Update the current angular velocity by getting the motor velocity and multiplying by gear ratio
-    currentAngularVelocityDegPerSecond = angleChanger.getVelocity().getValue().in(DegreesPerSecond) * OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO;
+    currentAngularVelocityDegPerSecond = angleChanger.getVelocity().getValue().in(DegreesPerSecond);
   
     if (sysIdVoltage != 0.0 && currentAngleDeg > OuttakeConstants.MAXIMUM_HOOD_ANGLE_DEG) {
       angleChanger.setControl(new VoltageOut(sysIdVoltage));

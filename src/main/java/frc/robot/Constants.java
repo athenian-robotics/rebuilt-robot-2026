@@ -188,6 +188,7 @@ public class Constants {
     public static final double HOOD_ANGLE_KS = 0;
     public static final double HOOD_ANGLE_KV = 0;
     public static final double HOOD_ANGLE_KA = 0;
+    public static final double HOOD_ANGLE_KG = 0;
 
     public static final double HOOD_ANGLE_CRUISE_VELOCITY_RPS = 0.2;
     public static final double HOOD_ANGLE_MAX_ACCELERATION_RPSPS = 1.0;
