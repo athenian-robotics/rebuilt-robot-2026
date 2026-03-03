@@ -37,7 +37,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   private final BangBangController flywheelController;
   private double flywheelSetpointRPS = 0.0;
 
-  private double targetShotAngleDeg = OuttakeConstants.STARTING_SHOT_ANGLE_DEG;
+  private double targetShotAngleDeg = OuttakeConstants.STARTING_HOOD_ANGLE_DEG;
 
   private double currentAngleDeg = 0.0;
   private double currentAngularVelocityDegPerSecond = 0.0;
@@ -52,7 +52,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     super();
     indexerMotor = new TalonFX(OuttakeConstants.STAR_WHEEL_MOTOR, new CANBus(CANConstants.CANIVORE_NAME)); //indexer AND star wheel motor
 
-    hoodAngleDegEntry = NetworkTableInstance.getDefault().getDoubleTopic("/Outtake/HoodAngleDeg").getEntry(OuttakeConstants.MAXIMUM_SHOT_ANGLE_DEG);
+    hoodAngleDegEntry = NetworkTableInstance.getDefault().getDoubleTopic("/Outtake/HoodAngleDeg").getEntry(OuttakeConstants.MINIMUM_HOOD_ANGLE_DEG);
 
     followShooter = new TalonFX(OuttakeConstants.LEFT_SHOOTER_MOTOR, new CANBus(CANConstants.CANIVORE_NAME));
     leadShooter = new TalonFX(OuttakeConstants.RIGHT_SHOOTER_MOTOR, new CANBus(CANConstants.CANIVORE_NAME));
@@ -91,7 +91,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     // Update the current angular velocity by getting the motor velocity and multiplying by gear ratio
     currentAngularVelocityDegPerSecond = angleChanger.getVelocity().getValue().in(DegreesPerSecond) * OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO;
   
-    if (sysIdVoltage != 0.0 && currentAngleDeg > OuttakeConstants.MINIMUM_SHOT_ANGLE_DEG) {
+    if (sysIdVoltage != 0.0 && currentAngleDeg > OuttakeConstants.MAXIMUM_HOOD_ANGLE_DEG) {
       angleChanger.setControl(new VoltageOut(sysIdVoltage));
     } else {
       angleChanger.setControl(new VoltageOut(0));
@@ -158,9 +158,9 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   @Override
   public void updateInputs(OuttakeIOInputs inputs) {
     // Inputs for IO logging
-    inputs.currentShotAngleDegrees = currentAngleDeg;
+    inputs.currentHoodAngleDegrees = currentAngleDeg;
     inputs.currentAngularVelocityDegPerSecond = currentAngularVelocityDegPerSecond;
-    inputs.targetShotAngleDegrees = targetShotAngleDeg;
+    inputs.targetHoodAngleDegrees = targetShotAngleDeg;
     inputs.targetDistanceFeet = Units.metersToFeet(targetDistanceMeters);
     inputs.angleChangerVoltage = angleChanger.getMotorVoltage().getValueAsDouble();
     inputs.indexerVoltage = indexerMotor.getMotorVoltage().getValueAsDouble();
@@ -212,8 +212,8 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   }
 
   public void setAngle(double angleDegrees) {
-    if (OuttakeConstants.MINIMUM_SHOT_ANGLE_DEG > angleDegrees 
-     || OuttakeConstants.MAXIMUM_SHOT_ANGLE_DEG < angleDegrees) {
+    if (OuttakeConstants.MAXIMUM_HOOD_ANGLE_DEG < angleDegrees 
+     || OuttakeConstants.MINIMUM_HOOD_ANGLE_DEG > angleDegrees) {
       System.out.println("setAngle was passed an invalid angle");
       return;
     }

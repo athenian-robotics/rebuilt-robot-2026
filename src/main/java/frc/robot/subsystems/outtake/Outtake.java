@@ -66,7 +66,7 @@ public class Outtake extends SubsystemBase {
   }
 
   public Command lowerHood() {
-    return new InstantCommand(() -> io.setAngle(OuttakeConstants.MAXIMUM_SHOT_ANGLE_DEG));
+    return new InstantCommand(() -> io.setAngle(OuttakeConstants.MINIMUM_HOOD_ANGLE_DEG));
   }
 
   public Command stopFlywheel() {
@@ -112,8 +112,8 @@ public class Outtake extends SubsystemBase {
           double invertedY = -joystickY.getAsDouble();
           double normalized = (invertedY + 1.0) / 2.0;
           double angleRange =
-              OuttakeConstants.MAXIMUM_SHOT_ANGLE_DEG - OuttakeConstants.MINIMUM_SHOT_ANGLE_DEG;
-          double targetAngle = OuttakeConstants.MINIMUM_SHOT_ANGLE_DEG + (normalized * angleRange);
+              OuttakeConstants.MINIMUM_HOOD_ANGLE_DEG - OuttakeConstants.MAXIMUM_HOOD_ANGLE_DEG;
+          double targetAngle = OuttakeConstants.MAXIMUM_HOOD_ANGLE_DEG + (normalized * angleRange);
           io.setAngle(targetAngle);
         }, this);
   }

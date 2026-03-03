@@ -8,10 +8,10 @@ import org.littletonrobotics.junction.AutoLog;
 public interface OuttakeIO extends Subsystem {
   @AutoLog
   public static class OuttakeIOInputs {
-    /** The actual angle of the hood, in degrees, representing launch angle compared to horizontal with ccw+ */
-    public double currentShotAngleDegrees = 0.0;
-    /** The target angle of the hood, in degrees, representing launch angle compared to horizontal with ccw+ */
-    public double targetShotAngleDegrees = 0.0;
+    /** The actual angle of the hood, in degrees, representing hood angle compared to horizontal with ccw+ */
+    public double currentHoodAngleDegrees = 0.0;
+    /** The target angle of the hood, in degrees, representing hood angle compared to horizontal with ccw+ */
+    public double targetHoodAngleDegrees = 0.0;
     /** The current angular velocity of the hood in degrees per second */
     public double currentAngularVelocityDegPerSecond = 0.0;
     /** Distance to the target in feet */

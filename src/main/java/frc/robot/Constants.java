@@ -172,9 +172,9 @@ public class Constants {
     public static final double FLYWHEEL_MAX_ERROR_RPS = 0.0;
     public static final double FLYWHEEL_VELOCITY_RPS = 80.0;
 
-    public static final double MINIMUM_SHOT_ANGLE_DEG = 48.782882;
-    public static final double MAXIMUM_SHOT_ANGLE_DEG = 74.552487;
-    public static final double STARTING_SHOT_ANGLE_DEG = 74.552487;
+    public static final double MAXIMUM_HOOD_ANGLE_DEG = 41.217118;
+    public static final double MINIMUM_HOOD_ANGLE_DEG = 15.447513;
+    public static final double STARTING_HOOD_ANGLE_DEG = 15.447513;
     public static final double MIDFIELD_SHOT_ANGLE_DEG = 0.0;
     public static final double OPPOSITE_TEAM_SHOT_ANGLE_DEG = 0.0;
 
@@ -192,7 +192,7 @@ public class Constants {
     public static final double HOOD_ANGLE_CRUISE_VELOCITY_RPS = 0.2;
     public static final double HOOD_ANGLE_MAX_ACCELERATION_RPSPS = 1.0;
 
-    public static final double ANGLE_CHANGER_STARTING_ANGLE_ROTATIONS = 0.2070902417;
+    public static final double ANGLE_CHANGER_STARTING_ANGLE_ROTATIONS = STARTING_HOOD_ANGLE_DEG / 360.0;
 
     public static final Translation2d HUB_POSITION = new Translation2d();
 
