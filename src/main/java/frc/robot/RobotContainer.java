@@ -255,9 +255,7 @@ public class RobotContainer {
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).whileTrue(outtake.startFlywheel());
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_LEFT).whileTrue(outtake.stopFlywheel());
     operatorJoystick.button(ControllerConstants.TRIGGER).toggleOnTrue(intake.runIntake());
-    operatorJoystick
-        .button(ControllerConstants.MAINHAND_TOP_RIGHT)
-        .onTrue(Commands.runOnce(intake::openHopper, intake));
+    operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).onTrue(intake.openHopper());
 
     driveJoystick.button(ControllerConstants.TRIGGER).whileTrue(
         DriveCommands.joystickDriveAtAngle(

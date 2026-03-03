@@ -33,15 +33,15 @@ public class Intake extends SubsystemBase {
    * Opens the intake arm far enough to push the hopper out before the hopper subsystem
    * is removed, matching the desired {@link IntakeConstants#HOPPER_OPEN_DEGREES}.
    */
-  public void openHopper() {
+  public Command openHopper() {
     System.out.println("opening hopper with intake");
-    io.goToPosition(IntakeConstants.HOPPER_OPEN_DEGREES);
+    return Commands.runOnce(() -> io.goToPosition(IntakeConstants.HOPPER_OPEN_DEGREES), this);
   }
   /**fully retracts the intake from {@value IntakeConstants#FULL_EXTENSION_DEGREES} degrees 
    * to {@value IntakeConstants#FULL_RETRACTION_DEGREES} degrees*/
-  public void fullyRetract(){
+  public Command fullyRetract(){
     System.out.println("full retraction");
-    io.goToPosition(IntakeConstants.FULL_RETRACTION_DEGREES);
+    return Commands.runOnce(() -> io.goToPosition(IntakeConstants.FULL_RETRACTION_DEGREES), this);
   }
 
   public void wiggleUp() {

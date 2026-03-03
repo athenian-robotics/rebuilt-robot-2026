@@ -89,7 +89,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     angleChangerMotionProfile.MotionMagicAcceleration = OuttakeConstants.HOOD_ANGLE_MAX_ACCELERATION_RPSPS;
     angleChanger.getConfigurator().apply(angleChangerMotionProfile);
 
-    angleChanger.getConfigurator().apply(new FeedbackConfigs().withSensorToMechanismRatio(OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO));
+    angleChanger.getConfigurator().apply(new FeedbackConfigs().withSensorToMechanismRatio(1.0/OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO));
   }
 
   public void periodic() {
@@ -98,7 +98,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     // Update the current angular velocity by getting the motor velocity and multiplying by gear ratio
     currentAngularVelocityDegPerSecond = angleChanger.getVelocity().getValue().in(DegreesPerSecond);
   
-    if (sysIdVoltage != 0.0 && currentAngleDeg > OuttakeConstants.MAXIMUM_HOOD_ANGLE_DEG) {
+    if (sysIdVoltage != 0.0) {
       angleChanger.setControl(new VoltageOut(sysIdVoltage));
     } else {
       angleChanger.setControl(new VoltageOut(0));
