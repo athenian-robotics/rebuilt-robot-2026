@@ -168,6 +168,16 @@ public class RobotContainer {
         "Outtake SysId (Dynamic Forward)", outtake.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Outtake SysId (Dynamic Reverse)", outtake.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    autoChooser.addOption(
+        "Intake SysId (Quasistatic Forward)",
+        intake.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    autoChooser.addOption(
+        "Intake SysId (Quasistatic Reverse)",
+        intake.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    autoChooser.addOption(
+        "Intake SysId (Dynamic Forward)", intake.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    autoChooser.addOption(
+        "Intake SysId (Dynamic Reverse)", intake.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
     configureJoystickBindings();

@@ -2,6 +2,9 @@ package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+
+import static edu.wpi.first.units.Units.Volts;
+
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -15,6 +18,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.IntakeConstants;
 
@@ -24,11 +28,12 @@ public class IntakeIOTalonFX implements IntakeIO {
   private final TalonFX armMotor = new TalonFX(IntakeConstants.ARM_ID, new CANBus(CANConstants.CANIVORE_NAME));
   private final TalonFX wheelMotor = new TalonFX(IntakeConstants.WHEEL_ID, new CANBus(CANConstants.CANIVORE_NAME));
 
+  private double sysIdVoltage = 0.0;
+
   // private final PIDController feedback = new PIDController
   // (IntakeConstants.INTAKE_kP, 
   // IntakeConstants.INTAKE_kI, 
-  // IntakeConstants.INTAKE_kD);
-  // private final ArmFeedforward feedforward = new ArmFeedforward
+  // IntakeConstants.INTAKE_kD); new ArmFeedforward
   // (IntakeConstants.INTAKE_kS,
   // IntakeConstants.INTAKE_kG,
   // IntakeConstants.INTAKE_kV,
@@ -65,19 +70,25 @@ public class IntakeIOTalonFX implements IntakeIO {
   public void updateInputs(IntakeIOInputs inputs) {
     inputs.armMotorVoltage_Volts = armMotor.getMotorVoltage().getValueAsDouble();
     inputs.armMotorCurrent_Amps = armMotor.getTorqueCurrent().getValueAsDouble();
-    inputs.armMotorRotations_Rotations = armMotor.getPosition().getValueAsDouble();
-    inputs.armRotations_Rotations = 
-        inputs.armMotorRotations_Rotations * IntakeConstants.GEAR_ROTATIONS_TO_ARM_ROTATIONS;
+    inputs.armRotations_Rotations = armMotor.getPosition().getValueAsDouble();
+    inputs.armMotorRotations_Rotations = 
+        inputs.armMotorRotations_Rotations / IntakeConstants.GEAR_ROTATIONS_TO_ARM_ROTATIONS;
 
     inputs.wheelMotorVoltage_Volts = wheelMotor.getMotorVoltage().getValueAsDouble();
     inputs.wheelMotorCurrent_Amps = wheelMotor.getTorqueCurrent().getValueAsDouble();
     inputs.wheelMotorVelocity_RotationsPerSecond = wheelMotor.getVelocity().getValueAsDouble();
+
+    if (sysIdVoltage == 0.0) {
+      armMotor.set(0);
+    } else {
+      armMotor.setControl(new VoltageOut(sysIdVoltage));
+    }
   }
 
   @Override
   public void goToPosition(double armRotations_Degrees) {
     final MotionMagicVoltage m_request = new MotionMagicVoltage(0);
-    armMotor.setControl(m_request.withPosition(Units.degreesToRotations(armRotations_Degrees)  / IntakeConstants.GEAR_ROTATIONS_TO_ARM_ROTATIONS));
+    armMotor.setControl(m_request.withPosition(Units.degreesToRotations(armRotations_Degrees)));
   }
   public boolean atSetpoint(){
     return armMotor.getMotionMagicAtTarget().getValue();
@@ -91,5 +102,15 @@ public class IntakeIOTalonFX implements IntakeIO {
   @Override
   public void stopIntake() {
     wheelMotor.setControl(new VoltageOut(0));
+  }
+
+  @Override
+  public void runSysId(double voltage) {
+    sysIdVoltage = voltage;
+  }
+
+  @Override
+  public void sysIDLog(SysIdRoutineLog log) {
+    log.motor("arm").angularPosition(armMotor.getPosition().getValue()).angularVelocity(armMotor.getVelocity().getValue()).voltage(Volts.of(sysIdVoltage));
   }
 }

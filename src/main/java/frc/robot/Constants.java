@@ -228,8 +228,8 @@ public class Constants {
     public static final double INTAKE_kA = 0;
     public static final double INTAKE_kG = 0;
     // motion profiler constants
-    public static final double INTAKE_CRUISE_VELOCITY = 0;
-    public static final double INTAKE_MAX_ACCELERATION = 0;
+    public static final double INTAKE_CRUISE_VELOCITY = 10;
+    public static final double INTAKE_MAX_ACCELERATION = 100;
     public static final double INTAKE_MAX_ALLOWED_PROFILER_ERROR = 0;
 
     public static final double WHEEL_VOLTAGE = 6;

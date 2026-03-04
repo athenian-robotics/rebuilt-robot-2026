@@ -3,6 +3,8 @@ package frc.robot.subsystems.intake;
 import frc.robot.Constants.IntakeConstants;
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+
 public interface IntakeIO {
   @AutoLog
   public static class IntakeIOInputs {
@@ -21,5 +23,7 @@ public interface IntakeIO {
   public default void goToPosition(double rotations){};
   public default boolean atSetpoint(){return false;};
   public default void startIntake(){};
-  public default void stopIntake(){};
+  public default void stopIntake(){}
+  public default void runSysId(double voltage) {};
+  public default void sysIDLog(SysIdRoutineLog log) {};
 }
