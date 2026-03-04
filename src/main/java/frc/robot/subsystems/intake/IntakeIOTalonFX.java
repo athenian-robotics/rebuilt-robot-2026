@@ -13,6 +13,7 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.BangBangController;
@@ -41,7 +42,7 @@ public class IntakeIOTalonFX implements IntakeIO {
 
   public IntakeIOTalonFX(){
     FeedbackConfigs feedbackConfigs = new FeedbackConfigs()
-      .withSensorToMechanismRatio(IntakeConstants.GEAR_ROTATIONS_TO_ARM_ROTATIONS)
+      .withSensorToMechanismRatio(1/IntakeConstants.GEAR_ROTATIONS_TO_ARM_ROTATIONS)
       .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor);
    
     var talonFXConfigs = new TalonFXConfiguration()
@@ -61,6 +62,8 @@ public class IntakeIOTalonFX implements IntakeIO {
     var motionMagicConfigs = talonFXConfigs.MotionMagic;
     motionMagicConfigs.MotionMagicCruiseVelocity = IntakeConstants.INTAKE_CRUISE_VELOCITY;
     motionMagicConfigs.MotionMagicAcceleration = IntakeConstants.INTAKE_MAX_ACCELERATION;
+
+    talonFXConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
     armMotor.getConfigurator().apply(talonFXConfigs);
   }

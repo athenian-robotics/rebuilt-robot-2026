@@ -183,15 +183,15 @@ public class Constants {
 
     public static final double ANGLE_CHANGER_GEAR_RATIO = 1.0 / (12.0 * 16.0);
 
-    public static final double HOOD_ANGLE_KP = 0;
-    public static final double HOOD_ANGLE_KD = 0;
-    public static final double HOOD_ANGLE_KS = 0;
-    public static final double HOOD_ANGLE_KV = 0;
-    public static final double HOOD_ANGLE_KA = 0;
-    public static final double HOOD_ANGLE_KG = 0;
+    public static final double HOOD_ANGLE_KP = 35.203;
+    public static final double HOOD_ANGLE_KD = 8.0464;
+    public static final double HOOD_ANGLE_KS = 0.12904;
+    public static final double HOOD_ANGLE_KV = 19.949;
+    public static final double HOOD_ANGLE_KA = 2.0061;
+    public static final double HOOD_ANGLE_KG = 0.060617;
 
     public static final double HOOD_ANGLE_CRUISE_VELOCITY_RPS = 0.2;
-    public static final double HOOD_ANGLE_MAX_ACCELERATION_RPSPS = 1.0;
+    public static final double HOOD_ANGLE_MAX_ACCELERATION_RPSPS = 2.0;
 
     public static final double ANGLE_CHANGER_STARTING_ANGLE_ROTATIONS = STARTING_HOOD_ANGLE_DEG / 360.0;
 
@@ -207,11 +207,8 @@ public class Constants {
     // motors
     public static final int ARM_ID = 26;
     public static final int WHEEL_ID = 25;
-
-    public static final double INTAKE_MOTOR_TO_FIRST_PULLEY_RATIO = 60;
-    public static final double INTAKE_FIRST_PULLEY_TO_SECOND_PULLEY_RATIO = 15.0 / 36.0;
     public static final double GEAR_ROTATIONS_TO_ARM_ROTATIONS =
-        INTAKE_FIRST_PULLEY_TO_SECOND_PULLEY_RATIO / INTAKE_MOTOR_TO_FIRST_PULLEY_RATIO;
+        1.0 / 180.0;
     public static final double FULL_RETRACTION_DEGREES = 0;
     public static final double FULL_EXTENSION_DEGREES = 120;
     public static final double HOPPER_OPEN_DEGREES = FULL_EXTENSION_DEGREES;

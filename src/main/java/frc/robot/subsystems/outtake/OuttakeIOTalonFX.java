@@ -81,7 +81,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     angleChangerControl.kV = OuttakeConstants.HOOD_ANGLE_KV;
     angleChangerControl.kA = OuttakeConstants.HOOD_ANGLE_KA;
     angleChangerControl.kG = OuttakeConstants.HOOD_ANGLE_KG;
-    angleChangerControl.GravityType = GravityTypeValue.Arm_Cosine;
+    angleChangerControl.GravityType = GravityTypeValue.Elevator_Static;
     angleChanger.getConfigurator().apply(angleChangerControl);
 
     MotionMagicConfigs angleChangerMotionProfile = new MotionMagicConfigs();
@@ -98,11 +98,11 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     // Update the current angular velocity by getting the motor velocity and multiplying by gear ratio
     currentAngularVelocityDegPerSecond = angleChanger.getVelocity().getValue().in(DegreesPerSecond);
   
-    if (sysIdVoltage != 0.0) {
-      angleChanger.setControl(new VoltageOut(sysIdVoltage));
-    } else {
-      angleChanger.setControl(new VoltageOut(0));
-    }
+    // if (sysIdVoltage != 0.0) {
+    //   angleChanger.setControl(new VoltageOut(sysIdVoltage));
+    // } else {
+    //   angleChanger.setControl(new VoltageOut(0));
+    // }
     
     if (flywheelSetpointRPS != 0.0) {
       leadShooter.setControl(new VoltageOut(-12 * flywheelController.calculate(-leadShooter.getVelocity().getValue().in(RotationsPerSecond), flywheelSetpointRPS)));
@@ -229,7 +229,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
 
     targetShotAngleDeg = angleDegrees;
 
-    MotionMagicDutyCycle magic = new MotionMagicDutyCycle(angleDegrees / OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO);
+    MotionMagicDutyCycle magic = new MotionMagicDutyCycle(angleDegrees);
 
     angleChanger.setControl(magic);
   }

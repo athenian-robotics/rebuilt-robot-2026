@@ -23,8 +23,7 @@ public class Intake extends SubsystemBase {
   public Intake(IntakeIO io){
     this.io = io;
     
-    Config sysIdConfig = new Config(Volts.per(Seconds).of(.3), Volts.of(1), Seconds.of(5),
-            (state) -> Logger.recordOutput("Outtake/SysIdState", state.toString()));
+    Config sysIdConfig = new Config(Volts.per(Seconds).of(1), Volts.of(3), Seconds.of(5));
     Mechanism sysIdMechanism = new Mechanism((volts) -> io.runSysId(volts.in(Volts)), io::sysIDLog, this);
 
     sysId = new SysIdRoutine(sysIdConfig, sysIdMechanism);
