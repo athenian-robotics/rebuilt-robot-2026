@@ -6,8 +6,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import java.util.Optional;
+import java.util.OptionalDouble;
+import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
+import frc.robot.LimelightHelpers.RawFiducial;
 import org.littletonrobotics.junction.Logger;
 
 /** Subsystem shell that limits and validates pose updates from vision hardware. */
@@ -110,6 +113,23 @@ public class Vision extends SubsystemBase {
    */
   public void setRobotOrientation(Rotation2d rotation, double yawVelocityRadPerSec) {
     io.setRobotOrientation(rotation.getDegrees(), Units.radiansToDegrees(yawVelocityRadPerSec));
+  }
+
+  /**
+   * Returns the reported distance from the robot to a specific AprilTag, if detected.
+   *
+   * @param tagNumber AprilTag ID to query.
+   * @return Optional distance to the requested tag in meters.
+   */
+  public OptionalDouble getDistanceToTag(int tagNumber) {
+    RawFiducial[] fiducials =
+        LimelightHelpers.getRawFiducials(Constants.LimelightConstants.CAMERA_NAME);
+    for (RawFiducial fiducial : fiducials) {
+      if (fiducial.id == tagNumber) {
+        return OptionalDouble.of(fiducial.distToRobot);
+      }
+    }
+    return OptionalDouble.empty();
   }
 
   /** Returns true if the measurement falls within the permitted translation and rotation window. */
