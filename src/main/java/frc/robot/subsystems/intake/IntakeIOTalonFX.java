@@ -29,7 +29,10 @@ public class IntakeIOTalonFX implements IntakeIO {
   private final TalonFX armMotor = new TalonFX(IntakeConstants.ARM_ID, new CANBus(CANConstants.CANIVORE_NAME));
   private final TalonFX wheelMotor = new TalonFX(IntakeConstants.WHEEL_ID, new CANBus(CANConstants.CANIVORE_NAME));
 
+  private boolean usingBasicControl = false;
+
   private double sysIdVoltage = 0.0;
+  private double setpoint_Rotations = 0.00;
 
   // private final PIDController feedback = new PIDController
   // (IntakeConstants.INTAKE_kP, 
@@ -56,8 +59,6 @@ public class IntakeIOTalonFX implements IntakeIO {
     slot0Configs.kS = IntakeConstants.INTAKE_kS;
     slot0Configs.kV = IntakeConstants.INTAKE_kV;
     slot0Configs.kG = IntakeConstants.INTAKE_kG;
-
-    slot0Configs.GravityArmPositionOffset = 0;
     
     var motionMagicConfigs = talonFXConfigs.MotionMagic;
     motionMagicConfigs.MotionMagicCruiseVelocity = IntakeConstants.INTAKE_CRUISE_VELOCITY;
@@ -65,7 +66,11 @@ public class IntakeIOTalonFX implements IntakeIO {
 
     talonFXConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
+    talonFXConfigs.Voltage.PeakForwardVoltage = IntakeConstants.MAX_ARM_VOLTAGE;
+    talonFXConfigs.Voltage.PeakReverseVoltage = -IntakeConstants.MAX_ARM_VOLTAGE;
+
     armMotor.getConfigurator().apply(talonFXConfigs);
+    armMotor.setPosition(IntakeConstants.ARM_STARTING_POSITION_ROT);
   }
 
   /** Update the set of loggable inputs */
@@ -80,8 +85,15 @@ public class IntakeIOTalonFX implements IntakeIO {
     inputs.wheelMotorVoltage_Volts = wheelMotor.getMotorVoltage().getValueAsDouble();
     inputs.wheelMotorCurrent_Amps = wheelMotor.getTorqueCurrent().getValueAsDouble();
     inputs.wheelMotorVelocity_RotationsPerSecond = wheelMotor.getVelocity().getValueAsDouble();
+    inputs.setpoint_Rotations = setpoint_Rotations;
 
-    if (sysIdVoltage == 0.0) {
+
+    if (usingBasicControl) {
+      // if (-Units.rotationsToDegrees(armMotor.getPosition().getValueAsDouble()) + IntakeConstants.FULL_RETRACTION_DEGREES < IntakeConstants.BASIC_CONTROL_TOLERANCE_DEG) {
+      //   usingBasicControl = false;
+      // }
+      armMotor.setControl(new VoltageOut(IntakeConstants.BASIC_CONTROL_VOLTS));
+    } else if(sysIdVoltage == 0.0) {
       armMotor.set(0);
     } else {
       armMotor.setControl(new VoltageOut(sysIdVoltage));
@@ -89,9 +101,15 @@ public class IntakeIOTalonFX implements IntakeIO {
   }
 
   @Override
+  public void goWithBasicControl() {
+    usingBasicControl = true;
+  }
+
+  @Override
   public void goToPosition(double armRotations_Degrees) {
     final MotionMagicVoltage m_request = new MotionMagicVoltage(0);
     armMotor.setControl(m_request.withPosition(Units.degreesToRotations(armRotations_Degrees)));
+    setpoint_Rotations = Units.degreesToRotations(armRotations_Degrees);
   }
   public boolean atSetpoint(){
     return armMotor.getMotionMagicAtTarget().getValue();

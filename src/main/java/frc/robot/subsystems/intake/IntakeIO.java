@@ -17,6 +17,7 @@ public interface IntakeIO {
     public double wheelMotorVoltage_Volts = 0;
     public double wheelMotorCurrent_Amps = 0;
     public double wheelMotorVelocity_RotationsPerSecond = 0;
+    public double setpoint_Rotations = 0;
   }
 
   public default void updateInputs(IntakeIOInputs inputs){};
@@ -26,4 +27,5 @@ public interface IntakeIO {
   public default void stopIntake(){}
   public default void runSysId(double voltage) {};
   public default void sysIDLog(SysIdRoutineLog log) {};
+  public default void goWithBasicControl() {}
 }

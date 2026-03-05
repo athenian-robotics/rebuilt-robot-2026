@@ -56,6 +56,10 @@ public class Intake extends SubsystemBase {
     return Commands.runOnce(() -> io.goToPosition(IntakeConstants.FULL_RETRACTION_DEGREES), this);
   }
 
+  public Command runBasicControl() {
+    return Commands.runOnce(() -> io.goWithBasicControl(), this);
+  }
+
   public void wiggleUp() {
     System.out.println("wiggle up");
     io.goToPosition(IntakeConstants.MAX_WIGGLE_DEGREES);

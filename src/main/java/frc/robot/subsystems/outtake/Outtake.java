@@ -116,6 +116,9 @@ public class Outtake extends SubsystemBase {
           io.setAngle(targetAngle);
         }, this);
   }
+  public Command aimWithoutJoystick(){
+    return Commands.run(() -> io.setAngle(35), this);
+  }
 
   /** Returns a command to run a quasistatic test in the specified direction. */
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
@@ -149,5 +152,9 @@ public class Outtake extends SubsystemBase {
             Commands.runOnce(() -> {io.setIndexerVoltage(-OuttakeConstants.INDEXER_MOTOR_VOLTAGE);
                 indexerState = indexerState.ON;}), // if off toggle on
             () -> this.indexerState == State.ON);
+    }
+
+    public Command toNTAngle () {
+      return Commands.runOnce(io::setAngleFromNT, this);
     }
 }

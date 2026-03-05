@@ -80,8 +80,6 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     angleChangerControl.kS = OuttakeConstants.HOOD_ANGLE_KS;
     angleChangerControl.kV = OuttakeConstants.HOOD_ANGLE_KV;
     angleChangerControl.kA = OuttakeConstants.HOOD_ANGLE_KA;
-    angleChangerControl.kG = OuttakeConstants.HOOD_ANGLE_KG;
-    angleChangerControl.GravityType = GravityTypeValue.Elevator_Static;
     angleChanger.getConfigurator().apply(angleChangerControl);
 
     MotionMagicConfigs angleChangerMotionProfile = new MotionMagicConfigs();
@@ -167,7 +165,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     // Inputs for IO logging
     inputs.currentHoodAngleDegrees = currentAngleDeg;
     inputs.currentAngularVelocityDegPerSecond = currentAngularVelocityDegPerSecond;
-    inputs.targetHoodAngleDegrees = targetShotAngleDeg;
+    inputs.targetHoodAngleDegrees = angleChanger.getClosedLoopReference().getValueAsDouble() * 360.0;
     inputs.targetDistanceFeet = Units.metersToFeet(targetDistanceMeters);
     inputs.angleChangerVoltage = angleChanger.getMotorVoltage().getValueAsDouble();
     inputs.indexerVoltage = indexerMotor.getMotorVoltage().getValueAsDouble();
@@ -229,7 +227,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
 
     targetShotAngleDeg = angleDegrees;
 
-    MotionMagicDutyCycle magic = new MotionMagicDutyCycle(angleDegrees);
+    MotionMagicDutyCycle magic = new MotionMagicDutyCycle(angleDegrees/360.0);
 
     angleChanger.setControl(magic);
   }
