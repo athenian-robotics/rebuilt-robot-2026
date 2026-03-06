@@ -27,5 +27,5 @@ public interface IntakeIO {
   public default void stopIntake(){}
   public default void runSysId(double voltage) {};
   public default void sysIDLog(SysIdRoutineLog log) {};
-  public default void goWithBasicControl() {}
+  public default void goWithBasicControl(int direction) {}
 }

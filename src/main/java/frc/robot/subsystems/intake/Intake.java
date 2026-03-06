@@ -56,8 +56,14 @@ public class Intake extends SubsystemBase {
     return Commands.runOnce(() -> io.goToPosition(IntakeConstants.FULL_RETRACTION_DEGREES), this);
   }
 
-  public Command runBasicControl() {
-    return Commands.runOnce(() -> io.goWithBasicControl(), this);
+  public Command runBasicControlForward() {
+    return Commands.runOnce(() -> io.goWithBasicControl(1), this);
+  }
+  public Command runBasicControlBackwards() {
+    return Commands.runOnce(() -> io.goWithBasicControl(-1), this);
+  }
+  public Command stopBasicControl() {
+    return Commands.runOnce(() -> io.goWithBasicControl(0), this);
   }
 
   public void wiggleUp() {

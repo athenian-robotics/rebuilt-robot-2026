@@ -136,28 +136,9 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     
     // ~Math~
 
-    // This code is unreadable right now so use this   V V V
-    // a_{ngle}=\arctan\left(\frac{\left(v^{2}+\sqrt{v^{4}-g\left(gd^{2}+2hv^{2}\right)}\right)}{gd}\right)
-    // PASTE INTO DESMOS TO VIEW                       ^ ^ ^
+    double angle = -6.6 + 17.2 * distance - 2.02 * Math.pow(distance, 2);
 
-    // The discriminant is useful for telling how many solutions there are
-    double discriminant = 
-      Math.pow(velocity, 4) 
-      - ((Math.pow(gravity, 2) * Math.pow(distance, 2))
-      + (2 * gravity * height * Math.pow(velocity, 2))
-    );
-    
-    // If discriminant isn't squareroot-able, then there are no solutions,
-    // meaning no shot is possible. 
-    if (discriminant < 0) return OptionalDouble.empty(); 
-
-    // The rest of the math
-    double angle = Math.atan(
-      (Math.pow(velocity, 2) + Math.sqrt(discriminant)) 
-      / (gravity * distance)
-    );
-
-    return OptionalDouble.of(angle / (2*Math.PI) * 360);
+    return OptionalDouble.of(angle);
   }
 
   @Override
@@ -201,18 +182,10 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   }
 
   public void setAngleAtTarget(Translation2d currentPosition) {
-    if (currentPosition.getMeasureX().in(Feet) > OuttakeConstants.OPPOSITE_TEAM_LIMIT_FEET) {
-      setAngle(OuttakeConstants.OPPOSITE_TEAM_SHOT_ANGLE_DEG);
-      return;
-    } 
-    if (currentPosition.getMeasureX().in(Feet) > OuttakeConstants.MIDFIELD_LIMIT_FEET) {
-      setAngle(OuttakeConstants.MIDFIELD_SHOT_ANGLE_DEG);
-      return;
-    }
     
     // TODO: check in with drive team if we should try shot next update/tick if angle is empty
     // TODO: figure out how to account for blueside/redside when integrating this with pose estimation
-    calculateAngle(currentPosition, OuttakeConstants.HUB_POSITION)
+    calculateAngle(currentPosition, OuttakeConstants.HUB_POSITION_BLUE)
       .ifPresent(this::setAngle);
   }
 

@@ -92,7 +92,7 @@ public class Constants {
      */
     public static final Transform3d ROBOT_TO_CAMERA =
         new Transform3d(
-            new Translation3d(Inches.of(11.5), Inches.of(0.0), Inches.of(7.5)),
+            new Translation3d(Inches.of(0.0), Inches.of(0.0), Inches.of(7.5)),
             new Rotation3d(0.0, Units.degreesToRadians(28.1), 0.0));
     // TODO: update to the final measured translation/rotation from robot origin to camera.
 
@@ -155,8 +155,8 @@ public class Constants {
 
     public static final double MIDDLE_WHEEL_TO_SHOOTER_VOLTS = 6;
     public static final double MIDDLE_WHEEL_TO_GROUND_VOLTS = -3;
-    public static final double STAR_WHEEL_TO_GROUND_VOLTS = 2.4;
-    public static final double STAR_WHEEL_TO_SHOOTER_VOLTS = 2.4;
+    public static final double STAR_WHEEL_TO_GROUND_VOLTS = 5;
+    public static final double STAR_WHEEL_TO_SHOOTER_VOLTS = 5;
     public static final double FLYWHEEL_VOLTS = 9;
 
     public static final double FLYWHEEL_KS = 0.0;
@@ -194,7 +194,8 @@ public class Constants {
 
     public static final double ANGLE_CHANGER_STARTING_ANGLE_ROTATIONS = STARTING_HOOD_ANGLE_DEG / 360.0;
 
-    public static final Translation2d HUB_POSITION = new Translation2d();
+    public static final Translation2d HUB_POSITION_BLUE = new Translation2d(Inches.of(182.1), Inches.of(158.85));
+    public static final Translation2d HUB_POSITION_RED = new Translation2d(Inches.of(469.1), Inches.of(158.85)); //TODO: ADD CHECKS FOR RED V BLUE, CURRENTLY WE JUST GUESS EVERYWHERE
 
     public static final double OUTTAKE_VELOCITY_MPS = 14.5; //based on recalc in slack
     public static final double GRAVITATIONAL_CONSTANT_MPS2 = 9.8;
@@ -228,7 +229,7 @@ public class Constants {
     public static final double INTAKE_MAX_ACCELERATION = 100;
     public static final double INTAKE_MAX_ALLOWED_PROFILER_ERROR = 5.0/360.0;
 
-    public static final double BASIC_CONTROL_VOLTS = 10;
+    public static final double BASIC_CONTROL_VOLTS = 5;
     public static final double BASIC_CONTROL_TOLERANCE_DEG = 5.0/360.0;
 
     public static final double MAX_ARM_VOLTAGE = 7;
@@ -238,7 +239,7 @@ public class Constants {
 
   public final class IndexerConstants {
     public static final int MOTOR_ID = 52;
-    public static final double MOTOR_VOLTAGE = 2.4;
+    public static final double MOTOR_VOLTAGE = 5.0;
   }
 
   public final class PathGenerationConstants {

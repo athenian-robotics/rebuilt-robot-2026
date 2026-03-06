@@ -38,6 +38,10 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.indexer.IndexerIO;
+import frc.robot.subsystems.indexer.IndexerIOSim;
+import frc.robot.subsystems.indexer.IndexerIOTalonFX;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSim;
@@ -68,6 +72,7 @@ public class RobotContainer {
   private final Intake intake;
   private final PathGeneration pathGeneration;
   private final Outtake outtake;
+  private final Indexer indexer;
 
   // -- Controllers --
   private final CommandJoystick driveJoystick =
@@ -96,6 +101,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         intake = new Intake(new IntakeIOTalonFX());
         outtake = new Outtake(new OuttakeIOTalonFX());
+        indexer = new Indexer(new IndexerIOTalonFX());
         break;
 
       case SIM:
@@ -111,6 +117,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackRight));
         intake = new Intake(new IntakeIOSim());
         outtake = null;
+        indexer = new Indexer(new IndexerIOSim());
         break;
 
       default:
@@ -126,6 +133,7 @@ public class RobotContainer {
                 new ModuleIO() {});
         intake = new Intake(new IntakeIO() {});
         outtake = new Outtake(new OuttakeIO() {});
+        indexer = new Indexer(new IndexerIO() {});
     }
 
     pathGeneration = new PathGeneration();
@@ -258,26 +266,32 @@ public class RobotContainer {
    // operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).whileTrue(
             //intake.runIntake().ignoringDisable(true));
 
+    operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_LEFT).onTrue(indexer.toggle());
+    operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_MIDDLE).whileTrue(outtake.sendBallsToShooter());
+
     steerJoystick.button(ControllerConstants.TRIGGER).whileTrue(outtake.sendBallsToShooter());
 
     operatorJoystick.button(ControllerConstants.OFFHAND_TOP_RIGHT).whileTrue(outtake.aimWithJoystick(() -> operatorJoystick.getY()));
-    operatorJoystick.button(ControllerConstants.OFFHAND_TOP_MIDDLE).onTrue(outtake.toNTAngle());
+    operatorJoystick.button(ControllerConstants.OFFHAND_TOP_MIDDLE).onTrue(outtake.toNTAngle().andThen(outtake.updateDistance(() -> drive.getPose().getTranslation(), () -> OuttakeConstants.HUB_POSITION_BLUE)));
 
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).whileTrue(outtake.startFlywheel());
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_LEFT).whileTrue(outtake.stopFlywheel());
     operatorJoystick.button(ControllerConstants.TRIGGER).toggleOnTrue(intake.runIntake());
     // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).whileTrue(intake.openHopper());
     // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_MIDDLE).whileTrue(intake.fullyRetract());
-    operatorJoystick.button(ControllerConstants.MAINHAND_TOP_LEFT).onTrue(intake.runBasicControl());
+    operatorJoystick.button(ControllerConstants.MAINHAND_TOP_LEFT).onTrue(intake.runBasicControlForward());
+    operatorJoystick.button(ControllerConstants.MAINHAND_TOP_MIDDLE).onTrue(intake.stopBasicControl());
+    operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).onTrue(intake.runBasicControlBackwards());
 
     driveJoystick.button(ControllerConstants.TRIGGER).whileTrue(
+        outtake.aimAtTarget(() -> drive.getPose().getTranslation()).andThen(
         DriveCommands.joystickDriveAtAngle(
             drive, 
             () -> -driveJoystick.getY(),
             () -> -driveJoystick.getX(), 
             () -> {
-                return OuttakeConstants.HUB_POSITION.minus(drive.getPose().getTranslation()).getAngle();
-            })
+                return OuttakeConstants.HUB_POSITION_BLUE.minus(drive.getPose().getTranslation()).getAngle();
+            }))
     );
   }
 

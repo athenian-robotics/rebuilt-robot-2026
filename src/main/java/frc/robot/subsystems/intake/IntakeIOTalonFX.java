@@ -29,7 +29,7 @@ public class IntakeIOTalonFX implements IntakeIO {
   private final TalonFX armMotor = new TalonFX(IntakeConstants.ARM_ID, new CANBus(CANConstants.CANIVORE_NAME));
   private final TalonFX wheelMotor = new TalonFX(IntakeConstants.WHEEL_ID, new CANBus(CANConstants.CANIVORE_NAME));
 
-  private boolean usingBasicControl = false;
+  private int usingBasicControl = 0;
 
   private double sysIdVoltage = 0.0;
   private double setpoint_Rotations = 0.00;
@@ -88,21 +88,21 @@ public class IntakeIOTalonFX implements IntakeIO {
     inputs.setpoint_Rotations = setpoint_Rotations;
 
 
-    if (usingBasicControl) {
+    if (usingBasicControl > 0) {
       // if (-Units.rotationsToDegrees(armMotor.getPosition().getValueAsDouble()) + IntakeConstants.FULL_RETRACTION_DEGREES < IntakeConstants.BASIC_CONTROL_TOLERANCE_DEG) {
       //   usingBasicControl = false;
       // }
       armMotor.setControl(new VoltageOut(IntakeConstants.BASIC_CONTROL_VOLTS));
-    } else if(sysIdVoltage == 0.0) {
-      armMotor.set(0);
+    } else if(usingBasicControl < 0) {
+      armMotor.set(-0.4);
     } else {
-      armMotor.setControl(new VoltageOut(sysIdVoltage));
+      armMotor.set(0);
     }
   }
 
   @Override
-  public void goWithBasicControl() {
-    usingBasicControl = true;
+  public void goWithBasicControl(int direction) {
+    usingBasicControl = direction;
   }
 
   @Override

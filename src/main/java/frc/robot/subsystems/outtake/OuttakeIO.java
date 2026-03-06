@@ -3,7 +3,13 @@ package frc.robot.subsystems.outtake;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+
+import java.util.Optional;
+import java.util.OptionalDouble;
+
 import org.littletonrobotics.junction.AutoLog;
+
+import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Empty;
 
 public interface OuttakeIO extends Subsystem {
   @AutoLog
@@ -58,5 +64,7 @@ public interface OuttakeIO extends Subsystem {
   public default void periodic () {}
 
   public default void sysIDLog (SysIdRoutineLog log) {}
+
+  public default OptionalDouble calculateAngle (Translation2d currentPosition, Translation2d targetPosition) {return OptionalDouble.empty();}
 
 }

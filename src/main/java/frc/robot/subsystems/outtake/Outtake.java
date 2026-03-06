@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 import frc.robot.Constants.OuttakeConstants;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
@@ -89,8 +90,8 @@ public class Outtake extends SubsystemBase {
   public Command groundOuttake() {
     return new StartEndCommand(
         () -> {
-            io.setMiddleWheelVoltage(OuttakeConstants.MIDDLE_WHEEL_TO_GROUND_VOLTS);
-            io.setIndexerVoltage(OuttakeConstants.STAR_WHEEL_TO_GROUND_VOLTS);
+            io.setMiddleWheelVoltage(-OuttakeConstants.MIDDLE_WHEEL_TO_GROUND_VOLTS);
+            io.setIndexerVoltage(-OuttakeConstants.STAR_WHEEL_TO_GROUND_VOLTS);
         },
         () -> {
             io.setMiddleWheelVoltage(0);
@@ -156,5 +157,13 @@ public class Outtake extends SubsystemBase {
 
     public Command toNTAngle () {
       return Commands.runOnce(io::setAngleFromNT, this);
+    }
+
+    public Command updateDistance (Supplier<Translation2d> currentPosition, Supplier<Translation2d> targetPosition) {
+      return Commands.runOnce(() -> io.calculateAngle(currentPosition.get(), targetPosition.get()));
+    }
+
+    public Command aimAtTarget (Supplier<Translation2d> currentPosition) {
+      return Commands.runOnce(() -> io.setAngleAtTarget(currentPosition.get()));
     }
 }
