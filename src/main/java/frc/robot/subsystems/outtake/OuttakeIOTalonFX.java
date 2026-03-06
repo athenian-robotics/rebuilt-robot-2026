@@ -30,6 +30,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANConstants;
@@ -182,11 +184,13 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   }
 
   public void setAngleAtTarget(Translation2d currentPosition) {
-    
-    // TODO: check in with drive team if we should try shot next update/tick if angle is empty
-    // TODO: figure out how to account for blueside/redside when integrating this with pose estimation
-    calculateAngle(currentPosition, OuttakeConstants.HUB_POSITION_BLUE)
-      .ifPresent(this::setAngle);
+    if (DriverStation.getAlliance().orElseGet(() -> Alliance.Blue) == Alliance.Red) {
+      calculateAngle(currentPosition, OuttakeConstants.HUB_POSITION_RED)
+        .ifPresent(this::setAngle);
+    } else {
+      calculateAngle(currentPosition, OuttakeConstants.HUB_POSITION_BLUE)
+        .ifPresent(this::setAngle);
+    }
   }
 
   public void setAngle(double angleDegrees) {

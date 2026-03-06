@@ -233,7 +233,6 @@ public class Drive extends SubsystemBase {
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
 
-      Logger.recordOutput("distToHubMeters", this.getPose().getTranslation().getDistance(OuttakeConstants.HUB_POSITION_BLUE));
     }
 
     // Update vision
@@ -257,6 +256,12 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("Odometry/Robot", Pose2d.struct, getPose());
     Logger.recordOutput("SwerveStates/Measured", SwerveModuleState.struct, getModuleStates());
     Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds());
+    if (DriverStation.getAlliance().orElseGet(() -> Alliance.Blue) == Alliance.Red) {
+      Logger.recordOutput("distToHubMeters", this.getPose().getTranslation().getDistance(OuttakeConstants.HUB_POSITION_RED));
+    } else {
+      Logger.recordOutput("distToHubMeters", this.getPose().getTranslation().getDistance(OuttakeConstants.HUB_POSITION_BLUE));
+    }
+    
 
     // Update gyro alert
     gyroDisconnectedAlert.set(

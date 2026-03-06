@@ -15,12 +15,15 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathfindingCommand;
+
+import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Voltage;
-
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -234,7 +237,7 @@ public class RobotContainer {
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
 
-    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).toggleOnTrue(outtake.sendBallsToShooter());
+    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).toggleOnTrue(outtake.groundOuttake().alongWith(indexer.hold()));
 
     /**
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).onTrue(
@@ -266,13 +269,13 @@ public class RobotContainer {
    // operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).whileTrue(
             //intake.runIntake().ignoringDisable(true));
 
-    operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_LEFT).onTrue(indexer.toggle());
-    operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_MIDDLE).whileTrue(outtake.sendBallsToShooter());
+    operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_LEFT).onTrue(outtake.lowerHood());
+    operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_MIDDLE).whileTrue(outtake.sendBallsToShooter().alongWith(indexer.hold()));
 
     steerJoystick.button(ControllerConstants.TRIGGER).whileTrue(outtake.sendBallsToShooter());
 
-    operatorJoystick.button(ControllerConstants.OFFHAND_TOP_RIGHT).whileTrue(outtake.aimWithJoystick(() -> operatorJoystick.getY()));
-    operatorJoystick.button(ControllerConstants.OFFHAND_TOP_MIDDLE).onTrue(outtake.toNTAngle().andThen(outtake.updateDistance(() -> drive.getPose().getTranslation(), () -> OuttakeConstants.HUB_POSITION_BLUE)));
+    // operatorJoystick.button(ControllerConstants.OFFHAND_TOP_RIGHT).whileTrue(outtake.aimWithJoystick(() -> operatorJoystick.getY()));
+    // operatorJoystick.button(ControllerConstants.OFFHAND_TOP_MIDDLE).onTrue(outtake.toNTAngle().andThen(outtake.updateDistance(() -> drive.getPose().getTranslation(), () -> OuttakeConstants.HUB_POSITION_BLUE)));
 
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).whileTrue(outtake.startFlywheel());
     operatorJoystick.button(ControllerConstants.THUMB_BUTTON_LEFT).whileTrue(outtake.stopFlywheel());
@@ -283,16 +286,29 @@ public class RobotContainer {
     operatorJoystick.button(ControllerConstants.MAINHAND_TOP_MIDDLE).onTrue(intake.stopBasicControl());
     operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).onTrue(intake.runBasicControlBackwards());
 
-    driveJoystick.button(ControllerConstants.TRIGGER).whileTrue(
-        outtake.aimAtTarget(() -> drive.getPose().getTranslation()).andThen(
-        DriveCommands.joystickDriveAtAngle(
-            drive, 
-            () -> -driveJoystick.getY(),
-            () -> -driveJoystick.getX(), 
-            () -> {
-                return OuttakeConstants.HUB_POSITION_BLUE.minus(drive.getPose().getTranslation()).getAngle();
-            }))
-    );
+    if (DriverStation.getAlliance().orElseGet(() -> Alliance.Blue) == Alliance.Red) {
+        driveJoystick.button(ControllerConstants.TRIGGER).whileTrue(
+            outtake.aimAtTarget(() -> drive.getPose().getTranslation()).andThen(
+            DriveCommands.joystickDriveAtAngle(
+                drive, 
+                () -> -driveJoystick.getY(),
+                () -> -driveJoystick.getX(), 
+                () -> {
+                    return OuttakeConstants.HUB_POSITION_RED.minus(drive.getPose().getTranslation()).getAngle();
+                }))
+        );
+    } else {
+        driveJoystick.button(ControllerConstants.TRIGGER).whileTrue(
+            outtake.aimAtTarget(() -> drive.getPose().getTranslation()).andThen(
+            DriveCommands.joystickDriveAtAngle(
+                drive, 
+                () -> -driveJoystick.getY(),
+                () -> -driveJoystick.getX(), 
+                () -> {
+                    return OuttakeConstants.HUB_POSITION_BLUE.minus(drive.getPose().getTranslation()).getAngle();
+                }))
+        );
+    }
   }
 
 

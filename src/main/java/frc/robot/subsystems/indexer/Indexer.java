@@ -50,4 +50,8 @@ public class Indexer extends SubsystemBase {
                 state = state.ON;}), // if off toggle on
             () -> this.state == State.ON);
     }
+
+    public Command hold () {
+        return Commands.startEnd(() -> io.setVoltage(-IndexerConstants.MOTOR_VOLTAGE), () -> io.setVoltage(0), this);
+    }
 }
