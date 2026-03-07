@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.Volts;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -17,6 +18,7 @@ public class IndexerIOTalonFX implements IndexerIO {
 
     public IndexerIOTalonFX() {
         motor = new TalonFX(IndexerConstants.MOTOR_ID, new CANBus(CANConstants.CANIVORE_NAME));
+        motor.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(70).withSupplyCurrentLowerLimit(35).withSupplyCurrentLowerTime(1).withSupplyCurrentLimitEnable(true));
     }
 
     @Override

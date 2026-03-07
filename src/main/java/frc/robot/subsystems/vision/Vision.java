@@ -160,4 +160,8 @@ public class Vision extends SubsystemBase {
   public void setOverrideOdometry(boolean value) {
     overrideOdometry = value;
   }
+
+  public boolean odometryBeingOverridden () {
+    return overrideOdometry;
+  }
 }

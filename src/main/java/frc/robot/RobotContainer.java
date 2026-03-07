@@ -297,7 +297,7 @@ public class RobotContainer {
 
     operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_LEFT).onTrue(outtake.lowerHood());
     operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_MIDDLE).whileTrue(outtake.sendBallsToShooter().alongWith(indexer.hold()));
-    operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_RIGHT).onTrue(outtake.aimAtTarget(() -> drive.getPose().getTranslation()));
+    operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_RIGHT).onTrue(Commands.runOnce(() -> vision.setOverrideOdometry(true)).andThen(Commands.waitUntil(() -> !vision.odometryBeingOverridden())).andThen(outtake.aimAtTarget(() -> drive.getPose().getTranslation())));
     operatorJoystick.button(ControllerConstants.OFFHAND_TOP_RIGHT).onTrue(outtake.setAngle(() -> 40));
 
     steerJoystick.button(ControllerConstants.TRIGGER).whileTrue(outtake.sendBallsToShooter());
@@ -316,7 +316,7 @@ public class RobotContainer {
 
     if (DriverStation.getAlliance().orElseGet(() -> Alliance.Blue) == Alliance.Red) {
         driveJoystick.button(ControllerConstants.TRIGGER).whileTrue(
-            outtake.aimAtTarget(() -> drive.getPose().getTranslation()).andThen(
+            Commands.runOnce(() -> vision.setOverrideOdometry(true)).andThen(Commands.waitUntil(() -> !vision.odometryBeingOverridden())).andThen(outtake.aimAtTarget(() -> drive.getPose().getTranslation())).andThen(
             DriveCommands.joystickDriveAtAngle(
                 drive, 
                 () -> -driveJoystick.getY(),
@@ -327,7 +327,7 @@ public class RobotContainer {
         );
     } else {
         driveJoystick.button(ControllerConstants.TRIGGER).whileTrue(
-            outtake.aimAtTarget(() -> drive.getPose().getTranslation()).andThen(
+            Commands.runOnce(() -> vision.setOverrideOdometry(true)).andThen(Commands.waitUntil(() -> !vision.odometryBeingOverridden())).andThen(outtake.aimAtTarget(() -> drive.getPose().getTranslation())).andThen(
             DriveCommands.joystickDriveAtAngle(
                 drive, 
                 () -> -driveJoystick.getY(),
