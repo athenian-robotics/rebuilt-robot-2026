@@ -59,6 +59,7 @@ import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.util.PathGeneration;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Volt;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -142,7 +143,9 @@ public class RobotContainer {
 
     pathGeneration = new PathGeneration();
 
-    NamedCommands.registerCommand("DeployHopperIntake", intake.runBasicControlForward().andThen(Commands.waitSeconds(4)).andThen(intake.stopBasicControl()).andThen(intake.runIntake()));
+    NamedCommands.registerCommand("DeployHopperIntake", intake.runBasicControlForward().andThen(Commands.waitSeconds(5))
+        .andThen(intake.stopBasicControl())
+        .andThen(intake.runIntake()));
     NamedCommands.registerCommand("AimAndScore", outtake.aimAtTarget(() -> drive.getPose().getTranslation())
         .andThen(outtake.startFlywheel())
         .andThen(Commands.waitSeconds(2))
@@ -259,13 +262,23 @@ public class RobotContainer {
     */
     
     // Reset gyro to 0° when the drive joystick's trigger is pressed
-    steerJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).onTrue(
-            Commands.runOnce(
-                    () ->
-                        drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-                    drive)
-                .ignoringDisable(true));
+    if (DriverStation.getAlliance().orElseGet(() -> Alliance.Blue) == Alliance.Red) {
+        steerJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).onTrue(
+                Commands.runOnce(
+                        () ->
+                            drive.setPose(
+                                new Pose2d(drive.getPose().getTranslation(), new Rotation2d(Degrees.of(180)))),
+                        drive)
+                    .ignoringDisable(true));
+    } else {
+        steerJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).onTrue(
+                Commands.runOnce(
+                        () ->
+                            drive.setPose(
+                                new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+                        drive)
+                    .ignoringDisable(true));
+    }
 
     // // Should return the bot to its initial position
     // driveJoystick
@@ -284,6 +297,8 @@ public class RobotContainer {
 
     operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_LEFT).onTrue(outtake.lowerHood());
     operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_MIDDLE).whileTrue(outtake.sendBallsToShooter().alongWith(indexer.hold()));
+    operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_RIGHT).onTrue(outtake.aimAtTarget(() -> drive.getPose().getTranslation()));
+    operatorJoystick.button(ControllerConstants.OFFHAND_TOP_RIGHT).onTrue(outtake.setAngle(() -> 40));
 
     steerJoystick.button(ControllerConstants.TRIGGER).whileTrue(outtake.sendBallsToShooter());
 

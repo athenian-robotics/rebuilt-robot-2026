@@ -21,17 +21,37 @@ import edu.wpi.first.units.measure.*;
 public class TunerConstants {
     // Both sets of gains need to be tuned to your individual robot.
 
-    // The steer motor uses any SwerveModule.SteerRequestType control request with the
-    // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
-    private static final Slot0Configs steerGains = new Slot0Configs()
-        .withKP(100).withKI(0).withKD(0.5)
-        .withKS(0.1).withKV(2.66).withKA(0)
-        .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
-    // When using closed-loop control, the drive motor uses the control
-    // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
-    private static final Slot0Configs driveGains = new Slot0Configs()
-        .withKP(0.1).withKI(0).withKD(0)
-        .withKS(0).withKV(0.124);
+    // // The steer motor uses any SwerveModule.SteerRequestType control request with the
+    // // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
+    // private static final Slot0Configs steerGains = new Slot0Configs()
+    //     .withKP(100).withKI(0).withKD(0.5)
+    //     .withKS(0.1).withKV(2.66).withKA(0)
+    //     .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
+    // // When using closed-loop control, the drive motor uses the control
+    // // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
+    // private static final Slot0Configs driveGains = new Slot0Configs()
+    //     .withKP(0.1).withKI(0).withKD(0)
+    //     .withKS(0).withKV(0.124);
+
+    private static final Slot0Configs steerGains =
+      new Slot0Configs()
+          .withKP(100)
+          .withKI(0)
+          .withKD(0.5)
+          .withKS(0.08198300189 * .9)
+          .withKV(0.7786751551 * .9)
+          .withKA(0.1444127311 * .9)
+          .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
+  // When using closed-loop control, the drive motor uses the control
+  // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
+  private static final Slot0Configs driveGains =
+      new Slot0Configs()
+          .withKP(0.1)
+          .withKI(0)
+          .withKD(0)
+          .withKS(0.1928246739 * .9)
+          .withKV(1.2115531579 * .9)
+          .withKA(0.17926556 * .9);
 
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors
@@ -149,7 +169,7 @@ public class TunerConstants {
 
     // Back Left
     private static final int kBackLeftDriveMotorId = 35;
-    private static final int kBackLeftSteerMotorId = 38;
+    private static final int kBackLeftSteerMotorId = 0;
     private static final int kBackLeftEncoderId = 2;
     private static final Angle kBackLeftEncoderOffset = Rotations.of(-0.181884765625);
     private static final boolean kBackLeftSteerMotorInverted = true;
@@ -159,7 +179,7 @@ public class TunerConstants {
     private static final Distance kBackLeftYPos = Inches.of(10.75);
 
     // Back Right
-    private static final int kBackRightDriveMotorId = 0;
+    private static final int kBackRightDriveMotorId = 47;
     private static final int kBackRightSteerMotorId = 40;
     private static final int kBackRightEncoderId = 3;
     private static final Angle kBackRightEncoderOffset = Rotations.of(-0.298828125);
