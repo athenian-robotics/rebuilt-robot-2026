@@ -194,7 +194,7 @@ public class Constants {
 
     public static final double ANGLE_CHANGER_STARTING_ANGLE_ROTATIONS = STARTING_HOOD_ANGLE_DEG / 360.0;
 
-    public static final Translation2d HUB_POSITION_BLUE = new Translation2d(Inches.of(182.1), Inches.of(158.85));
+    public static final Translation2d HUB_POSITION_BLUE = new Translation2d(Inches.of(182.1), Inches.of(158.85)); // x for facing 126.98 inches y for facing -38.00039 inches
     public static final Translation2d HUB_POSITION_RED = new Translation2d(Inches.of(469.1), Inches.of(158.85)); //TODO: ADD CHECKS FOR RED V BLUE, CURRENTLY WE JUST GUESS EVERYWHERE
 
     public static final double OUTTAKE_VELOCITY_MPS = 14.5; //based on recalc in slack

@@ -166,4 +166,8 @@ public class Outtake extends SubsystemBase {
     public Command aimAtTarget (Supplier<Translation2d> currentPosition) {
       return Commands.runOnce(() -> io.setAngleAtTarget(currentPosition.get()));
     }
+
+    public Command setAngle (DoubleSupplier angleDegrees) {
+      return Commands.runOnce(() -> io.setAngle(angleDegrees.getAsDouble()), this);
+    }
 }

@@ -14,6 +14,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
 
 import edu.wpi.first.hal.AllianceStationID;
@@ -140,6 +141,18 @@ public class RobotContainer {
     }
 
     pathGeneration = new PathGeneration();
+
+    NamedCommands.registerCommand("DeployHopperIntake", intake.runBasicControlForward().andThen(Commands.waitSeconds(4)).andThen(intake.stopBasicControl()).andThen(intake.runIntake()));
+    NamedCommands.registerCommand("AimAndScore", outtake.aimAtTarget(() -> drive.getPose().getTranslation())
+        .andThen(outtake.startFlywheel())
+        .andThen(Commands.waitSeconds(2))
+        .andThen(indexer.toggle())
+        .andThen(outtake.sendBallsToShooter()));
+    NamedCommands.registerCommand("LaunchFuel", outtake.setAngle(() -> 40.0)
+        .andThen(outtake.startFlywheel())
+        .andThen(Commands.waitSeconds(2))
+        .andThen(indexer.toggle())
+        .andThen(outtake.sendBallsToShooter()));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
