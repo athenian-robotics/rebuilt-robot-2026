@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "DeployHopperIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Comp_RightAggroNeutralShort"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchFuel"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
