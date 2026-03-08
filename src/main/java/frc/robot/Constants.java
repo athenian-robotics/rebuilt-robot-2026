@@ -156,8 +156,8 @@ public class Constants {
     public static final double MIDDLE_WHEEL_TO_SHOOTER_VOLTS = 10;
     public static final double MIDDLE_WHEEL_TO_GROUND_VOLTS = -3;
     public static final double STAR_WHEEL_TO_GROUND_VOLTS = 7;
-    public static final double STAR_WHEEL_TO_SHOOTER_VOLTS = 7;
-    public static final double FLYWHEEL_VOLTS = 12;
+    public static final double STAR_WHEEL_TO_SHOOTER_VOLTS = 10;
+    public static final double FLYWHEEL_VOLTS = 9;
 
     public static final double FLYWHEEL_KS = 0.0;
     public static final double FLYWHEEL_KV = 0.0;
