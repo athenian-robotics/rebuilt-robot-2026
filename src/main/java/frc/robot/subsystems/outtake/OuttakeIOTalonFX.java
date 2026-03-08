@@ -160,19 +160,18 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     inputs.flywheel_RPS = leadShooter.getVelocity().getValue().in(RotationsPerSecond);
     inputs.armEncoderAngle_rot = angleChanger.getPosition().getValueAsDouble();
     inputs.middleWheelVoltage = middleWheel.getMotorVoltage().getValueAsDouble();
+    inputs.flywheelVoltage = (Math.abs(leadShooter.getMotorVoltage().getValueAsDouble()) + Math.abs(followShooter.getMotorVoltage().getValueAsDouble()))/2.0;
   }
 
  
 
   public void startFlywheel() {
     flywheelSetpointRPS = OuttakeConstants.FLYWHEEL_VELOCITY_RPS;
-    Logger.recordOutput("Outtake/FlywheelVoltage", leadShooter.getMotorVoltage().getValue());
     System.out.println(leadShooter.getMotorVoltage().getValue());
   }
 
   public void stopFlywheel() {
     flywheelSetpointRPS = 0.0;
-    Logger.recordOutput("Outtake/FlywheelVoltage", 0.0);
    
   }
 
