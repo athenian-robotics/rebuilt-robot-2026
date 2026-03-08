@@ -19,7 +19,7 @@ public class Vision extends SubsystemBase {
   private final VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
   private VisionObservation latestObservation;
   private double lastHeartbeatSeconds = 0.0;
-  private boolean overrideOdometry = false;
+  private boolean overrideOdometry = true;
 
   /** Result of a validated Limelight solve. */
   public static record VisionObservation(
@@ -95,7 +95,7 @@ public class Vision extends SubsystemBase {
     Logger.recordOutput("Vision/RejectedByOdometry", false);
 
     if (overrideOdometry) {
-      overrideOdometry = false;
+      overrideOdometry = true;
       Logger.recordOutput("Vision/overrideOdometryCheck", true);
     } else {
       Logger.recordOutput("Vision/overrideOdometryCheck", false);
