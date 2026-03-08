@@ -148,10 +148,11 @@ public class RobotContainer {
         .andThen(intake.runIntake()));
     NamedCommands.registerCommand("AimAndScore", outtake.aimAtTarget(() -> drive.getPose().getTranslation())
         .andThen(outtake.startFlywheel())
-        .andThen(Commands.waitSeconds(.5))
+        .andThen(Commands.waitSeconds(2))
         .andThen(indexer.toggle())
         .andThen(outtake.sendBallsToShooter())
         .andThen(Commands.waitSeconds(3)));
+    NamedCommands.registerCommand("StartFlywheel", outtake.startFlywheel());
     NamedCommands.registerCommand("LaunchFuel", outtake.setAngle(() -> 40.0)
         .andThen(outtake.startFlywheel())
         .andThen(Commands.waitSeconds(2))

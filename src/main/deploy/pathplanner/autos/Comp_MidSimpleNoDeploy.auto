@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "StartFlywheel"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Comp_ForwardMidToCenter"
