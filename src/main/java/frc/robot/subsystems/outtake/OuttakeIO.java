@@ -29,6 +29,7 @@ public interface OuttakeIO extends Subsystem {
     public double flywheel_RPS = 0.0;
     public double middleWheelVoltage = 0.0;
     public double flywheelVoltage = 0.0;
+    public boolean flywheelSpunUp = false;
   }
 
   /** Updates logs; util for AdvantageScope
@@ -68,4 +69,5 @@ public interface OuttakeIO extends Subsystem {
 
   public default OptionalDouble calculateAngle (Translation2d currentPosition, Translation2d targetPosition) {return OptionalDouble.empty();}
 
+  public default boolean isSpunUp () {return false;}
 }

@@ -170,4 +170,8 @@ public class Outtake extends SubsystemBase {
     public Command setAngle (DoubleSupplier angleDegrees) {
       return Commands.runOnce(() -> io.setAngle(angleDegrees.getAsDouble()));
     }
+
+    public boolean isSpunUp () {
+      return io.isSpunUp();
+    }
 }

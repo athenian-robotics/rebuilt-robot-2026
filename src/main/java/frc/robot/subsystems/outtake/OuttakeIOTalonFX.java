@@ -8,6 +8,8 @@ import static edu.wpi.first.units.Units.Volts;
 
 import java.util.OptionalDouble;
 
+import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.CANBus;
@@ -161,6 +163,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     inputs.armEncoderAngle_rot = angleChanger.getPosition().getValueAsDouble();
     inputs.middleWheelVoltage = middleWheel.getMotorVoltage().getValueAsDouble();
     inputs.flywheelVoltage = (Math.abs(leadShooter.getMotorVoltage().getValueAsDouble()) + Math.abs(followShooter.getMotorVoltage().getValueAsDouble()))/2.0;
+    inputs.flywheelSpunUp = isSpunUp();
   }
 
  
@@ -229,5 +232,10 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   @Override
   public void sysIDLog(SysIdRoutineLog log) {
       log.motor("angle").voltage(Volts.of(sysIdVoltage)).angularPosition(Degrees.of(currentAngleDeg)).angularVelocity(DegreesPerSecond.of(currentAngularVelocityDegPerSecond));
+  }
+
+  @Override
+  public boolean isSpunUp() {
+    return Math.abs(Math.abs(leadShooter.getVelocity().getValueAsDouble()) - flywheelSetpointRPS) < OuttakeConstants.FLYWHEEL_MAX_ERROR_RPS;
   }
 }
