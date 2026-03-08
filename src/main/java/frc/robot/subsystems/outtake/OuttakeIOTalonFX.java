@@ -91,9 +91,9 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     angleChanger.getConfigurator().apply(angleChangerMotionProfile);
 
     angleChanger.getConfigurator().apply(new FeedbackConfigs().withSensorToMechanismRatio(1.0/OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO));
-    middleWheel.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(70).withSupplyCurrentLowerLimit(35).withSupplyCurrentLowerTime(1).withSupplyCurrentLimitEnable(true));
-    angleChanger.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(70).withSupplyCurrentLowerLimit(35).withSupplyCurrentLowerTime(1).withSupplyCurrentLimitEnable(true));
-    indexerMotor.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(70).withSupplyCurrentLowerLimit(35).withSupplyCurrentLowerTime(1).withSupplyCurrentLimitEnable(true));
+    middleWheel.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(70).withSupplyCurrentLowerLimit(37).withSupplyCurrentLowerTime(1).withSupplyCurrentLimitEnable(true));
+    angleChanger.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(70).withSupplyCurrentLowerLimit(37).withSupplyCurrentLowerTime(1).withSupplyCurrentLimitEnable(true));
+    indexerMotor.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(70).withSupplyCurrentLowerLimit(37).withSupplyCurrentLowerTime(1).withSupplyCurrentLimitEnable(true));
   }
 
   public void periodic() {

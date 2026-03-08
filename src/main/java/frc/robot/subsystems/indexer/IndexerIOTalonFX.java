@@ -18,7 +18,7 @@ public class IndexerIOTalonFX implements IndexerIO {
 
     public IndexerIOTalonFX() {
         motor = new TalonFX(IndexerConstants.MOTOR_ID, new CANBus(CANConstants.CANIVORE_NAME));
-        motor.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(70).withSupplyCurrentLowerLimit(35).withSupplyCurrentLowerTime(1).withSupplyCurrentLimitEnable(true));
+        motor.getConfigurator().apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(70).withSupplyCurrentLowerLimit(37).withSupplyCurrentLowerTime(1).withSupplyCurrentLimitEnable(true));
     }
 
     @Override
