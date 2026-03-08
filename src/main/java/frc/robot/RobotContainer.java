@@ -305,8 +305,8 @@ public class RobotContainer {
     // operatorJoystick.button(ControllerConstants.OFFHAND_TOP_RIGHT).whileTrue(outtake.aimWithJoystick(() -> operatorJoystick.getY()));
     // operatorJoystick.button(ControllerConstants.OFFHAND_TOP_MIDDLE).onTrue(outtake.toNTAngle().andThen(outtake.updateDistance(() -> drive.getPose().getTranslation(), () -> OuttakeConstants.HUB_POSITION_BLUE)));
 
-    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).whileTrue(outtake.startFlywheel());
-    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_LEFT).whileTrue(outtake.stopFlywheel());
+    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).onTrue(outtake.startFlywheel());
+    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_LEFT).onTrue(outtake.stopFlywheel());
     operatorJoystick.button(ControllerConstants.TRIGGER).toggleOnTrue(intake.runIntake());
     // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).whileTrue(intake.openHopper());
     // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_MIDDLE).whileTrue(intake.fullyRetract());
