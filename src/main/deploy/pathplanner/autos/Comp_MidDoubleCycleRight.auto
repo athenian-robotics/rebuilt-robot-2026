@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Comp_ForwardMidToCenter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DeployHopperIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AimAndScore"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Comp_CenterToRightSecondCycle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AimAndScore"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

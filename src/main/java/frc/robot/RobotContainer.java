@@ -143,14 +143,15 @@ public class RobotContainer {
 
     pathGeneration = new PathGeneration();
 
-    NamedCommands.registerCommand("DeployHopperIntake", intake.runBasicControlForward().andThen(Commands.waitSeconds(5))
+    NamedCommands.registerCommand("DeployHopperIntake", intake.runBasicControlForward().andThen(Commands.waitSeconds(4))
         .andThen(intake.stopBasicControl())
         .andThen(intake.runIntake()));
     NamedCommands.registerCommand("AimAndScore", outtake.aimAtTarget(() -> drive.getPose().getTranslation())
         .andThen(outtake.startFlywheel())
-        .andThen(Commands.waitSeconds(2))
+        .andThen(Commands.waitSeconds(.5))
         .andThen(indexer.toggle())
-        .andThen(outtake.sendBallsToShooter()));
+        .andThen(outtake.sendBallsToShooter())
+        .andThen(Commands.waitSeconds(3)));
     NamedCommands.registerCommand("LaunchFuel", outtake.setAngle(() -> 40.0)
         .andThen(outtake.startFlywheel())
         .andThen(Commands.waitSeconds(2))
