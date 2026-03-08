@@ -35,7 +35,7 @@ public class Indexer extends SubsystemBase {
      * @return The command
      */
     public Command runIndexer(double voltage) {
-        return new InstantCommand(() -> io.setVoltage(voltage), this);
+        return new InstantCommand(() -> io.setVoltage(voltage));
     }
 
     /**
@@ -52,6 +52,6 @@ public class Indexer extends SubsystemBase {
     }
 
     public Command hold () {
-        return Commands.startEnd(() -> io.setVoltage(-IndexerConstants.MOTOR_VOLTAGE), () -> io.setVoltage(0), this);
+        return Commands.startEnd(() -> io.setVoltage(-IndexerConstants.MOTOR_VOLTAGE), () -> io.setVoltage(0));
     }
 }

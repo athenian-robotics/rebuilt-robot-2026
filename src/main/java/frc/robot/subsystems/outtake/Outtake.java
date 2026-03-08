@@ -139,7 +139,7 @@ public class Outtake extends SubsystemBase {
      * @return The command
      */
     public Command runIndexer(double voltage) {
-        return new InstantCommand(() -> io.setIndexerVoltage(voltage), this);
+        return new InstantCommand(() -> io.setIndexerVoltage(voltage));
     }
 
     /**
