@@ -101,6 +101,10 @@ public class DriveCommands {
         drive);
   }
 
+  public static Command brake (Drive drive) {
+    return Commands.run((drive::brake), drive);
+  }
+
   /**
    * Field relative drive command using joystick for linear control and PID for angular control.
    * Possible use cases include snapping to an angle, aiming at a vision target, or controlling

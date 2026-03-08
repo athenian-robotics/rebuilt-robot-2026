@@ -148,14 +148,14 @@ public class RobotContainer {
         .andThen(intake.runIntake()));
     NamedCommands.registerCommand("AimAndScore", outtake.aimAtTarget(() -> drive.getPose().getTranslation())
         .andThen(outtake.startFlywheel())
-        .andThen(Commands.waitSeconds(2))
+        .andThen(Commands.waitSeconds(4))
         .andThen(indexer.toggle())
         .andThen(outtake.sendBallsToShooter())
         .andThen(Commands.waitSeconds(3)));
     NamedCommands.registerCommand("StartFlywheel", outtake.startFlywheel());
     NamedCommands.registerCommand("LaunchFuel", outtake.setAngle(() -> 40.0)
         .andThen(outtake.startFlywheel())
-        .andThen(Commands.waitSeconds(2))
+        .andThen(Commands.waitSeconds(4))
         .andThen(indexer.toggle())
         .andThen(outtake.sendBallsToShooter()));
 
@@ -315,6 +315,9 @@ public class RobotContainer {
     operatorJoystick.button(ControllerConstants.MAINHAND_TOP_LEFT).onTrue(intake.runBasicControlForward());
     operatorJoystick.button(ControllerConstants.MAINHAND_TOP_MIDDLE).onTrue(intake.stopBasicControl());
     operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).onTrue(intake.runBasicControlBackwards());
+    operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).onTrue(outtake.setAngle(() -> OuttakeConstants.LOW_SET_ANGLE_DEG));
+    operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_MIDDLE).onTrue(outtake.setAngle(() -> OuttakeConstants.MIDDLE_SET_ANGLE_DEG));
+    operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_RIGHT).onTrue(outtake.setAngle(() -> OuttakeConstants.HIGH_SET_ANGLE_DEG));
 
     if (DriverStation.getAlliance().orElseGet(() -> Alliance.Blue) == Alliance.Red) {
         driveJoystick.button(ControllerConstants.TRIGGER).whileTrue(
@@ -338,6 +341,7 @@ public class RobotContainer {
                     return OuttakeConstants.HUB_POSITION_BLUE.minus(drive.getPose().getTranslation()).getAngle();
                 }))
         );
+        driveJoystick.button((ControllerConstants.THUMB_BUTTON_BOTTOM)).whileTrue(DriveCommands.brake(drive));
     }
   }
 

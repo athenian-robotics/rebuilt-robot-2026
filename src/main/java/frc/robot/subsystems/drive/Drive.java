@@ -297,6 +297,19 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
   }
 
+  public void brake() {
+    SwerveModuleState[] setpointStates = new SwerveModuleState[]{
+      new SwerveModuleState(0, new Rotation2d(Degrees.of(45))), //fl
+      new SwerveModuleState(0, new Rotation2d(Degrees.of(135))), //fr
+      new SwerveModuleState(0, new Rotation2d(Degrees.of(225))), //br
+      new SwerveModuleState(0, new Rotation2d(Degrees.of(315))) //bl
+    };
+
+    for (int i = 0; i < 4; i++) {
+      modules[i].runSetpoint(setpointStates[i]);
+    }
+  }
+
   /** Runs the drive in a straight line with the specified drive output. */
   public void runDriveCharacterization(double output) {
     for (int i = 0; i < 4; i++) {

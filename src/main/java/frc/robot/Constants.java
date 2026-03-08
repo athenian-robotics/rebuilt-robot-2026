@@ -201,6 +201,10 @@ public class Constants {
     public static final double GRAVITATIONAL_CONSTANT_MPS2 = 9.8;
     public static final double HUB_HEIGHT_FEET = 6.0;
     public static final double LAUNCH_HEIGHT_FEET = 2.5;
+
+    public static final double LOW_SET_ANGLE_DEG = 23.2926886432; // 2.4333333333 m
+    public static final double MIDDLE_SET_ANGLE_DEG = 28.2261055557; // 3.3166666667 m
+    public static final double HIGH_SET_ANGLE_DEG = 30.0072; // 4.2 m
   }
 
   public final class IntakeConstants {
