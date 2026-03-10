@@ -373,7 +373,14 @@ public class Drive extends SubsystemBase {
     stop();
   }
 
-  /** Returns a command to run a quasistatic drive test in the specified direction. */
+  /** Returns a command to run a quasistatic drive test in the specified direction. 
+   * HOW TO USE: get feedforwards from SysId program
+   * and transform kV from wheel meters to motor rotations by dividing wheel radius, 2pi, and gear ratio. 
+   * Do the divisions twice for kA because the control unit is squared there.
+   * Put an average of those feedforwards and the rotate feedforwards in to DriveGains in TunerConstants, 
+   * because we don't have a smarter way of handling it.
+   * Remember to also keep the non-averaged values for calculating rotational inertia (Moment of Inertia).
+   */
   public Command sysIdQuasistaticDrive(SysIdRoutine.Direction direction) {
     return run(() -> runDriveCharacterization(0.0))
         .withTimeout(1.0)
@@ -387,7 +394,14 @@ public class Drive extends SubsystemBase {
         .andThen(sysIdDrive.dynamic(direction));
   }
 
-  /** Returns a command to run a quasistatic rotate test in the specified direction. */
+  /** Returns a command to run a quasistatic rotate test in the specified direction.
+   * HOW TO USE: get feedforwards from SysId program
+   * and transform kV from wheel meters to motor rotations by dividing wheel radius, 2pi, and gear ratio. 
+   * Do the divisions twice for kA because the control unit is squared there.
+   * Put an average of those feedforwards and the rotate feedforwards in to DriveGains in TunerConstants, 
+   * because we don't have a smarter way of handling it.
+   * Remember to also keep the non-averaged values for calculating rotational inertia (Moment of Inertia).
+   * THIS IS NOT FOR STEERGAINS */
   public Command sysIdQuasistaticRotate(SysIdRoutine.Direction direction) {
     return run(() -> runRotateCharacterization(0.0))
         .withTimeout(1.0)
