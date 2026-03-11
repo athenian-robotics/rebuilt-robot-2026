@@ -207,6 +207,7 @@ public class RobotContainer {
         "Intake SysId (Dynamic Forward)", intake.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Intake SysId (Dynamic Reverse)", intake.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    autoChooser.addOption("Speed At 12 Volts", drive.findMaxSpeed());
 
     // Configure the button bindings
     configureJoystickBindings();
