@@ -55,6 +55,7 @@ import frc.robot.Constants.OuttakeConstants;
 import frc.robot.Constants.RuntimeConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.util.AllianceUtil;
 import frc.robot.util.LocalADStarAK;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -115,6 +116,10 @@ public class Drive extends SubsystemBase {
 
   private final Field2d field = new Field2d();
 
+  // Driver-only heading offset for "field oriented" driving. This must not affect odometry or
+  // vision; it only changes how joystick inputs are interpreted.
+  private Rotation2d driverHeadingOffset = new Rotation2d();
+
   public Drive(
       Vision vision,
       GyroIO gyroIO,
@@ -144,7 +149,7 @@ public class Drive extends SubsystemBase {
         new PPHolonomicDriveController(
             new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
         PP_CONFIG,
-        () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+        AllianceUtil::isRedAlliance,
         this);
     Pathfinding.setPathfinder(new LocalADStarAK());
     PathPlannerLogging.setLogActivePathCallback(
@@ -261,7 +266,7 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("Odometry/Robot", Pose2d.struct, getPose());
     Logger.recordOutput("SwerveStates/Measured", SwerveModuleState.struct, getModuleStates());
     Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds());
-    if (DriverStation.getAlliance().orElseGet(() -> Alliance.Blue) == Alliance.Red) {
+    if (AllianceUtil.isRedAlliance()) {
       Logger.recordOutput("distToHubMeters", this.getPose().getTranslation().getDistance(OuttakeConstants.HUB_POSITION_RED));
     } else {
       Logger.recordOutput("distToHubMeters", this.getPose().getTranslation().getDistance(OuttakeConstants.HUB_POSITION_BLUE));
@@ -467,6 +472,19 @@ public class Drive extends SubsystemBase {
   /** Returns the current odometry rotation. */
   public Rotation2d getRotation() {
     return getPose().getRotation();
+  }
+
+  /** Returns the rotation used for field-relative driving (odometry rotation minus driver offset). */
+  public Rotation2d getDriverFieldRelativeRotation() {
+    return getRotation().minus(driverHeadingOffset);
+  }
+
+  /**
+   * Sets the driver-only heading so that the robot's current pose rotation is treated as the given
+   * desired heading for field-relative driving.
+   */
+  public void setDriverFieldRelativeHeading(Rotation2d desiredHeading) {
+    driverHeadingOffset = getRotation().minus(desiredHeading);
   }
 
   /** Resets the current odometry pose. */
