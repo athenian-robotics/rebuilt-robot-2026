@@ -86,19 +86,21 @@ public class Vision extends SubsystemBase {
       return Optional.empty();
     }
 
-    if (currentPose != null
-        && !overrideOdometry
+    boolean bypassOdometryCheck = overrideOdometry || currentPose == null;
+    Logger.recordOutput("Vision/OdometryCheckBypassed", bypassOdometryCheck);
+
+    if (!bypassOdometryCheck
         && !measurementMatchesOdometry(currentPose, latestObservation.pose())) {
       Logger.recordOutput("Vision/RejectedByOdometry", true);
       return Optional.empty();
     }
     Logger.recordOutput("Vision/RejectedByOdometry", false);
 
+    // "Override" is intended as a one-shot bypass to allow relocalization when odometry is known
+    // to be wrong (e.g., after a manual pose reset). After we accept a measurement with the bypass
+    // enabled, re-enable normal gating to prevent large frame-mismatch teleports.
     if (overrideOdometry) {
-      overrideOdometry = true;
-      Logger.recordOutput("Vision/overrideOdometryCheck", true);
-    } else {
-      Logger.recordOutput("Vision/overrideOdometryCheck", false);
+      overrideOdometry = false;
     }
 
     return Optional.of(latestObservation);
