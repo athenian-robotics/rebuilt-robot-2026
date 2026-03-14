@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.util.AllianceUtil;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.HashSet;
@@ -92,15 +93,13 @@ public class DriveCommands {
                   linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
                   linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
                   omega * drive.getMaxAngularSpeedRadPerSec());
-          boolean isFlipped =
-              DriverStation.getAlliance().isPresent()
-                  && DriverStation.getAlliance().get() == Alliance.Red;
+          boolean isFlipped = AllianceUtil.isRedAlliance();
           drive.runVelocity(
               ChassisSpeeds.fromFieldRelativeSpeeds(
                   speeds,
                   isFlipped
-                      ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                      : drive.getRotation()));
+                      ? drive.getDriverFieldRelativeRotation().plus(new Rotation2d(Math.PI))
+                      : drive.getDriverFieldRelativeRotation()));
         },
         drive);
   }
@@ -175,15 +174,13 @@ public class DriveCommands {
                 linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
                 linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
                 omega);
-        boolean isFlipped =
-            DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get() == Alliance.Red;
+        boolean isFlipped = AllianceUtil.isRedAlliance();
         drive.runVelocity(
             ChassisSpeeds.fromFieldRelativeSpeeds(
                 speeds,
                 isFlipped
-                    ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                    : drive.getRotation()));
+                    ? drive.getDriverFieldRelativeRotation().plus(new Rotation2d(Math.PI))
+                    : drive.getDriverFieldRelativeRotation()));
       }
     }
     // Reset PID controller when command starts

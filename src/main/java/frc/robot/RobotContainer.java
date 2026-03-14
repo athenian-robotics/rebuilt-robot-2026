@@ -54,6 +54,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.util.PathGeneration;
+import frc.robot.util.AllianceUtil;
 
 import static edu.wpi.first.units.Units.Degrees;
 
@@ -234,71 +235,67 @@ public class RobotContainer {
         PathfindingCommand.warmupCommand().schedule();
     }
 
+  /**
+   * Use this method to define your button->command mappings. Buttons can be created by
+   * instantiating a {@link GenericHID} or one of its subclasses ({@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   */
+  private void configureJoystickBindings() {
+    
+    // Default command, normal field-relative drive
+    drive.setDefaultCommand(
+        DriveCommands.joystickDrive(
+            drive,
+            () -> -driveJoystick.getY(),
+            () -> -driveJoystick.getX(),
+            () -> -steerJoystick.getX()));
+  
+
+    // This allows for heading-based drive
+    // drive.setDefaultCommand(
+    //     DriveCommands.joystickDriveAtAngle(
+    //         drive,
+    //         () -> driveJoystick.getY(),
+    //         () -> driveJoystick.getX(),
+    //         () -> new Rotation2d(-steerJoystick.getY(), -steerJoystick.getX()),
+    //         () -> steerJoystick.getMagnitude() >=
+    // Constants.ControllerConstants.HEADING_DEADZONE));
+
+    // // Lock to 0° when A button is held
+    // controller
+    //     .a()
+    //     .whileTrue(
+    //         DriveCommands.joystickDriveAtAngle(
+    //             drive,
+    //             () -> -controller.getLeftY(),
+    //             () -> -controller.getLeftX(),
+    //             () -> new Rotation2d()));
+
+    // // Switch to X pattern when X button is pressed
+    // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+
+
+    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).toggleOnTrue(outtake.groundOuttake().alongWith(indexer.hold()));
+
     /**
-     * Use this method to define your button -> command mappings. 
-     * <p> Buttons can be created by instantiating a {@link GenericHID} 
-     * or one of its subclasses: ({@link edu.wpi.first.wpilibj.Joystick Joystick} or {@link XboxController}), 
-     * and then passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton JoystickButton}.
-     */
-    private void configureJoystickBindings() {
-        // Default command, normal field-relative drive
-        drive.setDefaultCommand(
-                DriveCommands.joystickDrive(
-                        drive,
-                        () -> -driveJoystick.getY(),
-                        () -> -driveJoystick.getX(),
-                        () -> -steerJoystick.getX()));
-
-        // Run indexer rollers and ground outtake balls
-        operatorJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM)
-        .toggleOnTrue(outtake.groundOuttake().alongWith(indexer.hold()));
-
-        driveJoystick.button((ControllerConstants.THUMB_BUTTON_BOTTOM)).onTrue(DriveCommands.brake(drive));
-        
-        // Alliance-side dependant code (reset heading code & aim towards hub code)
-        if (DriverStation.getAlliance().orElseGet(() -> Alliance.Blue) == Alliance.Red) {
-            // When drive trigger pressed, face towards Red alliance hub
-            driveJoystick.button(ControllerConstants.TRIGGER).whileTrue(
-                outtake.keepAimingAtTarget(
-                    () -> drive.getPose().getTranslation())
-                .alongWith(DriveCommands.joystickDriveAtAngle(
-                    drive,
-                    () -> -driveJoystick.getY(),
-                    () -> -driveJoystick.getX(),
-                    () -> OuttakeConstants.HUB_POSITION_RED
-                            .minus(drive.getPose().getTranslation()).getAngle()
-                    )));
-            
-            // Reset gyro to 0° when the drive joystick's trigger is pressed
-            // If on Red alliance, offset by 180º
-            steerJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).onTrue(
-                Commands.runOnce(
-                    () -> drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d(Degrees.of(180)))),
+    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).onTrue(
+      intake.runIntake()
+    );
+    */
+    steerJoystick
+        .button(ControllerConstants.THUMB_BUTTON_BOTTOM)
+        .onTrue(
+            Commands.runOnce(
+                    () -> {
+                      Rotation2d desiredHeading =
+                          AllianceUtil.isRedAlliance()
+                              ? new Rotation2d(Degrees.of(180))
+                              : new Rotation2d();
+                      drive.setDriverFieldRelativeHeading(desiredHeading);
+                    },
                     drive)
-                    .ignoringDisable(true));
-        } else {
-            // When drive trigger pressed, face towards Blue alliance hub
-            driveJoystick.button(ControllerConstants.TRIGGER).whileTrue(
-                    outtake.aimAtTarget(() -> drive.getPose().getTranslation()).andThen(
-                            DriveCommands.joystickDriveAtAngle(
-                                    drive,
-                                    () -> -driveJoystick.getY(),
-                                    () -> -driveJoystick.getX(),
-                                    () -> {
-                                        return OuttakeConstants.HUB_POSITION_BLUE
-                                                .minus(drive.getPose().getTranslation()).getAngle();
-                                    })));
-
-            // Reset gyro to 0° when the drive joystick's trigger is pressed
-            // If on Blue alliance (or N/A), offset by 0º
-            steerJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).onTrue(
-                    Commands.runOnce(
-                            () -> drive.setPose(
-                                    new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-                            drive)
-                            .ignoringDisable(true));
-        }
+                .ignoringDisable(true));
 
         // Heading-based drive
         // drive.setDefaultCommand(
@@ -349,6 +346,23 @@ public class RobotContainer {
         // -> drive.getPose().getTranslation(), () ->
         // OuttakeConstants.HUB_POSITION_BLUE)));
 
+        driveJoystick
+        .button(ControllerConstants.TRIGGER)
+        .whileTrue(
+            outtake
+                .aimAtTarget(() -> drive.getPose().getTranslation())
+                .andThen(
+                    DriveCommands.joystickDriveAtAngle(
+                        drive,
+                        () -> -driveJoystick.getY(),
+                        () -> -driveJoystick.getX(),
+                        () -> {
+                            var hubPosition =
+                                AllianceUtil.isRedAlliance()
+                                    ? OuttakeConstants.HUB_POSITION_RED
+                                    : OuttakeConstants.HUB_POSITION_BLUE;
+                            return hubPosition.minus(drive.getPose().getTranslation()).getAngle();
+                        })));
         
         // Operator left side bottom left button    -->  lower hood
         operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_LEFT).onTrue(outtake.lowerHood());
