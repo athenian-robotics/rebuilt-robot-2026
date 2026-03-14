@@ -62,6 +62,10 @@ public class DriveCommands {
 
   /**
    * Field relative drive command using two joysticks (controlling linear and angular velocities).
+   * @param drive The drive subsystem
+   * @param xSupplier The forwards-backwards motion of the robot, from -1 to 1 (usually y axis on driving controller)
+   * @param ySupplier The left-right motion of the robot, from -1 to 1 (usually x axis on driving controller)
+   * @param omegaSupplier The rotational motion of the robot, from -1 to 1 (usually x axis on turning controller)
    */
   public static Command joystickDrive(
       Drive drive,
@@ -101,6 +105,12 @@ public class DriveCommands {
         drive);
   }
 
+  /**
+   * Causes the robot to enter a braking formation, for counter-defense. 
+   * The robot will exit braking formation automatically once a joystick is moved.
+   * @param drive The robot's drive subsystem
+   * @return An instant command
+   */
   public static Command brake (Drive drive) {
     return Commands.runOnce(drive::stopWithX, drive);
   }
@@ -109,6 +119,11 @@ public class DriveCommands {
    * Field relative drive command using joystick for linear control and PID for angular control.
    * Possible use cases include snapping to an angle, aiming at a vision target, or controlling
    * absolute rotation with a joystick.
+   * @param drive The drive subsystem
+   * @param xSupplier The forwards-backwards motion of the robot, from -1 to 1 (usually y axis on driving controller)
+   * @param ySupplier The left-right motion of the robot, from -1 to 1 (usually x axis on driving controller)
+   * @param rotationSupplier The angle at which the robot should be facing
+   * @param changeAngle Whether or not to accept the newest result from rotationSupplier (in case e.g. controller is in deadzone)
    */
   public static Command joystickDriveAtAngle(
       Drive drive,
@@ -175,6 +190,15 @@ public class DriveCommands {
     .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
   }
 
+  /**
+   * Field relative drive command using joystick for linear control and PID for angular control.
+   * Possible use cases include snapping to an angle, aiming at a vision target, or controlling
+   * absolute rotation with a joystick.
+   * @param drive The drive subsystem
+   * @param xSupplier The forwards-backwards motion of the robot, from -1 to 1 (usually y axis on driving controller)
+   * @param ySupplier The left-right motion of the robot, from -1 to 1 (usually x axis on driving controller)
+   * @param rotationSupplier The angle at which the robot should be facing
+   */
   public static Command joystickDriveAtAngle(
       Drive drive,
       DoubleSupplier xSupplier,

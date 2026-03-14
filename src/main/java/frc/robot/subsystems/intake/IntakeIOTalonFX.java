@@ -1,9 +1,6 @@
 package frc.robot.subsystems.intake;
 
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
 import static edu.wpi.first.units.Units.Volts;
@@ -12,12 +9,13 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import frc.robot.Constants;
 import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.subsystems.intake.Intake.BasicControlState;
 
 public class IntakeIOTalonFX implements IntakeIO {
     private final TalonFX armMotor = new TalonFX(IntakeConstants.ARM_ID, new CANBus(CANConstants.CANIVORE_NAME));
@@ -25,44 +23,32 @@ public class IntakeIOTalonFX implements IntakeIO {
 
     private BasicControlState basicControlState = BasicControlState.STOPPED;
 
-    public enum BasicControlState {
-        FORWARD,
-        STOPPED,
-        BACKWARD
-    }
-
     private double sysIdVoltage = 0.0;
-    private double setpointRotations = 0.00;
-
-    // private final PIDController feedback = new PIDController
-    // (IntakeConstants.INTAKE_kP,
-    // IntakeConstants.INTAKE_kI,
-    // IntakeConstants.INTAKE_kD); new ArmFeedforward
-    // (IntakeConstants.INTAKE_kS,
-    // IntakeConstants.INTAKE_kG,
-    // IntakeConstants.INTAKE_kV,
-    // IntakeConstants.INTAKE_kA);
+    private double setpointRotations = 0.0;
 
     public IntakeIOTalonFX() {
+        // Sets gear ratios
         FeedbackConfigs feedbackConfigs = new FeedbackConfigs()
                 .withSensorToMechanismRatio(1 / IntakeConstants.GEAR_ROTATIONS_TO_ARM_ROTATIONS)
                 .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor);
 
+        // Applies configs
         TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration()
                 .withFeedback(feedbackConfigs);
 
-        Slot0Configs slot0Configs = talonFXConfigs.Slot0;
-        slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
-        slot0Configs.kP = IntakeConstants.INTAKE_kP;
-        slot0Configs.kI = IntakeConstants.INTAKE_kI;
-        slot0Configs.kD = IntakeConstants.INTAKE_kD;
-        slot0Configs.kS = IntakeConstants.INTAKE_kS;
-        slot0Configs.kV = IntakeConstants.INTAKE_kV;
-        slot0Configs.kG = IntakeConstants.INTAKE_kG;
+        // Sets up for more sophisticated feedback/feedforward control methods (that we don't currently use)
+        // Slot0Configs slot0Configs = talonFXConfigs.Slot0;
+        // slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
+        // slot0Configs.kP = IntakeConstants.INTAKE_kP;
+        // slot0Configs.kI = IntakeConstants.INTAKE_kI;
+        // slot0Configs.kD = IntakeConstants.INTAKE_kD;
+        // slot0Configs.kS = IntakeConstants.INTAKE_kS;
+        // slot0Configs.kV = IntakeConstants.INTAKE_kV;
+        // slot0Configs.kG = IntakeConstants.INTAKE_kG;
 
-        MotionMagicConfigs motionMagicConfigs = talonFXConfigs.MotionMagic;
-        motionMagicConfigs.MotionMagicCruiseVelocity = IntakeConstants.INTAKE_CRUISE_VELOCITY;
-        motionMagicConfigs.MotionMagicAcceleration = IntakeConstants.INTAKE_MAX_ACCELERATION;
+        // MotionMagicConfigs motionMagicConfigs = talonFXConfigs.MotionMagic;
+        // motionMagicConfigs.MotionMagicCruiseVelocity = IntakeConstants.INTAKE_CRUISE_VELOCITY;
+        // motionMagicConfigs.MotionMagicAcceleration = IntakeConstants.INTAKE_MAX_ACCELERATION;
 
         talonFXConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
@@ -71,18 +57,8 @@ public class IntakeIOTalonFX implements IntakeIO {
 
         armMotor.getConfigurator().apply(talonFXConfigs);
         armMotor.setPosition(IntakeConstants.ARM_STARTING_POSITION_ROT);
-        armMotor.getConfigurator()
-                .apply(new CurrentLimitsConfigs()
-                .withSupplyCurrentLimit(70)
-                .withSupplyCurrentLowerLimit(37)
-                .withSupplyCurrentLowerTime(1)
-                .withSupplyCurrentLimitEnable(true));
-        wheelMotor.getConfigurator()
-                .apply(new CurrentLimitsConfigs()
-                .withSupplyCurrentLimit(70)
-                .withSupplyCurrentLowerLimit(37)
-                .withSupplyCurrentLowerTime(1)
-                .withSupplyCurrentLimitEnable(true));
+        armMotor.getConfigurator().apply(Constants.CURRENT_LIMITS);
+        wheelMotor.getConfigurator().apply(Constants.CURRENT_LIMITS);
     }
 
     /** Update the set of loggable inputs */
@@ -108,6 +84,12 @@ public class IntakeIOTalonFX implements IntakeIO {
 
     @Override
     public void periodic() {
+        // If robot is undergoing sysID, ignore everything that would normally happen and simply sysID.
+        if (sysIdVoltage != 0) {
+            armMotor.setControl(new VoltageOut(sysIdVoltage));
+            return;
+        }
+
         // Check the basicControl state and set motor control based on direction
         switch (basicControlState) {
             case FORWARD:

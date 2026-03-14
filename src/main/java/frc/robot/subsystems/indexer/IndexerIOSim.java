@@ -2,8 +2,6 @@ package frc.robot.subsystems.indexer;
 
 import org.littletonrobotics.junction.Logger;
 
-import frc.robot.Constants.IndexerConstants;
-
 public class IndexerIOSim implements IndexerIO {
     private double appliedVoltage = 0;
 

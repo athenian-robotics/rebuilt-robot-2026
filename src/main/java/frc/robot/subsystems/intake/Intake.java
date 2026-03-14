@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
-import frc.robot.subsystems.intake.IntakeIOTalonFX.BasicControlState;
 
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
@@ -18,6 +17,12 @@ public class Intake extends SubsystemBase {
     private IntakeIO io;
     private IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
     private SysIdRoutine sysId;
+
+    public enum BasicControlState {
+        FORWARD,
+        STOPPED,
+        BACKWARD
+    }
 
     /**
      * Contains code to run intake wheels, move intake arm, and manage SysId autos.
@@ -51,10 +56,19 @@ public class Intake extends SubsystemBase {
         Logger.processInputs("Intake", inputs);
     }
 
+    /**
+     * Causes the intake to move in a direction at constant voltages set in IntakeConstants
+     * @param direction One of BasicControlState.FORWARD, BasicControlState.STOPPED, and BasicControlState.BACKWARD
+     * @return An instant command to start the motion
+     */
     public Command runBasicControl(BasicControlState direction) {
         return Commands.runOnce(() -> io.goWithBasicControl(direction), this);
     }
 
+    /**
+     * Causes the intake wheels to spin
+     * @return A continuous command to run the wheels while the command is active
+     */
     public Command runIntake() {
         return Commands.startEnd(io::startIntake, io::stopIntake, this);
     }

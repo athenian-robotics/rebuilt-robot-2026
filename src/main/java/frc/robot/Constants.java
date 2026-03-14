@@ -2,9 +2,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Volt;
-import static edu.wpi.first.units.Units.Volts;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -17,6 +16,12 @@ import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.generated.TunerConstants;
 
 public class Constants {
+  public static final CurrentLimitsConfigs CURRENT_LIMITS = new CurrentLimitsConfigs()
+    .withSupplyCurrentLimit(70)
+    .withSupplyCurrentLowerLimit(37)
+    .withSupplyCurrentLowerTime(1)
+    .withSupplyCurrentLimitEnable(true);
+
   /**
    * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when
    * running on a roboRIO. Change the value of "simMode" to switch between "sim" (physics sim) and
@@ -39,8 +44,6 @@ public class Constants {
   }
 
   public final class ControllerConstants {
-    /**Placeholder value to signify that it should be changed later */
-    public static final int PLACEHOLDER = 0;
     // -- Port (identifier) for each individual joystick/controller.
     public static final int JOYSTICK_LEFT_PORT = 0;
     public static final int JOYSTICK_MIDDLE_PORT = 1;
@@ -71,8 +74,6 @@ public class Constants {
     public static final int MAINHAND_BOTTOM_LEFT = 14;
     public static final int MAINHAND_BOTTOM_MIDDLE = 15;
     public static final int MAINHAND_BOTTOM_RIGHT = 16;
-
-    public static final double HEADING_DEADZONE = 0.2;
   }
 
   public final class DrivetrainConstants {
@@ -86,9 +87,7 @@ public class Constants {
     public static final String CAMERA_NAME = "limelight";
 
     /**
-     * Transform from the robot origin (center of rotation on the floor) to the camera pose. The
-     * numbers below assume the camera sits 8 in forward, 0 in left/right, and 26 in above the floor
-     * with a slight upward tilt; update once final mounting values are known.
+     * Transform from the robot origin (center of rotation on the floor) to the camera pose.
      */
     public static final Transform3d ROBOT_TO_CAMERA =
         new Transform3d(
@@ -157,29 +156,19 @@ public class Constants {
     public static final double MIDDLE_WHEEL_TO_GROUND_VOLTS = -3;
     public static final double STAR_WHEEL_TO_GROUND_VOLTS = 7;
     public static final double STAR_WHEEL_TO_SHOOTER_VOLTS = 10;
-    public static final double FLYWHEEL_VOLTS = 9;
-
-    public static final double FLYWHEEL_KS = 0.0;
-    public static final double FLYWHEEL_KV = 0.0;
-    public static final double FLYWHEEL_KA = 0.0;
-
-    public static final int INDEXER_MOTOR_ID = 52;
-    public static final double INDEXER_MOTOR_VOLTAGE = 6.0;
-
+    public static final double FLYWHEEL_VOLTS = 12;
     
-    public static final double FLYWHEEL_MAX_ACCELERATION_RPSPS = 0.0;
-    public static final double FLYWHEEL_MAX_JERK_RPSPSPS = 0.0;
     public static final double FLYWHEEL_MAX_ERROR_RPS = 10.0;
     public static final double FLYWHEEL_VELOCITY_RPS = 80.0;
 
     public static final double MAXIMUM_HOOD_ANGLE_DEG = 41.217118;
     public static final double MINIMUM_HOOD_ANGLE_DEG = 15.447513;
     public static final double STARTING_HOOD_ANGLE_DEG = 15.447513;
-    public static final double MIDFIELD_SHOT_ANGLE_DEG = 0.0;
-    public static final double OPPOSITE_TEAM_SHOT_ANGLE_DEG = 0.0;
+    public static final double MIDFIELD_SHOT_ANGLE_DEG = 35; // guess
+    public static final double OPPOSITE_TEAM_SHOT_ANGLE_DEG = 40; //guess
 
-    public static final double MIDFIELD_LIMIT_FEET = 0.0;
-    public static final double OPPOSITE_TEAM_LIMIT_FEET = 0.0;
+    public static final double MIDFIELD_LIMIT_FEET = 15.18; // from allied team driverstation wall
+    public static final double OPPOSITE_TEAM_LIMIT_FEET = 39.092; // from allied team driverstation wall
 
     public static final double ANGLE_CHANGER_GEAR_RATIO = 1.0 / (12.0 * 16.0);
 
@@ -195,12 +184,7 @@ public class Constants {
     public static final double ANGLE_CHANGER_STARTING_ANGLE_ROTATIONS = STARTING_HOOD_ANGLE_DEG / 360.0;
 
     public static final Translation2d HUB_POSITION_BLUE = new Translation2d(Inches.of(182.1), Inches.of(158.85)); // x for facing 126.98 inches y for facing -38.00039 inches
-    public static final Translation2d HUB_POSITION_RED = new Translation2d(Inches.of(469.1), Inches.of(158.85)); //TODO: ADD CHECKS FOR RED V BLUE, CURRENTLY WE JUST GUESS EVERYWHERE
-
-    public static final double OUTTAKE_VELOCITY_MPS = 14.5; //based on recalc in slack
-    public static final double GRAVITATIONAL_CONSTANT_MPS2 = 9.8;
-    public static final double HUB_HEIGHT_FEET = 6.0;
-    public static final double LAUNCH_HEIGHT_FEET = 2.5;
+    public static final Translation2d HUB_POSITION_RED = new Translation2d(Inches.of(469.1), Inches.of(158.85));
 
     public static final double LOW_SET_ANGLE_DEG = 23.2926886432; // 2.4333333333 m
     public static final double MIDDLE_SET_ANGLE_DEG = 28.2261055557; // 3.3166666667 m
@@ -213,29 +197,25 @@ public class Constants {
     public static final int WHEEL_ID = 25;
     public static final double GEAR_ROTATIONS_TO_ARM_ROTATIONS =
         1.0 / 180.0;
-    public static final double FULL_RETRACTION_DEGREES = 150;
-    public static final double FULL_EXTENSION_DEGREES = 120;
-    public static final double HOPPER_OPEN_DEGREES = FULL_EXTENSION_DEGREES;
-    public static final double MAX_WIGGLE_DEGREES = 75;
-    public static final double VELOCITY = 0;
 
     // feedback constants
-    public static final double INTAKE_kP = 5.5824; // 55.824
-    public static final double INTAKE_kI = 0;
-    public static final double INTAKE_kD = .37177; //3.7177
+    // public static final double INTAKE_kP = 5.5824; // 55.824
+    // public static final double INTAKE_kI = 0;
+    // public static final double INTAKE_kD = .37177; //3.7177
     // feedforward constants
-    public static final double INTAKE_kS = 0.41289;
-    public static final double INTAKE_kV = 20.206;
-    public static final double INTAKE_kA = 0.90771;
-    public static final double INTAKE_kG = 0.36108;
+    // public static final double INTAKE_kS = 0.41289;
+    // public static final double INTAKE_kV = 20.206;
+    // public static final double INTAKE_kA = 0.90771;
+    // public static final double INTAKE_kG = 0.36108;
+
     // motion profiler constants
-    public static final double INTAKE_CRUISE_VELOCITY = 12;
-    public static final double INTAKE_MAX_ACCELERATION = 100;
-    public static final double INTAKE_MAX_ALLOWED_PROFILER_ERROR = 5.0/360.0;
+    // public static final double INTAKE_CRUISE_VELOCITY = 12;
+    // public static final double INTAKE_MAX_ACCELERATION = 100;
+    // public static final double INTAKE_MAX_ALLOWED_PROFILER_ERROR = 5.0/360.0;
 
     public static final double BASIC_CONTROL_FORWARD_VOLTS = 5.0;
     public static final double BASIC_CONTROL_BACKWARD_VOLTS = 5.0;
-    public static final double BASIC_CONTROL_TOLERANCE_DEG = 5.0/360.0;
+    // public static final double BASIC_CONTROL_TOLERANCE_DEG = 5.0/360.0;
 
     public static final double MAX_ARM_VOLTAGE = 7;
     public static final double WHEEL_VOLTAGE = 6;
@@ -251,10 +231,6 @@ public class Constants {
 
     // Predefined locations of interest
     public enum Location {
-      SPEAKER_CENTER(new Pose2d(0.0, 5.5, Rotation2d.fromDegrees(0))), // Example coordinates
-      AMP(new Pose2d(1.8, 7.7, Rotation2d.fromDegrees(90))),
-      SOURCE_RIGHT(new Pose2d(15.5, 1.0, Rotation2d.fromDegrees(120))),
-      STAGE_CENTER(new Pose2d(4.5, 4.0, Rotation2d.fromDegrees(0))),
       TEST_POSE(new Pose2d(14.55, 1.0, new Rotation2d()));
 
       private final Pose2d pose;
@@ -271,7 +247,7 @@ public class Constants {
     // Default constraints for pathfinding
     // Adjust these based on your robot's capabilities
     public static final double MAX_VELOCITY = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
-    public static final double MAX_ACCELERATION = 7.9;
+    public static final double MAX_ACCELERATION = 2.8; //from pathplanner
     public static final double MAX_ANGULAR_VELOCITY =
         MAX_VELOCITY / Math.sqrt(Math.pow(0.273, 2) * 2);
     public static final double MAX_ANGULAR_ACCELERATION = Units.degreesToRadians(790);

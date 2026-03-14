@@ -4,10 +4,8 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IndexerConstants;
-import frc.robot.subsystems.indexer.IndexerIOInputsAutoLogged;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class Indexer extends SubsystemBase {
     private final IndexerIO io;
@@ -30,27 +28,27 @@ public class Indexer extends SubsystemBase {
     }
 
     /**
-     * Run the indexer with a specified voltage. For use in 
-     * @param voltage The voltage at which to run the indexer in volts
-     * @return The command
-     */
-    public Command runIndexer(double voltage) {
-        return new InstantCommand(() -> io.setVoltage(voltage));
-    }
-
-    /**
      * Toggles the indexer between on and off
-     * @return The command to do this
+     * @return An instant command to do this
      */
     public Command toggle () {
         return Commands.either(
-            Commands.runOnce(() -> {io.setVoltage(0);
-                state = state.OFF;}), // If on toggle off
-            Commands.runOnce(() -> {io.setVoltage(-IndexerConstants.MOTOR_VOLTAGE);
-                state = state.ON;}), // if off toggle on
-            () -> this.state == State.ON);
+            Commands.runOnce(() -> {
+                io.setVoltage(0);
+                state = State.OFF; // If on toggle off
+            }), 
+            Commands.runOnce(() -> {
+                io.setVoltage(-IndexerConstants.MOTOR_VOLTAGE);
+                state = State.ON; // if off toggle on
+            }), 
+            () -> this.state == State.ON // Do top command if it's currently on
+        );
     }
 
+    /**
+     * Runs the indexer as long as the command is running
+     * @return A continuous command to do this
+     */
     public Command hold () {
         return Commands.startEnd(() -> io.setVoltage(-IndexerConstants.MOTOR_VOLTAGE), () -> io.setVoltage(0));
     }

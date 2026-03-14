@@ -22,12 +22,6 @@ public class Outtake extends SubsystemBase {
   private final OuttakeIO io;
   private final OuttakeIOInputsAutoLogged inputs;
   private final SysIdRoutine sysId;
-  private State indexerState = State.OFF;
-
-    private enum State {
-        ON,
-        OFF
-    }
 
   public Outtake(OuttakeIO io) {
     this.io = io;
@@ -46,56 +40,60 @@ public class Outtake extends SubsystemBase {
   }
 
   /**
-   * @return Returns a InstantCommand that starts spinning the flywheel and angles the hood.
-   * @param currentPosition The current position of the robot center on the field
+   * Starts running the flywheel. Will take a few seconds to get up to speed.
+   * @return An instant command to start the flywheels
    */
-  public Command enterShootMode(Translation2d currentPosition) {
-    return new InstantCommand(io::startFlywheel).andThen(new InstantCommand(() -> io.setAngleAtTarget(currentPosition)));
-  }
-
-  /**
-   * Starts the flywheel and angles the hood according to the parameter
-   * @param shotAngleDeg The angle at which the ball will exit the shooter ccw+ from horizontal
-   * @return The command
-   */
-  public Command enterShootMode(double shotAngleDeg) {
-    return new InstantCommand(io::startFlywheel).andThen(new InstantCommand(() -> io.setAngle(shotAngleDeg)));
-  }
   public Command startFlywheel(){
     return new InstantCommand(io::startFlywheel);
   }
 
-  public Command lowerHood() {
-    return new InstantCommand(() -> io.setAngle(OuttakeConstants.MINIMUM_HOOD_ANGLE_DEG));
-  }
-
+  /**
+   * Stops running the flywheel. Flywheel will be allowed to coast to preserve robot battery
+   * @return An instant command to stop powering the flywheels.
+   */
   public Command stopFlywheel() {
     return new InstantCommand(io::stopFlywheel);
   }
 
+  /**
+   * Lowers the hood to fit under the trench, and to shoot when right against the hub.
+   * @return An instant command to set the hood into motion
+   */
+  public Command lowerHood() {
+    return new InstantCommand(() -> io.setAngle(OuttakeConstants.MINIMUM_HOOD_ANGLE_DEG));
+  }
+
+  /**
+   * Causes the middle and star wheels to spin such that nearby fuel enters the shooter
+   * @return A continuous command that keeps the wheels running
+   */
   public Command sendBallsToShooter() {
     return new StartEndCommand(
         () -> {
           System.out.println("things!");
           io.setMiddleWheelVoltage(-OuttakeConstants.MIDDLE_WHEEL_TO_SHOOTER_VOLTS);
-          io.setIndexerVoltage(-OuttakeConstants.STAR_WHEEL_TO_SHOOTER_VOLTS);
+          io.setStarWheelVoltage(-OuttakeConstants.STAR_WHEEL_TO_SHOOTER_VOLTS);
         },
         () -> {
           io.setMiddleWheelVoltage(0);
-          io.setIndexerVoltage(0);
+          io.setStarWheelVoltage(0);
         },
         this);
   }
 
+  /**
+   * Causes the middle and star wheels to spin such that nearby fuel is deposited onto the ground
+   * @return A continuous command that keeps the wheels running
+   */
   public Command groundOuttake() {
     return new StartEndCommand(
         () -> {
             io.setMiddleWheelVoltage(-OuttakeConstants.MIDDLE_WHEEL_TO_GROUND_VOLTS);
-            io.setIndexerVoltage(-OuttakeConstants.STAR_WHEEL_TO_GROUND_VOLTS);
+            io.setStarWheelVoltage(-OuttakeConstants.STAR_WHEEL_TO_GROUND_VOLTS);
         },
         () -> {
             io.setMiddleWheelVoltage(0);
-            io.setIndexerVoltage(0);
+            io.setStarWheelVoltage(0);
         },
         this);
   }
@@ -106,20 +104,17 @@ public class Outtake extends SubsystemBase {
    * @param joystickY joystick axis in [-1, 1]
    * @return command that continuously tracks joystick position
    */
-  public Command aimWithJoystick(DoubleSupplier joystickY) {
-    return Commands.run(() -> {
-          // Invert axis so pushing forward increases the command value.
-          double invertedY = -joystickY.getAsDouble();
-          double normalized = (invertedY + 1.0) / 2.0;
-          double angleRange =
-              OuttakeConstants.MINIMUM_HOOD_ANGLE_DEG - OuttakeConstants.MAXIMUM_HOOD_ANGLE_DEG;
-          double targetAngle = OuttakeConstants.MAXIMUM_HOOD_ANGLE_DEG + (normalized * angleRange);
-          io.setAngle(targetAngle);
-        }, this);
-  }
-  public Command aimWithoutJoystick(){
-    return Commands.run(() -> io.setAngle(35), this);
-  }
+  // public Command aimWithJoystick(DoubleSupplier joystickY) {
+  //   return Commands.run(() -> {
+  //         // Invert axis so pushing forward increases the command value.
+  //         double invertedY = -joystickY.getAsDouble();
+  //         double normalized = (invertedY + 1.0) / 2.0;
+  //         double angleRange =
+  //             OuttakeConstants.MINIMUM_HOOD_ANGLE_DEG - OuttakeConstants.MAXIMUM_HOOD_ANGLE_DEG;
+  //         double targetAngle = OuttakeConstants.MAXIMUM_HOOD_ANGLE_DEG + (normalized * angleRange);
+  //         io.setAngle(targetAngle);
+  //       }, this);
+  // }
 
   /** Returns a command to run a quasistatic test in the specified direction. */
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
@@ -134,43 +129,36 @@ public class Outtake extends SubsystemBase {
     }
 
     /**
-     * Run the indexer with a specified voltage. For use in 
-     * @param voltage The voltage at which to run the indexer in volts
-     * @return The command
+     * Sets the target angle based on the current network table value at /Outtake/HoodAngleDeg
+     * To set the network table value, type a value in elastic and press enter while the robot is disabled
+     * @return An instant command to set the hood into motion
      */
-    public Command runIndexer(double voltage) {
-        return new InstantCommand(() -> io.setIndexerVoltage(voltage));
-    }
-
-    /**
-     * Toggles the indexer between on and off
-     * @return The command to do this
-     */
-    public Command toggleIndexer () {
-        return Commands.either(
-            Commands.runOnce(() -> {io.setIndexerVoltage(0);
-                indexerState = indexerState.OFF;}), // If on toggle off
-            Commands.runOnce(() -> {io.setIndexerVoltage(-OuttakeConstants.INDEXER_MOTOR_VOLTAGE);
-                indexerState = indexerState.ON;}), // if off toggle on
-            () -> this.indexerState == State.ON);
-    }
-
     public Command toNTAngle () {
       return Commands.runOnce(io::setAngleFromNT, this);
     }
 
-    public Command updateDistance (Supplier<Translation2d> currentPosition, Supplier<Translation2d> targetPosition) {
-      return Commands.runOnce(() -> io.calculateAngle(currentPosition.get(), targetPosition.get()));
-    }
-
+    /**
+     * Causes the hood to aim at the hub, based on solely the distance between the centers of the bot and hub.
+     * @param currentPosition The current robot position
+     * @return An instant command to set the hood into motion
+     */
     public Command aimAtTarget (Supplier<Translation2d> currentPosition) {
       return Commands.runOnce(() -> io.setAngleAtTarget(currentPosition.get()));
     }
 
+    /**
+     * Causes the hood to go to a specified angle
+     * @param angleDegrees Supplies the angle the hood should go to. Is sampled once when this command is executed
+     * @return An instant command to set the hood into motion
+     */
     public Command setAngle (DoubleSupplier angleDegrees) {
       return Commands.runOnce(() -> io.setAngle(angleDegrees.getAsDouble()));
     }
 
+    /**
+     * Checks whether the robot's flywheel is close (within FlywheelConstants.MAX_ERROR_RPS) to the target rps
+     * @return true if it is, false if it isn't
+     */
     public boolean isSpunUp () {
       return io.isSpunUp();
     }

@@ -1,7 +1,7 @@
 package frc.robot.subsystems.intake;
 
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.subsystems.intake.IntakeIOTalonFX.BasicControlState;
+import frc.robot.subsystems.intake.Intake.BasicControlState;
 
 import org.littletonrobotics.junction.AutoLog;
 

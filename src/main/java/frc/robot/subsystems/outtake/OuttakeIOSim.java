@@ -48,7 +48,7 @@ public class OuttakeIOSim implements OuttakeIO {
     }
 
     @Override
-    public void setIndexerVoltage(double voltage) {
+    public void setStarWheelVoltage(double voltage) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setIndexerVoltage'");
     }
