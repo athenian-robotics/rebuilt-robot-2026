@@ -233,7 +233,8 @@ public class Constants {
     public static final double INTAKE_MAX_ACCELERATION = 100;
     public static final double INTAKE_MAX_ALLOWED_PROFILER_ERROR = 5.0/360.0;
 
-    public static final double BASIC_CONTROL_VOLTS = 5;
+    public static final double BASIC_CONTROL_FORWARD_VOLTS = 5.0;
+    public static final double BASIC_CONTROL_BACKWARD_VOLTS = 5.0;
     public static final double BASIC_CONTROL_TOLERANCE_DEG = 5.0/360.0;
 
     public static final double MAX_ARM_VOLTAGE = 7;

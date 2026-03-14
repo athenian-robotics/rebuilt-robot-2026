@@ -46,6 +46,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeIOTalonFX;
+import frc.robot.subsystems.intake.IntakeIOTalonFX.BasicControlState;
 import frc.robot.subsystems.outtake.Outtake;
 import frc.robot.subsystems.outtake.OuttakeIO;
 import frc.robot.subsystems.outtake.OuttakeIOTalonFX;
@@ -144,7 +145,7 @@ public class RobotContainer {
         
         // Create basic named commands for autos
         NamedCommands.registerCommand("DeployHopperIntake",
-                intake.runBasicControlForward()
+                intake.runBasicControl()
                 .andThen( Commands.waitSeconds(4))
                 .andThen( intake.stopBasicControl())
                 .andThen( intake.runIntake()));
