@@ -147,6 +147,15 @@ public class Outtake extends SubsystemBase {
     }
 
     /**
+     * Causes the hood to aim at the hub, based on solely the distance between the centers of the bot and hub.
+     * @param currentPosition The current robot position
+     * @return A continuous command to keep adjusting the hub angle
+     */
+    public Command keepAimingAtTarget (Supplier<Translation2d> currentPosition) {
+      return Commands.run(() -> io.setAngleAtTarget(currentPosition.get()));
+    }
+
+    /**
      * Causes the hood to go to a specified angle
      * @param angleDegrees Supplies the angle the hood should go to. Is sampled once when this command is executed
      * @return An instant command to set the hood into motion

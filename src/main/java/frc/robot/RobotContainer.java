@@ -259,9 +259,9 @@ public class RobotContainer {
         if (DriverStation.getAlliance().orElseGet(() -> Alliance.Blue) == Alliance.Red) {
             // When drive trigger pressed, face towards Red alliance hub
             driveJoystick.button(ControllerConstants.TRIGGER).whileTrue(
-                outtake.aimAtTarget(
+                outtake.keepAimingAtTarget(
                     () -> drive.getPose().getTranslation())
-                .andThen(DriveCommands.joystickDriveAtAngle(
+                .alongWith(DriveCommands.joystickDriveAtAngle(
                     drive,
                     () -> -driveJoystick.getY(),
                     () -> -driveJoystick.getX(),
