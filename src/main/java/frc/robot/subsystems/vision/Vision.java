@@ -91,7 +91,8 @@ public class Vision extends SubsystemBase {
       return Optional.empty();
     }
 
-    boolean bypassOdometryCheck = overrideOdometry || currentPose == null || sequentialRejections > Constants.LimelightConstants.MAX_SEQUENTIAL_REJECTIONS;
+    boolean bypassOdometryCheck = overrideOdometry || currentPose == null 
+      || sequentialRejections > Constants.LimelightConstants.MAX_SEQUENTIAL_REJECTIONS || remainingOverrides > 0;
     Logger.recordOutput("Vision/OdometryCheckBypassed", bypassOdometryCheck);
 
     if (!bypassOdometryCheck
@@ -99,13 +100,17 @@ public class Vision extends SubsystemBase {
       Logger.recordOutput("Vision/RejectedByOdometry", true);
       sequentialRejections += 1;
       return Optional.empty();
+    } else if (bypassOdometryCheck) {
+      remainingOverrides -= 1;
     }
     sequentialRejections = 0;
     Logger.recordOutput("Vision/RejectedByOdometry", false);
 
     // "Override" is intended as a one-shot bypass to allow relocalization when odometry is known
-    // to be wrong (e.g., after a manual pose reset). After we accept a measurement with the bypass
-    // enabled, re-enable normal gating to prevent large frame-mismatch teleports.
+    // to be wrong (e.g., after a manual pose reset). However, pose estimation doesn't fully
+    // apply a vision estimate that's far from its current estimate, so we need to override a few times.
+    // After we accept a few measurements with the bypass enabled, 
+    // re-enable normal gating to prevent large frame-mismatch teleports.
     if (overrideOdometry) {
       overrideOdometry = false;
       remainingOverrides = LimelightConstants.SEQUENTIAL_OVERRIDES;
