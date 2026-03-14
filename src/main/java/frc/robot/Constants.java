@@ -131,6 +131,16 @@ public class Constants {
 
     /** The maximum time before an observation is no longer considered fresh (seconds). */
     public static final double FRESH_OBSERVATION_THRESHOLD = 0.5;
+
+    /** The maximum number of times that vision can be overridden by odometry in a row. Set to Integer.MAX_VALUE to disable behavior. */
+    public static final int MAX_SEQUENTIAL_REJECTIONS = 60; 
+
+    /** 
+     * The number of times in a row to force override odometry when overriding odometry.
+     * Necessary because otherwise the pose estimate will move some towards the vision measurement, 
+     * but then vision will be rejected again. 
+     */
+    public static final int SEQUENTIAL_OVERRIDES = 5;
   }
 
   public final class DriveCommandsConstants {

@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.LimelightHelpers.RawFiducial;
 import org.littletonrobotics.junction.Logger;
 
@@ -20,6 +21,8 @@ public class Vision extends SubsystemBase {
   private VisionObservation latestObservation;
   private double lastHeartbeatSeconds = 0.0;
   private boolean overrideOdometry = true;
+  private int sequentialRejections = 0;
+  private int remainingOverrides = 0;
 
   /** Result of a validated Limelight solve. */
   public static record VisionObservation(
@@ -78,22 +81,26 @@ public class Vision extends SubsystemBase {
   public Optional<VisionObservation> getVisionObservation(Pose2d currentPose) {
     if (!hasFreshObservation(Constants.LimelightConstants.FRESH_OBSERVATION_THRESHOLD)) {
       Logger.recordOutput("Vision/HasFreshObservation", false);
+      sequentialRejections = 0;
       return Optional.empty();
     }
     Logger.recordOutput("Vision/HasFreshObservation", true);
 
     if (latestObservation == null) {
+      sequentialRejections = 0;
       return Optional.empty();
     }
 
-    boolean bypassOdometryCheck = overrideOdometry || currentPose == null;
+    boolean bypassOdometryCheck = overrideOdometry || currentPose == null || sequentialRejections > Constants.LimelightConstants.MAX_SEQUENTIAL_REJECTIONS;
     Logger.recordOutput("Vision/OdometryCheckBypassed", bypassOdometryCheck);
 
     if (!bypassOdometryCheck
         && !measurementMatchesOdometry(currentPose, latestObservation.pose())) {
       Logger.recordOutput("Vision/RejectedByOdometry", true);
+      sequentialRejections += 1;
       return Optional.empty();
     }
+    sequentialRejections = 0;
     Logger.recordOutput("Vision/RejectedByOdometry", false);
 
     // "Override" is intended as a one-shot bypass to allow relocalization when odometry is known
@@ -101,6 +108,7 @@ public class Vision extends SubsystemBase {
     // enabled, re-enable normal gating to prevent large frame-mismatch teleports.
     if (overrideOdometry) {
       overrideOdometry = false;
+      remainingOverrides = LimelightConstants.SEQUENTIAL_OVERRIDES;
     }
 
     return Optional.of(latestObservation);
