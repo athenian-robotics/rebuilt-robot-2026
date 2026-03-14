@@ -145,9 +145,9 @@ public class RobotContainer {
         
         // Create basic named commands for autos
         NamedCommands.registerCommand("DeployHopperIntake",
-                intake.runBasicControl()
+                intake.runBasicControl(BasicControlState.FORWARD)
                 .andThen( Commands.waitSeconds(4))
-                .andThen( intake.stopBasicControl())
+                .andThen( intake.runBasicControl(BasicControlState.STOPPED))
                 .andThen( intake.runIntake()));
 
         NamedCommands.registerCommand("AimAndScore", 
@@ -252,6 +252,8 @@ public class RobotContainer {
         // Run indexer rollers and ground outtake balls
         operatorJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM)
         .toggleOnTrue(outtake.groundOuttake().alongWith(indexer.hold()));
+
+        driveJoystick.button((ControllerConstants.THUMB_BUTTON_BOTTOM)).onTrue(DriveCommands.brake(drive));
         
         // Alliance-side dependant code (reset heading code & aim towards hub code)
         if (DriverStation.getAlliance().orElseGet(() -> Alliance.Blue) == Alliance.Red) {
@@ -287,7 +289,6 @@ public class RobotContainer {
                                         return OuttakeConstants.HUB_POSITION_BLUE
                                                 .minus(drive.getPose().getTranslation()).getAngle();
                                     })));
-            driveJoystick.button((ControllerConstants.THUMB_BUTTON_BOTTOM)).whileTrue(DriveCommands.brake(drive));
 
             // Reset gyro to 0° when the drive joystick's trigger is pressed
             // If on Blue alliance (or N/A), offset by 0º
@@ -371,9 +372,9 @@ public class RobotContainer {
         // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).whileTrue(intake.openHopper());
         // Operator right side top middle           -> close hopper and intake
         // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_MIDDLE).whileTrue(intake.fullyRetract());
-        operatorJoystick.button(ControllerConstants.MAINHAND_TOP_LEFT).onTrue(intake.runBasicControlForward());
-        operatorJoystick.button(ControllerConstants.MAINHAND_TOP_MIDDLE).onTrue(intake.stopBasicControl());
-        operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).onTrue(intake.runBasicControlBackwards());
+        operatorJoystick.button(ControllerConstants.MAINHAND_TOP_LEFT).onTrue(intake.runBasicControl(BasicControlState.FORWARD));
+        operatorJoystick.button(ControllerConstants.MAINHAND_TOP_MIDDLE).onTrue(intake.runBasicControl(BasicControlState.STOPPED));
+        operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).onTrue(intake.runBasicControl(BasicControlState.BACKWARD));
         // Operator right side bottom left          -> lower hood
         operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).onTrue(outtake.setAngle(() -> OuttakeConstants.LOW_SET_ANGLE_DEG));
         // Operator right side bottom middle        -> set hood to middle

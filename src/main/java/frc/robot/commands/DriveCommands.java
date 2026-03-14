@@ -102,7 +102,7 @@ public class DriveCommands {
   }
 
   public static Command brake (Drive drive) {
-    return Commands.run((drive::stopWithX), drive);
+    return Commands.runOnce(drive::stopWithX, drive);
   }
 
   /**
