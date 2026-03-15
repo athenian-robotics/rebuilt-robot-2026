@@ -346,6 +346,8 @@ public class RobotContainer {
         // -> drive.getPose().getTranslation(), () ->
         // OuttakeConstants.HUB_POSITION_BLUE)));
 
+        driveJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).whileTrue(outtake.keepAimingAtTarget(() -> drive.getPose().getTranslation()));
+
         driveJoystick
         .button(ControllerConstants.TRIGGER)
         .whileTrue(
