@@ -39,6 +39,7 @@ import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.OuttakeConstants;
+import frc.robot.util.AllianceUtil;
 
 public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   private final TalonFX leadShooter, followShooter, middleWheel, angleChanger, indexerMotor;
@@ -190,7 +191,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   }
 
   public void setAngleAtTarget(Translation2d currentPosition) {
-    if (DriverStation.getAlliance().orElseGet(() -> Alliance.Blue) == Alliance.Red) {
+    if (AllianceUtil.isRedAlliance()) {
       calculateAngle(currentPosition, OuttakeConstants.HUB_POSITION_RED)
         .ifPresent(this::setAngle);
     } else {

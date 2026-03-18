@@ -58,6 +58,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.util.PathGeneration;
+import frc.robot.util.AllianceUtil;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Volt;
@@ -263,25 +264,19 @@ public class RobotContainer {
       intake.runIntake()
     );
     */
-    
-    // Reset gyro to 0° when the drive joystick's trigger is pressed
-    if (DriverStation.getAlliance().orElseGet(() -> Alliance.Blue) == Alliance.Red) {
-        steerJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).onTrue(
-                Commands.runOnce(
-                        () ->
-                            drive.setPose(
-                                new Pose2d(drive.getPose().getTranslation(), new Rotation2d(Degrees.of(180)))),
-                        drive)
-                    .ignoringDisable(true));
-    } else {
-        steerJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).onTrue(
-                Commands.runOnce(
-                        () ->
-                            drive.setPose(
-                                new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-                        drive)
-                    .ignoringDisable(true));
-    }
+    steerJoystick
+        .button(ControllerConstants.THUMB_BUTTON_BOTTOM)
+        .onTrue(
+            Commands.runOnce(
+                    () -> {
+                      Rotation2d desiredHeading =
+                          AllianceUtil.isRedAlliance()
+                              ? new Rotation2d(Degrees.of(180))
+                              : new Rotation2d();
+                      drive.setDriverFieldRelativeHeading(desiredHeading);
+                    },
+                    drive)
+                .ignoringDisable(true));
 
     // // Should return the bot to its initial position
     // driveJoystick
@@ -320,30 +315,27 @@ public class RobotContainer {
     operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_MIDDLE).onTrue(outtake.setAngle(() -> OuttakeConstants.MIDDLE_SET_ANGLE_DEG));
     operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_RIGHT).onTrue(outtake.setAngle(() -> OuttakeConstants.HIGH_SET_ANGLE_DEG));
 
-    if (DriverStation.getAlliance().orElseGet(() -> Alliance.Blue) == Alliance.Red) {
-        driveJoystick.button(ControllerConstants.TRIGGER).whileTrue(
-            outtake.aimAtTarget(() -> drive.getPose().getTranslation()).andThen(
-            DriveCommands.joystickDriveAtAngle(
-                drive, 
-                () -> -driveJoystick.getY(),
-                () -> -driveJoystick.getX(), 
-                () -> {
-                    return OuttakeConstants.HUB_POSITION_RED.minus(drive.getPose().getTranslation()).getAngle();
-                }))
-        );
-    } else {
-        driveJoystick.button(ControllerConstants.TRIGGER).whileTrue(
-            outtake.aimAtTarget(() -> drive.getPose().getTranslation()).andThen(
-            DriveCommands.joystickDriveAtAngle(
-                drive, 
-                () -> -driveJoystick.getY(),
-                () -> -driveJoystick.getX(), 
-                () -> {
-                    return OuttakeConstants.HUB_POSITION_BLUE.minus(drive.getPose().getTranslation()).getAngle();
-                }))
-        );
-        driveJoystick.button((ControllerConstants.THUMB_BUTTON_BOTTOM)).whileTrue(DriveCommands.brake(drive));
-    }
+    driveJoystick
+        .button(ControllerConstants.TRIGGER)
+        .whileTrue(
+            outtake
+                .aimAtTarget(() -> drive.getPose().getTranslation())
+                .andThen(
+                    DriveCommands.joystickDriveAtAngle(
+                        drive,
+                        () -> -driveJoystick.getY(),
+                        () -> -driveJoystick.getX(),
+                        () -> {
+                          var hubPosition =
+                              AllianceUtil.isRedAlliance()
+                                  ? OuttakeConstants.HUB_POSITION_RED
+                                  : OuttakeConstants.HUB_POSITION_BLUE;
+                          return hubPosition.minus(drive.getPose().getTranslation()).getAngle();
+                        })));
+
+    driveJoystick
+        .button((ControllerConstants.THUMB_BUTTON_BOTTOM))
+        .whileTrue(DriveCommands.brake(drive));
   }
 
 
