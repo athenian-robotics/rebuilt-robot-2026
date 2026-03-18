@@ -351,8 +351,31 @@ public class RobotContainer {
         operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_MIDDLE).onTrue(outtake.setAngle(() -> OuttakeConstants.MIDDLE_SET_ANGLE_DEG));
         // Operator right side bottom right         -> lift hood
         operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_RIGHT).onTrue(outtake.setAngle(() -> OuttakeConstants.HIGH_SET_ANGLE_DEG));
-    }
+    
+        // operatorJoystick.button(ControllerConstants.OFFHAND_TOP_RIGHT).whileTrue(outtake.aimWithJoystick(() -> operatorJoystick.getY()));
+        // operatorJoystick.button(ControllerConstants.OFFHAND_TOP_MIDDLE).onTrue(outtake.toNTAngle().andThen(outtake.updateDistance(() -> drive.getPose().getTranslation(), () -> OuttakeConstants.HUB_POSITION_BLUE)));
+        driveJoystick
+            .button(ControllerConstants.TRIGGER)
+            .whileTrue(
+                outtake
+                    .aimAtTarget(() -> drive.getPose().getTranslation())
+                    .andThen(
+                        DriveCommands.joystickDriveAtAngle(
+                            drive,
+                            () -> -driveJoystick.getY(),
+                            () -> -driveJoystick.getX(),
+                            () -> {
+                            var hubPosition =
+                                AllianceUtil.isRedAlliance()
+                                    ? OuttakeConstants.HUB_POSITION_RED
+                                    : OuttakeConstants.HUB_POSITION_BLUE;
+                            return hubPosition.minus(drive.getPose().getTranslation()).getAngle();
+                            })));
 
+        driveJoystick
+            .button((ControllerConstants.THUMB_BUTTON_BOTTOM))
+            .whileTrue(DriveCommands.brake(drive));
+    }
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
@@ -361,53 +384,4 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return autoChooser.get();
     }
-    // operatorJoystick.button(ControllerConstants.OFFHAND_TOP_RIGHT).whileTrue(outtake.aimWithJoystick(() -> operatorJoystick.getY()));
-    // operatorJoystick.button(ControllerConstants.OFFHAND_TOP_MIDDLE).onTrue(outtake.toNTAngle().andThen(outtake.updateDistance(() -> drive.getPose().getTranslation(), () -> OuttakeConstants.HUB_POSITION_BLUE)));
-
-    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).onTrue(outtake.startFlywheel());
-    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_LEFT).onTrue(outtake.stopFlywheel());
-    operatorJoystick.button(ControllerConstants.TRIGGER).toggleOnTrue(intake.runIntake());
-    // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).whileTrue(intake.openHopper());
-    // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_MIDDLE).whileTrue(intake.fullyRetract());
-    operatorJoystick.button(ControllerConstants.MAINHAND_TOP_LEFT).onTrue(intake.runBasicControlForward());
-    operatorJoystick.button(ControllerConstants.MAINHAND_TOP_MIDDLE).onTrue(intake.stopBasicControl());
-    operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).onTrue(intake.runBasicControlBackwards());
-    operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).onTrue(outtake.setAngle(() -> OuttakeConstants.LOW_SET_ANGLE_DEG));
-    operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_MIDDLE).onTrue(outtake.setAngle(() -> OuttakeConstants.MIDDLE_SET_ANGLE_DEG));
-    operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_RIGHT).onTrue(outtake.setAngle(() -> OuttakeConstants.HIGH_SET_ANGLE_DEG));
-
-    driveJoystick
-        .button(ControllerConstants.TRIGGER)
-        .whileTrue(
-            outtake
-                .aimAtTarget(() -> drive.getPose().getTranslation())
-                .andThen(
-                    DriveCommands.joystickDriveAtAngle(
-                        drive,
-                        () -> -driveJoystick.getY(),
-                        () -> -driveJoystick.getX(),
-                        () -> {
-                          var hubPosition =
-                              AllianceUtil.isRedAlliance()
-                                  ? OuttakeConstants.HUB_POSITION_RED
-                                  : OuttakeConstants.HUB_POSITION_BLUE;
-                          return hubPosition.minus(drive.getPose().getTranslation()).getAngle();
-                        })));
-
-    driveJoystick
-        .button((ControllerConstants.THUMB_BUTTON_BOTTOM))
-        .whileTrue(DriveCommands.brake(drive));
-  }
-
-
-  
-  
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    return autoChooser.get();
-  }
 }
