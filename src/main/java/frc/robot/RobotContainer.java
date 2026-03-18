@@ -53,6 +53,7 @@ import frc.robot.subsystems.outtake.OuttakeIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
+import frc.robot.util.AllianceUtil;
 import frc.robot.util.PathGeneration;
 
 import static edu.wpi.first.units.Units.Degrees;
@@ -255,50 +256,19 @@ public class RobotContainer {
 
         driveJoystick.button((ControllerConstants.THUMB_BUTTON_BOTTOM)).onTrue(DriveCommands.brake(drive));
         
-        // Alliance-side dependant code (reset heading code & aim towards hub code)
-        if (DriverStation.getAlliance().orElseGet(() -> Alliance.Blue) == Alliance.Red) {
-            // When drive trigger pressed, face towards Red alliance hub
-            driveJoystick.button(ControllerConstants.TRIGGER).whileTrue(
-                outtake.aimAtTarget(
-                    () -> drive.getPose().getTranslation())
-                .andThen(DriveCommands.joystickDriveAtAngle(
-                    drive,
-                    () -> -driveJoystick.getY(),
-                    () -> -driveJoystick.getX(),
-                    () -> OuttakeConstants.HUB_POSITION_RED
-                            .minus(drive.getPose().getTranslation()).getAngle()
-                    )));
-            
-            // Reset gyro to 0° when the drive joystick's trigger is pressed
-            // If on Red alliance, offset by 180º
-            steerJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).onTrue(
-                Commands.runOnce(
-                    () -> drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d(Degrees.of(180)))),
+        steerJoystick
+        .button(ControllerConstants.THUMB_BUTTON_BOTTOM)
+        .onTrue(
+            Commands.runOnce(
+                    () -> {
+                      Rotation2d desiredHeading =
+                          AllianceUtil.isRedAlliance()
+                              ? new Rotation2d(Degrees.of(180))
+                              : new Rotation2d();
+                      drive.setDriverFieldRelativeHeading(desiredHeading);
+                    },
                     drive)
-                    .ignoringDisable(true));
-        } else {
-            // When drive trigger pressed, face towards Blue alliance hub
-            driveJoystick.button(ControllerConstants.TRIGGER).whileTrue(
-                    outtake.aimAtTarget(() -> drive.getPose().getTranslation()).andThen(
-                            DriveCommands.joystickDriveAtAngle(
-                                    drive,
-                                    () -> -driveJoystick.getY(),
-                                    () -> -driveJoystick.getX(),
-                                    () -> {
-                                        return OuttakeConstants.HUB_POSITION_BLUE
-                                                .minus(drive.getPose().getTranslation()).getAngle();
-                                    })));
-
-            // Reset gyro to 0° when the drive joystick's trigger is pressed
-            // If on Blue alliance (or N/A), offset by 0º
-            steerJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM).onTrue(
-                    Commands.runOnce(
-                            () -> drive.setPose(
-                                    new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-                            drive)
-                            .ignoringDisable(true));
-        }
+                .ignoringDisable(true));
 
         // Heading-based drive
         // drive.setDefaultCommand(
@@ -391,4 +361,53 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return autoChooser.get();
     }
+    // operatorJoystick.button(ControllerConstants.OFFHAND_TOP_RIGHT).whileTrue(outtake.aimWithJoystick(() -> operatorJoystick.getY()));
+    // operatorJoystick.button(ControllerConstants.OFFHAND_TOP_MIDDLE).onTrue(outtake.toNTAngle().andThen(outtake.updateDistance(() -> drive.getPose().getTranslation(), () -> OuttakeConstants.HUB_POSITION_BLUE)));
+
+    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).onTrue(outtake.startFlywheel());
+    operatorJoystick.button(ControllerConstants.THUMB_BUTTON_LEFT).onTrue(outtake.stopFlywheel());
+    operatorJoystick.button(ControllerConstants.TRIGGER).toggleOnTrue(intake.runIntake());
+    // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).whileTrue(intake.openHopper());
+    // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_MIDDLE).whileTrue(intake.fullyRetract());
+    operatorJoystick.button(ControllerConstants.MAINHAND_TOP_LEFT).onTrue(intake.runBasicControlForward());
+    operatorJoystick.button(ControllerConstants.MAINHAND_TOP_MIDDLE).onTrue(intake.stopBasicControl());
+    operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).onTrue(intake.runBasicControlBackwards());
+    operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).onTrue(outtake.setAngle(() -> OuttakeConstants.LOW_SET_ANGLE_DEG));
+    operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_MIDDLE).onTrue(outtake.setAngle(() -> OuttakeConstants.MIDDLE_SET_ANGLE_DEG));
+    operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_RIGHT).onTrue(outtake.setAngle(() -> OuttakeConstants.HIGH_SET_ANGLE_DEG));
+
+    driveJoystick
+        .button(ControllerConstants.TRIGGER)
+        .whileTrue(
+            outtake
+                .aimAtTarget(() -> drive.getPose().getTranslation())
+                .andThen(
+                    DriveCommands.joystickDriveAtAngle(
+                        drive,
+                        () -> -driveJoystick.getY(),
+                        () -> -driveJoystick.getX(),
+                        () -> {
+                          var hubPosition =
+                              AllianceUtil.isRedAlliance()
+                                  ? OuttakeConstants.HUB_POSITION_RED
+                                  : OuttakeConstants.HUB_POSITION_BLUE;
+                          return hubPosition.minus(drive.getPose().getTranslation()).getAngle();
+                        })));
+
+    driveJoystick
+        .button((ControllerConstants.THUMB_BUTTON_BOTTOM))
+        .whileTrue(DriveCommands.brake(drive));
+  }
+
+
+  
+  
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    return autoChooser.get();
+  }
 }
