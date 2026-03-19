@@ -19,6 +19,7 @@ import com.pathplanner.lib.commands.PathfindingCommand;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -27,6 +28,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.firecontrol.ProjectileSimulator;
+import frc.firecontrol.ShotCalculator;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.OuttakeConstants;
 import frc.robot.Constants.RuntimeConstants;
@@ -233,6 +236,84 @@ public class RobotContainer {
         configureJoystickBindings();
 
         PathfindingCommand.warmupCommand().schedule();
+
+        // SOTM Lookup table
+        // Measurements from CAD
+        // TODO: REAL!
+        ProjectileSimulator.SimParameters params = new ProjectileSimulator.SimParameters(
+                0.215, // Ball mass (kg)
+                0.1501, // Ball diameter (m)
+                0.47, // Drag coeff (smooth sphere)
+                0.2, // Magnus coeff
+                1.225, // Air density
+                0.43, // Exit height (m), floor to where the ball leaves the shooter
+                0.1016, // Flywheel diameter (m), measure with calipers
+                1.83, // Target height (m), from game manual
+                0.6, // Slip factor (0=no grip, 1=perfect), tune this on the real robot
+                45.0, // Launch angle from horizontal, measure from CAD
+                0.001, // Sim timestep
+                1500, 6000, 25, 5.0 // RPM search range, iterations, max sim time
+        );
+
+        ProjectileSimulator sim = new ProjectileSimulator(params);
+        ProjectileSimulator.GeneratedLUT lut = sim.generateLUT();
+
+        // Print the LUT for debugging
+        for (var entry : lut.entries()) {
+            if (entry.reachable()) {
+                System.out.printf("%.2fm -> %.0f RPM, %.3fs TOF%n",
+                        entry.distanceM(), entry.rpm(), entry.tof());
+            }
+        }
+
+        ShotCalculator.Config config = new ShotCalculator.Config();
+        // TODO: REAL!
+        config.launcherOffsetX = 0.23; // how far forward the launcher is from robot center (m)
+        config.launcherOffsetY = 0.0; // how far left, 0 if centered
+        config.phaseDelayMs = 30.0; // your vision pipeline latency
+        config.mechLatencyMs = 20.0; // how long the mechanism takes to respond
+        config.maxTiltDeg = 5.0; // suppress firing when chassis tilts past this (bumps/ramps)
+        config.headingSpeedScalar = 1.0; // heading tolerance tightens with robot speed (0 to disable)
+        config.headingReferenceDistance = 2.5; // heading tolerance scales with distance from hub
+
+        ShotCalculator shotCalc = new ShotCalculator(config);
+
+        // load the LUT you generated
+        for (var entry : lut.entries()) {
+            if (entry.reachable()) {
+                shotCalc.loadLUTEntry(entry.distanceM(), entry.rpm(), entry.tof());
+            }
+        }
+
+        // call this every cycle in robotPeriodic()
+        Translation2d hubCenter = new Translation2d(4.6, 4.0); // your target
+        Translation2d hubForward = new Translation2d(1, 0); // which way the hub faces
+
+        ShotCalculator.ShotInputs inputs = new ShotCalculator.ShotInputs(
+                drive.getPose(),
+                drive.getFieldVelocity(),
+                drive.getRobotVelocity(),
+                hubCenter,
+                hubForward,
+                0.9, // vision confidence, 0 to 1
+                drive.getPitch().getDegrees(), // pitch for tilt gate (0.0 if no gyro)
+                drive.getRoll().getDegrees() // roll for tilt gate (0.0 if no gyro)
+        );
+
+        ShotCalculator.LaunchParameters shot = shotCalc.calculate(inputs);
+        if (shot.isValid() && shot.confidence() > 50) {
+            outtake.setRPM(shot.rpm());
+            drive.aimAt(shot.driveAngle());
+            // shot.driveAngularVelocityRadPerSec() gives you a heading feedforward if you
+            // want it
+        }
+
+        // Operator can adjust trim
+        // bind to copilot thumb-pad
+        operatorJoystick.povRight().onTrue(Commands.runOnce(() -> shotCalc.adjustOffset(25)));
+        operatorJoystick.povDown().onTrue(Commands.runOnce(() -> shotCalc.adjustOffset(-25)));
+        // reset on mode change so trim doesn't carry over
+        shotCalc.resetOffset();
     }
 
   /**
