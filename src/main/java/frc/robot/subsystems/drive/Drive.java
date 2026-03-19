@@ -51,6 +51,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.OuttakeConstants;
 import frc.robot.Constants.RuntimeConstants;
 import frc.robot.generated.TunerConstants;
@@ -483,6 +484,28 @@ public class Drive extends SubsystemBase {
       Pose2d visionRobotPoseMeters,
       double timestampSeconds,
       Matrix<N3, N1> visionMeasurementStdDevs) {
+    Pose2d currentEstimate = poseEstimator.getEstimatedPosition();
+    double translationCorrectionMeters =
+        visionRobotPoseMeters
+            .getTranslation()
+            .minus(currentEstimate.getTranslation())
+            .getNorm();
+    double rotationCorrectionRadians =
+        Math.abs(
+            visionRobotPoseMeters
+                .getRotation()
+                .minus(currentEstimate.getRotation())
+                .getRadians());
+    boolean ignoreAsJitter =
+        translationCorrectionMeters < LimelightConstants.MIN_VISION_CORRECTION_TRANSLATION_METERS
+            && rotationCorrectionRadians < LimelightConstants.MIN_VISION_CORRECTION_ROTATION_RADIANS;
+    Logger.recordOutput("Vision/IgnoreAsJitter", ignoreAsJitter);
+    Logger.recordOutput("Vision/CorrectionTranslationMeters", translationCorrectionMeters);
+    Logger.recordOutput("Vision/CorrectionRotationDeg", Math.toDegrees(rotationCorrectionRadians));
+    if (ignoreAsJitter) {
+      return;
+    }
+
     poseEstimator.addVisionMeasurement(
         visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
   }

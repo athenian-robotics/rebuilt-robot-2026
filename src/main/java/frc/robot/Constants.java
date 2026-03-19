@@ -128,6 +128,19 @@ public class Constants {
      */
     public static final double MAX_ROTATION_ERROR_RADIANS = Units.degreesToRadians(30.0);
 
+    /**
+     * Minimum translation correction (meters) before a vision update is fused into odometry.
+     * Smaller corrections are treated as jitter and ignored.
+     */
+    public static final double MIN_VISION_CORRECTION_TRANSLATION_METERS = 0.03;
+
+    /**
+     * Minimum rotation correction (radians) before a vision update is fused into odometry.
+     * Smaller corrections are treated as jitter and ignored.
+     */
+    public static final double MIN_VISION_CORRECTION_ROTATION_RADIANS =
+        Units.degreesToRadians(1.5);
+
     /** The maximum time before an observation is no longer considered fresh (seconds). */
     public static final double FRESH_OBSERVATION_THRESHOLD = 0.5;
 
@@ -274,4 +287,3 @@ public class Constants {
     public static final String CANIVORE_NAME = "can"; // 7733663E3353385320202034382203FF
   }
 }
-

@@ -289,24 +289,26 @@ public class RobotContainer {
         Translation2d hubCenter = new Translation2d(4.6, 4.0); // your target
         Translation2d hubForward = new Translation2d(1, 0); // which way the hub faces
 
-        ShotCalculator.ShotInputs inputs = new ShotCalculator.ShotInputs(
-                drive.getPose(),
-                drive.getFieldVelocity(),
-                drive.getRobotVelocity(),
-                hubCenter,
-                hubForward,
-                0.9, // vision confidence, 0 to 1
-                drive.getPitch().getDegrees(), // pitch for tilt gate (0.0 if no gyro)
-                drive.getRoll().getDegrees() // roll for tilt gate (0.0 if no gyro)
-        );
+        // TODO: Uncomment these and implement getFieldVelocity and getRobotVelocity.
+        
+        // ShotCalculator.ShotInputs inputs = new ShotCalculator.ShotInputs(
+        //         drive.getPose(),
+        //         drive.getFieldVelocity(),
+        //         drive.getRobotVelocity(),
+        //         hubCenter,
+        //         hubForward,
+        //         0.9, // vision confidence, 0 to 1
+        //         drive.getPitch().getDegrees(), // pitch for tilt gate (0.0 if no gyro)
+        //         drive.getRoll().getDegrees() // roll for tilt gate (0.0 if no gyro)
+        // );
 
-        ShotCalculator.LaunchParameters shot = shotCalc.calculate(inputs);
-        if (shot.isValid() && shot.confidence() > 50) {
-            outtake.setRPM(shot.rpm());
-            drive.aimAt(shot.driveAngle());
-            // shot.driveAngularVelocityRadPerSec() gives you a heading feedforward if you
-            // want it
-        }
+        // ShotCalculator.LaunchParameters shot = shotCalc.calculate(inputs);
+        // if (shot.isValid() && shot.confidence() > 50) {
+        //     outtake.setRPM(shot.rpm());
+        //     drive.aimAt(shot.driveAngle());
+        //     // shot.driveAngularVelocityRadPerSec() gives you a heading feedforward if you
+        //     // want it
+        // }
 
         // Operator can adjust trim
         // bind to copilot thumb-pad
