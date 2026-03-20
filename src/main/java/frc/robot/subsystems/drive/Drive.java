@@ -34,6 +34,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -366,7 +367,7 @@ public class Drive extends SubsystemBase {
   }
 
   /** Returns a command to run a quasistatic drive test in the specified direction. 
-   * HOW TO USE: get feedforwards from SysId program
+   * <p> HOW TO USE: get feedforwards from SysId program
    * and transform kV from wheel meters to motor rotations by dividing wheel radius, 2pi, and gear ratio. 
    * Do the divisions twice for kA because the control unit is squared there.
    * Put an average of those feedforwards and the rotate feedforwards in to DriveGains in TunerConstants, 
@@ -428,7 +429,7 @@ public class Drive extends SubsystemBase {
 
   /** Returns the measured chassis speeds of the robot. */
   @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
-  private ChassisSpeeds getChassisSpeeds() {
+  public ChassisSpeeds getChassisSpeeds() {
     return kinematics.toChassisSpeeds(getModuleStates());
   }
 
@@ -535,4 +536,6 @@ public class Drive extends SubsystemBase {
       runDriveCharacterization(12);
     });
   }
+
+  
 }

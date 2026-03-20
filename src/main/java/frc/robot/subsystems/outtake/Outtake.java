@@ -169,6 +169,14 @@ public class Outtake extends SubsystemBase {
      * @return true if it is, false if it isn't
      */
     public boolean isSpunUp () {
-      return io.isSpunUp();
+        return io.isSpunUp();
+    }
+
+    /**
+     * Set the rpm of the flywheel to an arbitrary value. 
+     * @param rpm
+     */
+    public void setRPM(double rpm) {
+        io.setRPM(rpm);
     }
 }

@@ -71,4 +71,10 @@ public interface OuttakeIO extends Subsystem {
    * @return true if so, false otherwise
    */
   public default boolean isSpunUp () {return false;}
+
+  /**
+   * Set the rpm of the flywheel to an arbitrary value. 
+   * @param rpm
+   */
+  public default void setRMP (double rpm) {}
 }

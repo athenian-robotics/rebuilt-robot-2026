@@ -286,4 +286,19 @@ public class Constants {
   public final class CANConstants {
     public static final String CANIVORE_NAME = "can"; // 7733663E3353385320202034382203FF
   }
+
+  public final class SOTMConstants {
+    public static final double BALL_MASS_KG = 0.215; // From original code
+    public static final double BALL_DIAMETER_M = 0.1501; // From original code
+    public static final double BALL_DRAG_COEFFICIENT = 0.47; // From original code
+    public static final double BALL_MAGNUS_COEFFICIENT = 0.2; // From original code
+    public static final double AIR_DENSITY = 1.225; // From original code
+    public static final double EXIT_HEIGHT_M = 0.43; // Exit height (m), floor to where the ball leaves the shooter
+    public static final double WHEELE_DIAMETER_M = 0.1016; // Flywheel diameter (m), measure with calipers
+    public static final double TARGET_HEIGHT_M = 1.83; // Hub height from game manual
+    public static final double SLIP_FACTOR = 0.6; // Slip factor (0=no grip, 1=perfect), tune this on the real robot
+    
+    public static final double LAUNCHER_OFFSET_X _M= 0.23; // how far forward the launcher is from robot center (m)
+
+  }
 }
