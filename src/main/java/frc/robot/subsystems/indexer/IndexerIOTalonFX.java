@@ -1,13 +1,12 @@
 package frc.robot.subsystems.indexer;
 
-import static edu.wpi.first.units.Units.Volts;
-
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import frc.robot.Constants;
 import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.IndexerConstants;
 
@@ -17,6 +16,7 @@ public class IndexerIOTalonFX implements IndexerIO {
 
     public IndexerIOTalonFX() {
         motor = new TalonFX(IndexerConstants.MOTOR_ID, new CANBus(CANConstants.CANIVORE_NAME));
+        motor.getConfigurator().apply(Constants.CURRENT_LIMITS);
     }
 
     @Override
@@ -29,5 +29,6 @@ public class IndexerIOTalonFX implements IndexerIO {
         Logger.recordOutput("Indexer/Voltage", voltage);
         appliedVoltage = voltage;
         motor.setControl(new VoltageOut(voltage));
+        System.out.println("Set voltage");
     }
 }

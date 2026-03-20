@@ -6,69 +6,82 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.subsystems.intake.IntakeIOInputsAutoLogged;
 
+import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
-
-import java.util.function.Consumer;
 
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
 
-  private IntakeIO io;
-  private IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
-  private Config sysIdConfig = new Config(null,null,null);
-  Mechanism sysIdMechanism = new Mechanism((volts) -> io.runSysId(volts.in(Volts)), null, this);
-  private SysIdRoutine sysId = new SysIdRoutine(sysIdConfig, sysIdMechanism);
-  
-  
-  
-  public Intake(IntakeIO io){
-    this.io = io;
-  }
+    private IntakeIO io;
+    private IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
+    private SysIdRoutine sysId;
 
-  @Override
-  public void periodic() {
-    io.updateInputs(inputs);
-    Logger.processInputs("Intake", inputs);
-  }
-  /**fully extends the intake from {@value IntakeConstants#FULL_RETRACTION_DEGREES} degrees 
-   * to {@value IntakeConstants#FULL_EXTENSION_DEGREES} degrees*/
-  public void fullyExtend() {
-    System.out.println("full extension");
-    io.goToPosition(IntakeConstants.FULL_EXTENSION_DEGREES); // position feedback loop
-  }
-  /**fully retracts the intake from {@value IntakeConstants#FULL_EXTENSION_DEGREES} degrees 
-   * to {@value IntakeConstants#FULL_RETRACTION_DEGREES} degrees*/
-  public void fullyRetract(){
-    System.out.println("full retraction");
-    io.goToPosition(IntakeConstants.FULL_RETRACTION_DEGREES);
-  }
+    public enum BasicControlState {
+        FORWARD,
+        STOPPED,
+        BACKWARD
+    }
 
-  public void wiggleUp() {
-    System.out.println("wiggle up");
-    io.goToPosition(IntakeConstants.MAX_WIGGLE_DEGREES);
-     // velocity feedback loop
-  }
-  public boolean atSetpoint(){
-    return io.atSetpoint();
-  }
+    /**
+     * Contains code to run intake wheels, move intake arm, and manage SysId autos.
+     * <p> Also opens hopper using intake.
+     * @param io The io object to use
+     */
+    public Intake(IntakeIO io) {
+        this.io = io;
 
-  public Command runIntake() {
-    return Commands.startEnd(io::startIntake, io::stopIntake, this);
-  }
+        Config sysIdConfig = new Config(
+                Volts.per(Seconds).of(1), 
+                Volts.of(3), 
+                Seconds.of(5)
+        );
+        Mechanism sysIdMechanism = new Mechanism(
+                (volts) -> io.runSysId(volts.in(Volts)), 
+                io::sysIDLog, 
+                this
+        );
 
-  public Command sysIdQuasistatic(SysIdRoutine.Direction direction){
-    return run(() -> io.runSysId(0.0))
-    .withTimeout(1.0)
-    .andThen(sysId.quasistatic(direction));
-  }
+        sysId = new SysIdRoutine(
+                sysIdConfig, 
+                sysIdMechanism
+        );
+    }
 
-  public Command sysIdDynamic(SysIdRoutine.Direction direction){
-    return run(() -> io.runSysId(0.0))
-    .withTimeout(1.0)
-    .andThen(sysId.dynamic(direction));
-  }
+    @Override
+    public void periodic() {
+        io.periodic();
+        io.updateInputs(inputs);
+        Logger.processInputs("Intake", inputs);
+    }
+
+    /**
+     * Causes the intake to move in a direction at constant voltages set in IntakeConstants
+     * @param direction One of BasicControlState.FORWARD, BasicControlState.STOPPED, and BasicControlState.BACKWARD
+     * @return An instant command to start the motion
+     */
+    public Command runBasicControl(BasicControlState direction) {
+        return Commands.runOnce(() -> io.goWithBasicControl(direction), this);
+    }
+
+    /**
+     * Causes the intake wheels to spin
+     * @return A continuous command to run the wheels while the command is active
+     */
+    public Command runIntake() {
+        return Commands.startEnd(io::startIntake, io::stopIntake, this);
+    }
+
+    /** Returns a command to run a quasistatic test in the specified direction. */
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return run(() -> io.runSysId(0.0))
+                .withTimeout(1.0)
+                .andThen(sysId.quasistatic(direction));
+    }
+
+    /** Returns a command to run a dynamic test in the specified direction. */
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return run(() -> io.runSysId(0.0)).withTimeout(1.0).andThen(sysId.dynamic(direction));
+    }
 }

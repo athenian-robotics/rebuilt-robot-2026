@@ -6,8 +6,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import java.util.Optional;
+import java.util.OptionalDouble;
+import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
+import frc.robot.Constants.LimelightConstants;
+import frc.robot.LimelightHelpers.RawFiducial;
 import org.littletonrobotics.junction.Logger;
 
 /** Subsystem shell that limits and validates pose updates from vision hardware. */
@@ -16,7 +20,9 @@ public class Vision extends SubsystemBase {
   private final VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
   private VisionObservation latestObservation;
   private double lastHeartbeatSeconds = 0.0;
-  private boolean overrideOdometry = false;
+  private boolean overrideOdometry = true;
+  private int sequentialRejections = 0;
+  private int remainingOverrides = 0;
 
   /** Result of a validated Limelight solve. */
   public static record VisionObservation(
@@ -75,27 +81,39 @@ public class Vision extends SubsystemBase {
   public Optional<VisionObservation> getVisionObservation(Pose2d currentPose) {
     if (!hasFreshObservation(Constants.LimelightConstants.FRESH_OBSERVATION_THRESHOLD)) {
       Logger.recordOutput("Vision/HasFreshObservation", false);
+      sequentialRejections = 0;
       return Optional.empty();
     }
     Logger.recordOutput("Vision/HasFreshObservation", true);
 
     if (latestObservation == null) {
+      sequentialRejections = 0;
       return Optional.empty();
     }
 
-    if (currentPose != null
-        && !overrideOdometry
+    boolean bypassOdometryCheck = overrideOdometry || currentPose == null 
+      || sequentialRejections > Constants.LimelightConstants.MAX_SEQUENTIAL_REJECTIONS || remainingOverrides > 0;
+    Logger.recordOutput("Vision/OdometryCheckBypassed", bypassOdometryCheck);
+
+    if (!bypassOdometryCheck
         && !measurementMatchesOdometry(currentPose, latestObservation.pose())) {
       Logger.recordOutput("Vision/RejectedByOdometry", true);
+      sequentialRejections += 1;
       return Optional.empty();
+    } else if (bypassOdometryCheck) {
+      remainingOverrides -= 1;
     }
+    sequentialRejections = 0;
     Logger.recordOutput("Vision/RejectedByOdometry", false);
 
+    // "Override" is intended as a one-shot bypass to allow relocalization when odometry is known
+    // to be wrong (e.g., after a manual pose reset). However, pose estimation doesn't fully
+    // apply a vision estimate that's far from its current estimate, so we need to override a few times.
+    // After we accept a few measurements with the bypass enabled, 
+    // re-enable normal gating to prevent large frame-mismatch teleports.
     if (overrideOdometry) {
       overrideOdometry = false;
-      Logger.recordOutput("Vision/overrideOdometryCheck", true);
-    } else {
-      Logger.recordOutput("Vision/overrideOdometryCheck", false);
+      remainingOverrides = LimelightConstants.SEQUENTIAL_OVERRIDES;
     }
 
     return Optional.of(latestObservation);
@@ -110,6 +128,23 @@ public class Vision extends SubsystemBase {
    */
   public void setRobotOrientation(Rotation2d rotation, double yawVelocityRadPerSec) {
     io.setRobotOrientation(rotation.getDegrees(), Units.radiansToDegrees(yawVelocityRadPerSec));
+  }
+
+  /**
+   * Returns the reported distance from the robot to a specific AprilTag, if detected.
+   *
+   * @param tagNumber AprilTag ID to query.
+   * @return Optional distance to the requested tag in meters.
+   */
+  public OptionalDouble getDistanceToTag(int tagNumber) {
+    RawFiducial[] fiducials =
+        LimelightHelpers.getRawFiducials(Constants.LimelightConstants.CAMERA_NAME);
+    for (RawFiducial fiducial : fiducials) {
+      if (fiducial.id == tagNumber) {
+        return OptionalDouble.of(fiducial.distToRobot);
+      }
+    }
+    return OptionalDouble.empty();
   }
 
   /** Returns true if the measurement falls within the permitted translation and rotation window. */
@@ -139,5 +174,9 @@ public class Vision extends SubsystemBase {
 
   public void setOverrideOdometry(boolean value) {
     overrideOdometry = value;
+  }
+
+  public boolean odometryBeingOverridden () {
+    return overrideOdometry;
   }
 }
