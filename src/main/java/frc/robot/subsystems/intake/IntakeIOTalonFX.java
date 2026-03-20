@@ -67,7 +67,7 @@ public class IntakeIOTalonFX implements IntakeIO {
         inputs.armMotorVoltage_Volts = armMotor.getMotorVoltage().getValueAsDouble();
         inputs.armMotorCurrent_Amps = armMotor.getTorqueCurrent().getValueAsDouble();
         inputs.armRotations_Rotations = armMotor.getPosition().getValueAsDouble();
-        inputs.armMotorRotations_Rotations = inputs.armMotorRotations_Rotations
+        inputs.armMotorRotations_Rotations = inputs.armRotations_Rotations
                 / IntakeConstants.GEAR_ROTATIONS_TO_ARM_ROTATIONS;
 
         inputs.wheelMotorVoltage_Volts = wheelMotor.getMotorVoltage().getValueAsDouble();

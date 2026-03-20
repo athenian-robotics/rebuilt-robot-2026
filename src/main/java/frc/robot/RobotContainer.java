@@ -49,6 +49,7 @@ import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeIOTalonFX;
 import frc.robot.subsystems.outtake.Outtake;
 import frc.robot.subsystems.outtake.OuttakeIO;
+import frc.robot.subsystems.outtake.OuttakeIOSim;
 import frc.robot.subsystems.outtake.OuttakeIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
@@ -122,7 +123,7 @@ public class RobotContainer {
                           new ModuleIOSim(TunerConstants.BackLeft),
                           new ModuleIOSim(TunerConstants.BackRight));
                 intake  = new Intake(new IntakeIOSim());
-                outtake = null;
+                outtake = new Outtake(new OuttakeIOSim());
                 indexer = new Indexer(new IndexerIOSim());
                 break;
 
