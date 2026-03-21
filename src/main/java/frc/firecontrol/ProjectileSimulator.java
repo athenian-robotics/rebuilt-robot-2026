@@ -70,10 +70,10 @@ public class ProjectileSimulator {
       double wheelDiameterM,
       double targetHeightM,
       double slipFactor,
-      double fixedLaunchAngleDeg,
+      double fixedRPM,
       double dt,
-      double rpmMin,
-      double rpmMax,
+      double angleMin,
+      double angleMax,
       int binarySearchIters,
       double maxSimTime) {}
 
@@ -111,10 +111,11 @@ public class ProjectileSimulator {
     return params.slipFactor() * rpm * Math.PI * params.wheelDiameterM() / 60.0;
   }
 
-  /** Simulate a ball launched at the given RPM and see where it is when it reaches the target distance. */
-  public TrajectoryResult simulate(double rpm, double targetDistanceM) {
+  /** Simulate a ball launched at the given angle and see where it is when it reaches the target distance. */
+  public TrajectoryResult simulate(double angle, double targetDistanceM) {
+    double rpm = this.params.fixedRPM;
     double v0 = exitVelocity(rpm);
-    double launchRad = Math.toRadians(params.fixedLaunchAngleDeg());
+    double launchRad = Math.toRadians(angle);
     double vx = v0 * Math.cos(launchRad);
     double vz = v0 * Math.sin(launchRad);
 
@@ -193,19 +194,19 @@ public class ProjectileSimulator {
     };
   }
 
-  /** Binary search for the RPM that puts the ball at the target height. Returns reachable=false if max RPM can't reach. */
-  public LUTEntry findRPMForDistance(double distanceM) {
+  /** Binary search for the angle that puts the ball at the target height. Returns reachable=false if max angle can't reach. */
+  public LUTEntry findAngleForDistance(double distanceM) {
     double heightTolerance = 0.02; // 2cm
-    double lo = params.rpmMin();
-    double hi = params.rpmMax();
+    double lo = params.angleMin();
+    double hi = params.angleMax();
 
-    // Quick feasibility check: can max RPM even reach this distance?
+    // Quick feasibility check: can max angle even reach this distance?
     TrajectoryResult maxCheck = simulate(hi, distanceM);
     if (!maxCheck.reachedTarget()) {
       return new LUTEntry(distanceM, 0, 0, false);
     }
 
-    double bestRpm = hi;
+    double bestAngle = hi;
     double bestTof = maxCheck.tof();
     double bestError = Math.abs(maxCheck.zAtTarget() - params.targetHeightM());
 
@@ -214,7 +215,7 @@ public class ProjectileSimulator {
       TrajectoryResult result = simulate(mid, distanceM);
 
       if (!result.reachedTarget()) {
-        // Too slow, need more RPM
+        // Too slow, need higher angle
         lo = mid;
         continue;
       }
@@ -223,7 +224,7 @@ public class ProjectileSimulator {
       double absError = Math.abs(error);
 
       if (absError < bestError) {
-        bestRpm = mid;
+        bestAngle = mid;
         bestTof = result.tof();
         bestError = absError;
       }
@@ -233,16 +234,16 @@ public class ProjectileSimulator {
       }
 
       if (error > 0) {
-        // Ball too high, reduce RPM
+        // Ball too high, reduce angle
         hi = mid;
       } else {
-        // Ball too low, increase RPM
+        // Ball too low, increase angle
         lo = mid;
       }
     }
 
-    // Return best found even if not perfectly converged (0.004 RPM precision after 25 iters)
-    return new LUTEntry(distanceM, bestRpm, bestTof, bestError < 0.10);
+    // Return best found even if not perfectly converged (0.004 angle precision after 25 iters)
+    return new LUTEntry(distanceM, bestAngle, bestTof, bestError < 0.10);
   }
 
   /** Generate the full lookup table: 0.50m to 5.00m in 5cm steps (91 entries). Takes ~200ms. */
@@ -259,7 +260,7 @@ public class ProjectileSimulator {
       // Round to avoid floating-point drift
       distance = Math.round(distance * 100.0) / 100.0;
 
-      LUTEntry entry = findRPMForDistance(distance);
+      LUTEntry entry = findAngleForDistance(distance);
       entries.add(entry);
 
       if (entry.reachable()) {
