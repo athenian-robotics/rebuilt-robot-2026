@@ -550,7 +550,7 @@ public class ShotCalculator {
 
   /** Bump the angle offset by delta. Clamped to +/- 200. Bind this to copilot D-pad. */
   public void adjustOffset(double delta) {
-    angleOffset = MathUtil.clamp(angleOffset + delta, -200, 200);
+    angleOffset = MathUtil.clamp(angleOffset + delta, -200, 200); // TODO: make more reasonable numbers
   }
 
   /** Reset the angle offset to zero. Call this on mode transitions so trim doesn't carry over. */

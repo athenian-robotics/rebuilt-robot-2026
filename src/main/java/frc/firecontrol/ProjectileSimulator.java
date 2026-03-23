@@ -43,7 +43,7 @@ import java.util.List;
  *       0.1016,  // wheel diameter, measure with calipers
  *       1.83,    // target height, from game manual
  *       0.6,     // slip factor (0=no grip, 1=perfect), tune on robot
- *       45.0,    // launch angle degrees from horizontal
+ *       45.0,    // launch angle degrees from horizontal TODO: change these to be accurate to usage for us
  *       0.001,   // sim timestep
  *       1500, 6000, 25, 5.0  // RPM range, search iters, max sim time
  *   );
@@ -72,7 +72,7 @@ public class ProjectileSimulator {
       double slipFactor,
       double fixedRPM,
       double dt,
-      double angleMin,
+      double angleMin, // launch angle TODO: units
       double angleMax,
       int binarySearchIters,
       double maxSimTime) {}
@@ -81,7 +81,7 @@ public class ProjectileSimulator {
       double zAtTarget, double tof, boolean reachedTarget, double maxHeight, double apexX) {}
 
   // One row: distance -> Angle that lands it, TOF, reachable flag
-  public record LUTEntry(double distanceM, double angle, double tof, boolean reachable) {}
+  public record LUTEntry(double distanceM, double angle, double tof, boolean reachable) {} // TODO: units
 
   /** Full LUT with generation stats. */
   public record GeneratedLUT(
@@ -112,7 +112,7 @@ public class ProjectileSimulator {
   }
 
   /** Simulate a ball launched at the given angle and see where it is when it reaches the target distance. */
-  public TrajectoryResult simulate(double angle, double targetDistanceM) {
+  public TrajectoryResult simulate(double angle, double targetDistanceM) { //TODO: units
     double rpm = this.params.fixedRPM;
     double v0 = exitVelocity(rpm);
     double launchRad = Math.toRadians(angle);
@@ -196,7 +196,7 @@ public class ProjectileSimulator {
 
   /** Binary search for the angle that puts the ball at the target height. Returns reachable=false if max angle can't reach. */
   public LUTEntry findAngleForDistance(double distanceM) {
-    double heightTolerance = 0.02; // 2cm
+    double heightTolerance = 0.02; // 2cm TODO: Extract into constants
     double lo = params.angleMin();
     double hi = params.angleMax();
 
@@ -242,7 +242,7 @@ public class ProjectileSimulator {
       }
     }
 
-    // Return best found even if not perfectly converged (0.004 angle precision after 25 iters)
+    // Return best found even if not perfectly converged (0.004 angle precision after 25 iters) <- is this parenthetical true?
     return new LUTEntry(distanceM, bestAngle, bestTof, bestError < 0.10);
   }
 
