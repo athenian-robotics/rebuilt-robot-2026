@@ -29,7 +29,7 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 /**
- * Shoot-on-the-move fire control solver. Figures out what RPM and heading your robot needs
+ * Shoot-on-the-move fire control solver. Figures out what angle and heading your robot needs
  * while you're driving around. It accounts for robot velocity, where the launcher is on the
  * robot, processing latency, and drag on the ball during flight.
  *
@@ -67,9 +67,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
  */
 public class ShotCalculator {
 
-  /** The result of calculate(). RPM to spin up, time of flight, heading to aim at, and a 0-100 confidence score. */
+  /** The result of calculate(). Angle to spin up, time of flight, heading to aim at, and a 0-100 confidence score. */
   public record LaunchParameters(
-      double rpm,
+      double angle,
       double timeOfFlightSec,
       Rotation2d driveAngle,
       double driveAngularVelocityRadPerSec,
@@ -111,6 +111,7 @@ public class ShotCalculator {
   }
 
   /** Tuning parameters. Set these to match your robot, or wire them to SmartDashboard/TunableNumber. */
+  // TODO: REAL!
   public static class Config {
     // Launcher geometry (measure from CAD)
     public double launcherOffsetX = 0.20; // meters forward of robot center
@@ -165,13 +166,13 @@ public class ShotCalculator {
 
   private final Config config;
 
-  private final InterpolatingDoubleTreeMap rpmMap = new InterpolatingDoubleTreeMap();
+  private final InterpolatingDoubleTreeMap angleMap = new InterpolatingDoubleTreeMap();
   private final InterpolatingDoubleTreeMap tofMap = new InterpolatingDoubleTreeMap();
-  private final InterpolatingDoubleTreeMap correctionRpmMap = new InterpolatingDoubleTreeMap();
+  private final InterpolatingDoubleTreeMap correctionAngleMap = new InterpolatingDoubleTreeMap();
   private final InterpolatingDoubleTreeMap correctionTofMap = new InterpolatingDoubleTreeMap();
 
-  // Copilot RPM trim (flat offset applied during match)
-  private double rpmOffset = 0;
+  // Copilot angle trim (flat offset applied during match)
+  private double angleOffset = 0;
 
   // Solver state (reused across cycles to avoid allocation)
   private double previousTOF = -1;
@@ -191,17 +192,17 @@ public class ShotCalculator {
     this(new Config());
   }
 
-  /** Add a distance/RPM/TOF point to the lookup table. Use ProjectileSimulator to generate these, or hand-tune. */
-  public void loadLUTEntry(double distanceM, double rpm, double tof) {
-    rpmMap.put(distanceM, rpm);
+  /** Add a distance/angle/TOF point to the lookup table. Use ProjectileSimulator to generate these, or hand-tune. */
+  public void loadLUTEntry(double distanceM, double angle, double tof) {
+    angleMap.put(distanceM, angle);
     tofMap.put(distanceM, tof);
   }
 
-  // LUT lookup: base value + any corrections + copilot RPM offset
-  double effectiveRPM(double distance) {
-    double base = rpmMap.get(distance);
-    Double correction = correctionRpmMap.get(distance);
-    return base + (correction != null ? correction : 0.0) + rpmOffset;
+  // LUT lookup: base value + any corrections + copilot angle offset
+  double effectiveAngle(double distance) {
+    double base = angleMap.get(distance);
+    Double correction = correctionAngleMap.get(distance);
+    return base + (correction != null ? correction : 0.0) + angleOffset;
   }
 
   double effectiveTOF(double distance) {
@@ -410,8 +411,8 @@ public class ShotCalculator {
 
     double effectiveTOF = solvedTOF + config.mechLatencyMs / 1000.0;
 
-    // RPM from LUT at solved distance
-    double effectiveRPMValue = effectiveRPM(projDist);
+    // Angle from LUT at solved distance
+    double effectiveAngleValue = effectiveAngle(projDist);
 
     // Drive angle: aim at velocity-compensated target position
     double compTargetX;
@@ -461,7 +462,7 @@ public class ShotCalculator {
     previousSpeed = robotSpeed;
 
     return new LaunchParameters(
-        effectiveRPMValue,
+        effectiveAngleValue,
         effectiveTOF,
         driveAngle,
         driveAngularVelocity,
@@ -531,9 +532,9 @@ public class ShotCalculator {
     return MathUtil.clamp(composite, 0, 100);
   }
 
-  /** Layer a per-distance RPM adjustment on top of the base LUT. Good for field tuning at comp. */
-  public void addRpmCorrection(double distance, double deltaRpm) {
-    correctionRpmMap.put(distance, deltaRpm);
+  /** Layer a per-distance angle adjustment on top of the base LUT. Good for field tuning at comp. */
+  public void addAngleCorrection(double distance, double deltaAngle) {
+    correctionAngleMap.put(distance, deltaAngle);
   }
 
   /** Layer a per-distance TOF adjustment on top of the base LUT. */
@@ -543,22 +544,22 @@ public class ShotCalculator {
 
   /** Clear all corrections, back to the raw LUT. */
   public void clearCorrections() {
-    correctionRpmMap.clear();
+    correctionAngleMap.clear();
     correctionTofMap.clear();
   }
 
-  /** Bump the RPM offset by delta. Clamped to +/- 200. Bind this to copilot D-pad. */
+  /** Bump the angle offset by delta. Clamped to +/- 200. Bind this to copilot D-pad. */
   public void adjustOffset(double delta) {
-    rpmOffset = MathUtil.clamp(rpmOffset + delta, -200, 200);
+    angleOffset = MathUtil.clamp(angleOffset + delta, -200, 200);
   }
 
-  /** Reset the RPM offset to zero. Call this on mode transitions so trim doesn't carry over. */
+  /** Reset the angle offset to zero. Call this on mode transitions so trim doesn't carry over. */
   public void resetOffset() {
-    rpmOffset = 0;
+    angleOffset = 0;
   }
 
   public double getOffset() {
-    return rpmOffset;
+    return angleOffset;
   }
 
   /** Raw time-of-flight from the LUT at this distance (no velocity compensation). */
@@ -566,9 +567,9 @@ public class ShotCalculator {
     return effectiveTOF(distanceM);
   }
 
-  /** Base RPM at this distance, before any corrections or offset. */
-  public double getBaseRPM(double distance) {
-    return rpmMap.get(distance);
+  /** Base angle at this distance, before any corrections or offset. */
+  public double getBaseAngle(double distance) {
+    return angleMap.get(distance);
   }
 
   /** Reset the warm start state. Call this after a pose reset so the solver doesn't use stale data. */
@@ -580,8 +581,8 @@ public class ShotCalculator {
     prevRobotOmega = 0;
   }
 
-  InterpolatingDoubleTreeMap getRpmMap() {
-    return rpmMap;
+  InterpolatingDoubleTreeMap getAngleMap() {
+    return angleMap;
   }
 
   InterpolatingDoubleTreeMap getTofMap() {

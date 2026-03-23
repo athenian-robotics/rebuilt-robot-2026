@@ -80,8 +80,8 @@ public class ProjectileSimulator {
   public record TrajectoryResult(
       double zAtTarget, double tof, boolean reachedTarget, double maxHeight, double apexX) {}
 
-  // One row: distance -> RPM that lands it, TOF, reachable flag
-  public record LUTEntry(double distanceM, double rpm, double tof, boolean reachable) {}
+  // One row: distance -> Angle that lands it, TOF, reachable flag
+  public record LUTEntry(double distanceM, double angle, double tof, boolean reachable) {}
 
   /** Full LUT with generation stats. */
   public record GeneratedLUT(
@@ -200,13 +200,13 @@ public class ProjectileSimulator {
     double lo = params.angleMin();
     double hi = params.angleMax();
 
-    // Quick feasibility check: can max angle even reach this distance?
-    TrajectoryResult maxCheck = simulate(hi, distanceM);
+    // Quick feasibility check: can lowest (closest to 45º) angle even reach this distance?
+    TrajectoryResult maxCheck = simulate(lo, distanceM);
     if (!maxCheck.reachedTarget()) {
       return new LUTEntry(distanceM, 0, 0, false);
     }
 
-    double bestAngle = hi;
+    double bestAngle = lo;
     double bestTof = maxCheck.tof();
     double bestError = Math.abs(maxCheck.zAtTarget() - params.targetHeightM());
 
@@ -215,8 +215,8 @@ public class ProjectileSimulator {
       TrajectoryResult result = simulate(mid, distanceM);
 
       if (!result.reachedTarget()) {
-        // Too slow, need higher angle
-        lo = mid;
+        // Too vertical, need lower angle
+        hi = mid;
         continue;
       }
 
@@ -234,11 +234,11 @@ public class ProjectileSimulator {
       }
 
       if (error > 0) {
-        // Ball too high, reduce angle
-        hi = mid;
-      } else {
-        // Ball too low, increase angle
+        // Ball too high, increase angle
         lo = mid;
+      } else {
+        // Ball too low, lower angle
+        hi = mid;
       }
     }
 
