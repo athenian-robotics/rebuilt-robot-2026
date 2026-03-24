@@ -324,7 +324,7 @@ public class RobotContainer {
         // Operator left side bottom left button    -->  lower hood
         operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_LEFT).onTrue(outtake.lowerHood());
         // Operator left side bottom middle button  -->  send balls to shooter (with indexer rollers)
-        operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_MIDDLE).whileTrue(outtake.sendBallsToShooter().alongWith(indexer.hold()));
+        operatorJoystick.button(ControllerConstants.TRIGGER).whileTrue(outtake.sendBallsToShooter().alongWith(indexer.hold()));
         // Operator left side bottom middle button  -->  send balls to shooter
         operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_RIGHT).onTrue(outtake.aimAtTarget(() -> drive.getPose().getTranslation()));
         // Operator left side top right button      -->  snap shooter angle to 40º
@@ -338,7 +338,7 @@ public class RobotContainer {
         // Operator left thumb                      -> stop flywheel
         operatorJoystick.button(ControllerConstants.THUMB_BUTTON_LEFT).onTrue(outtake.stopFlywheel());
         // Operator right thumb                     -> toggle intake
-        operatorJoystick.button(ControllerConstants.TRIGGER).toggleOnTrue(intake.runIntake());
+        operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_MIDDLE).toggleOnTrue(intake.runIntake());
         // Operator right side top right            -> open hopper
         // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).whileTrue(intake.openHopper());
         // Operator right side top middle           -> close hopper and intake
