@@ -16,8 +16,15 @@ import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.generated.TunerConstants;
 
 public class Constants {
-  public static final CurrentLimitsConfigs CURRENT_LIMITS = new CurrentLimitsConfigs()
-    .withSupplyCurrentLimit(70)
+  public static final CurrentLimitsConfigs MECHANISM_CURRENT_LIMITS = new CurrentLimitsConfigs()
+    .withSupplyCurrentLimit(60)
+    .withSupplyCurrentLowerLimit(37)
+    .withSupplyCurrentLowerTime(1)
+    .withSupplyCurrentLimitEnable(true);
+
+  //FOR THIS ONE: MANUALLY IMPLEMENT NEW LIMITS IN MODULEIOTALONFX
+  public static final CurrentLimitsConfigs DRIVE_CURRENT_LIMITS = new CurrentLimitsConfigs() 
+    .withSupplyCurrentLimit(45)
     .withSupplyCurrentLowerLimit(37)
     .withSupplyCurrentLowerTime(1)
     .withSupplyCurrentLimitEnable(true);
