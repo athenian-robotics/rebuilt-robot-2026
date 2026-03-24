@@ -27,6 +27,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import frc.robot.Constants.SOTMConstants;
 
 /**
  * Shoot-on-the-move fire control solver. Figures out what angle and heading your robot needs
@@ -548,9 +549,9 @@ public class ShotCalculator {
     correctionTofMap.clear();
   }
 
-  /** Bump the angle offset by delta. Clamped to +/- 200. Bind this to copilot D-pad. */
+  /** Bump the angle offset by delta. Clamped to +/- 20. Bind this to copilot D-pad. */
   public void adjustOffset(double delta) {
-    angleOffset = MathUtil.clamp(angleOffset + delta, -200, 200); // TODO: make more reasonable numbers
+    angleOffset = MathUtil.clamp(angleOffset + delta, -SOTMConstants.TRIM_MAX, SOTMConstants.TRIM_MAX); // TODO: make more reasonable numbers
   }
 
   /** Reset the angle offset to zero. Call this on mode transitions so trim doesn't carry over. */

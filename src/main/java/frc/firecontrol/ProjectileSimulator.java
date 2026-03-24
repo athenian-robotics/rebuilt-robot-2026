@@ -23,6 +23,8 @@ package frc.firecontrol;
 import java.util.ArrayList;
 import java.util.List;
 
+import frc.robot.Constants.SOTMConstants;
+
 /**
  * Simulates a ball flying through the air with drag and Magnus lift. Uses RK4 integration
  * in the vertical plane (x, z). For each distance, binary searches RPM until the ball arrives
@@ -43,7 +45,7 @@ import java.util.List;
  *       0.1016,  // wheel diameter, measure with calipers
  *       1.83,    // target height, from game manual
  *       0.6,     // slip factor (0=no grip, 1=perfect), tune on robot
- *       45.0,    // launch angle degrees from horizontal TODO: change these to be accurate to usage for us
+ *       4800.0,  // launch RPM
  *       0.001,   // sim timestep
  *       1500, 6000, 25, 5.0  // RPM range, search iters, max sim time
  *   );
@@ -72,8 +74,8 @@ public class ProjectileSimulator {
       double slipFactor,
       double fixedRPM,
       double dt,
-      double angleMin, // launch angle TODO: units
-      double angleMax,
+      double angleMinDeg, // launch angle
+      double angleMaxDeg,
       int binarySearchIters,
       double maxSimTime) {}
 
@@ -81,7 +83,7 @@ public class ProjectileSimulator {
       double zAtTarget, double tof, boolean reachedTarget, double maxHeight, double apexX) {}
 
   // One row: distance -> Angle that lands it, TOF, reachable flag
-  public record LUTEntry(double distanceM, double angle, double tof, boolean reachable) {} // TODO: units
+  public record LUTEntry(double distanceM, double angleDeg, double tof, boolean isReachable) {}
 
   /** Full LUT with generation stats. */
   public record GeneratedLUT(
@@ -112,10 +114,10 @@ public class ProjectileSimulator {
   }
 
   /** Simulate a ball launched at the given angle and see where it is when it reaches the target distance. */
-  public TrajectoryResult simulate(double angle, double targetDistanceM) { //TODO: units
+  public TrajectoryResult simulate(double angleDeg, double targetDistanceM) {
     double rpm = this.params.fixedRPM;
     double v0 = exitVelocity(rpm);
-    double launchRad = Math.toRadians(angle);
+    double launchRad = Math.toRadians(angleDeg);
     double vx = v0 * Math.cos(launchRad);
     double vz = v0 * Math.sin(launchRad);
 
@@ -196,9 +198,9 @@ public class ProjectileSimulator {
 
   /** Binary search for the angle that puts the ball at the target height. Returns reachable=false if max angle can't reach. */
   public LUTEntry findAngleForDistance(double distanceM) {
-    double heightTolerance = 0.02; // 2cm TODO: Extract into constants
-    double lo = params.angleMin();
-    double hi = params.angleMax();
+    double heightTolerance = SOTMConstants.HEIGHT_TOLERANCE_M;
+    double lo = params.angleMinDeg();
+    double hi = params.angleMaxDeg();
 
     // Quick feasibility check: can lowest (closest to 45º) angle even reach this distance?
     TrajectoryResult maxCheck = simulate(lo, distanceM);
@@ -263,7 +265,7 @@ public class ProjectileSimulator {
       LUTEntry entry = findAngleForDistance(distance);
       entries.add(entry);
 
-      if (entry.reachable()) {
+      if (entry.isReachable()) {
         reachable++;
         maxRange = distance;
       } else {

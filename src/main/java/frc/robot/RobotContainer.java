@@ -13,6 +13,10 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Degrees;
+
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
@@ -23,11 +27,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.firecontrol.ProjectileSimulator;
 import frc.firecontrol.ShotCalculator;
+import frc.firecontrol.ShotCalculator.LaunchParameters;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.OuttakeConstants;
 import frc.robot.Constants.RuntimeConstants;
@@ -55,12 +61,8 @@ import frc.robot.subsystems.outtake.OuttakeIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
-import frc.robot.util.PathGeneration;
 import frc.robot.util.AllianceUtil;
-
-import static edu.wpi.first.units.Units.Degrees;
-
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+import frc.robot.util.PathGeneration;
 
 /**
  * This class is where the bulk of the robot should be declared. 
@@ -90,6 +92,7 @@ public class RobotContainer {
 
     // -- SOTM --
     private ShotCalculator shotCalc;
+    private LaunchParameters shot;
     
 
     /**
@@ -266,13 +269,13 @@ public class RobotContainer {
 
         ShotCalculator.Config config = new ShotCalculator.Config();
         // TODO: REAL!
-        config.launcherOffsetX = 0.23; // how far forward the launcher is from robot center (m)
-        config.launcherOffsetY = 0.0; // how far left, 0 if centered
-        config.phaseDelayMs = 30.0; // your vision pipeline latency
-        config.mechLatencyMs = 20.0; // how long the mechanism takes to respond
-        config.maxTiltDeg = 5.0; // suppress firing when chassis tilts past this (bumps/ramps)
-        config.headingSpeedScalar = 1.0; // heading tolerance tightens with robot speed (0 to disable)
-        config.headingReferenceDistance = 2.5; // heading tolerance scales with distance from hub
+        config.launcherOffsetX = SOTMConstants.LAUNCHER_OFFSET_X_M; // how far forward the launcher is from robot center (m)
+        config.launcherOffsetY = SOTMConstants.LAUNCHER_OFFSET_X_M; // how far left, 0 if centered
+        config.phaseDelayMs = SOTMConstants.PHASE_DELAY_MS; // your vision pipeline latency
+        config.mechLatencyMs = SOTMConstants.MECH_LATENCY_MS; // how long the mechanism takes to respond
+        config.maxTiltDeg = SOTMConstants.MAX_TILT_DEG; // suppress firing when chassis tilts past this (bumps/ramps)
+        config.headingSpeedScalar = SOTMConstants.HEADING_SPEED_SCALAR_MPS; // heading tolerance tightens with robot speed (0 to disable)
+        config.headingReferenceDistance = SOTMConstants.HEADING_REFERENCE_DISTANCE_M; // heading tolerance scales with distance from hub
 
         shotCalc = new ShotCalculator(config);
         // Operator can adjust trim
@@ -281,6 +284,19 @@ public class RobotContainer {
         operatorJoystick.povDown().onTrue(Commands.runOnce(() -> shotCalc.adjustOffset(-25)));
         // reset on mode change so trim doesn't carry over
         shotCalc.resetOffset();
+
+        operatorJoystick.button(ControllerConstants.OFFHAND_TOP_LEFT).onTrue(
+            Commands.either(
+                DriveCommands.joystickDriveAtAngle(
+                    drive,
+                    () -> -driveJoystick.getY(),
+                    () -> -driveJoystick.getX(),
+                    () -> shot.driveAngle()
+                ),
+                Commands.none(),
+                () -> shot.isValid() && shot.confidence() > 50
+            )
+        );
     }
 
     public void periodic() {
@@ -306,13 +322,13 @@ public class RobotContainer {
         ShotCalculator.LaunchParameters shot = shotCalc.calculate(inputs);
         if (shot.isValid() && shot.confidence() > 50) {
             // outtake.setRPM(shot.rpm());
-            outtake.setAngle(shot.angle()); // Adjust shot angle rather than shot rpm TODO: make shot.angle()
-            DriveCommands.joystickDriveAtAngle(
+            // drive.setAngle(shot.angle()); // Adjust shot angle rather than shot rpm
+            CommandScheduler.getInstance().schedule(DriveCommands.joystickDriveAtAngle(
                 drive,
                 () -> -driveJoystick.getY(),
                 () -> -driveJoystick.getX(),
                 () -> shot.driveAngle()
-            );
+            ));
             // shot.driveAngularVelocityRadPerSec() gives you a heading feedforward if you
             // want it
         }
