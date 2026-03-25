@@ -16,7 +16,7 @@ public class IndexerIOTalonFX implements IndexerIO {
 
     public IndexerIOTalonFX() {
         motor = new TalonFX(IndexerConstants.MOTOR_ID, new CANBus(CANConstants.CANIVORE_NAME));
-        motor.getConfigurator().apply(Constants.CURRENT_LIMITS);
+        motor.getConfigurator().apply(Constants.MECHANISM_CURRENT_LIMITS);
     }
 
     @Override

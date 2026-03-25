@@ -89,9 +89,9 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     // Applies gear ratios into the code
     angleChanger.getConfigurator().apply(new FeedbackConfigs().withSensorToMechanismRatio(1.0/OuttakeConstants.ANGLE_CHANGER_GEAR_RATIO));
     
-    middleWheel.getConfigurator().apply(Constants.CURRENT_LIMITS);
-    angleChanger.getConfigurator().apply(Constants.CURRENT_LIMITS);
-    starWheelMotor.getConfigurator().apply(Constants.CURRENT_LIMITS);
+    middleWheel.getConfigurator().apply(Constants.MECHANISM_CURRENT_LIMITS);
+    angleChanger.getConfigurator().apply(Constants.MECHANISM_CURRENT_LIMITS);
+    starWheelMotor.getConfigurator().apply(Constants.MECHANISM_CURRENT_LIMITS);
   }
 
   public void periodic() {
