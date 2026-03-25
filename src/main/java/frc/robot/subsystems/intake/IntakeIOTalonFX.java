@@ -57,8 +57,8 @@ public class IntakeIOTalonFX implements IntakeIO {
 
         armMotor.getConfigurator().apply(talonFXConfigs);
         armMotor.setPosition(IntakeConstants.ARM_STARTING_POSITION_ROT);
-        armMotor.getConfigurator().apply(Constants.CURRENT_LIMITS);
-        wheelMotor.getConfigurator().apply(Constants.CURRENT_LIMITS);
+        armMotor.getConfigurator().apply(Constants.MECHANISM_CURRENT_LIMITS);
+        wheelMotor.getConfigurator().apply(Constants.MECHANISM_CURRENT_LIMITS);
     }
 
     /** Update the set of loggable inputs */
