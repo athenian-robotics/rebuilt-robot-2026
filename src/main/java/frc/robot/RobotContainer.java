@@ -17,12 +17,9 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -352,6 +349,11 @@ public class RobotContainer {
         operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_MIDDLE).onTrue(outtake.setAngle(() -> OuttakeConstants.MIDDLE_SET_ANGLE_DEG));
         // Operator right side bottom right         -> lift hood
         operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_RIGHT).onTrue(outtake.setAngle(() -> OuttakeConstants.HIGH_SET_ANGLE_DEG));
+        
+        // Operator thumb pad -> trim hood angle
+        // Note: does not apply immediately. Set angle again to apply trim. 
+        operatorJoystick.povUp().onTrue(outtake.addTrim(OuttakeConstants.HOOD_ANGLE_TRIM_AMOUNT_DEGREES));
+        operatorJoystick.povDown().onTrue(outtake.addTrim(-OuttakeConstants.HOOD_ANGLE_TRIM_AMOUNT_DEGREES));
     
         // operatorJoystick.button(ControllerConstants.OFFHAND_TOP_RIGHT).whileTrue(outtake.aimWithJoystick(() -> operatorJoystick.getY()));
         // operatorJoystick.button(ControllerConstants.OFFHAND_TOP_MIDDLE).onTrue(outtake.toNTAngle().andThen(outtake.updateDistance(() -> drive.getPose().getTranslation(), () -> OuttakeConstants.HUB_POSITION_BLUE)));

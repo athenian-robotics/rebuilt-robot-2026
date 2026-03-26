@@ -206,6 +206,8 @@ public class Constants {
     public static final double LOW_SET_ANGLE_DEG = 23.2926886432; // 2.4333333333 m
     public static final double MIDDLE_SET_ANGLE_DEG = 28.2261055557; // 3.3166666667 m
     public static final double HIGH_SET_ANGLE_DEG = 30.0072; // 4.2 m
+
+    public static final double HOOD_ANGLE_TRIM_AMOUNT_DEGREES = .5;
   }
 
   public final class IntakeConstants {

@@ -26,8 +26,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -43,10 +41,14 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   private double currentAngleDeg = 0.0;
   private double currentAngularVelocityDegPerSecond = 0.0;
   private double targetDistanceMeters = 0.0;
+  // Doesn't take into account the trim
+  private double targetHoodAngleDegrees;
 
   private DoubleEntry hoodAngleDegEntry;
 
   private double sysIdVoltage = 0.0;
+
+  public static double hoodAngleTrim;
 
   public OuttakeIOTalonFX() {
     super();
@@ -140,7 +142,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     // Inputs for IO logging
     inputs.currentHoodAngleDegrees = currentAngleDeg;
     inputs.currentAngularVelocityDegPerSecond = currentAngularVelocityDegPerSecond;
-    inputs.targetHoodAngleDegrees = angleChanger.getClosedLoopReference().getValueAsDouble() * 360.0;
+    inputs.targetHoodAngleDegrees = targetHoodAngleDegrees;
     inputs.targetDistanceFeet = Units.metersToFeet(targetDistanceMeters);
     inputs.angleChangerVoltage = angleChanger.getMotorVoltage().getValueAsDouble();
     inputs.indexerVoltage = starWheelMotor.getMotorVoltage().getValueAsDouble();
@@ -183,16 +185,27 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   }
 
   public void setAngle(double angleDegrees) {
+    targetHoodAngleDegrees = angleDegrees;
+
+    double trimmedAngleDegrees = angleDegrees + hoodAngleTrim;
     if (OuttakeConstants.MAXIMUM_HOOD_ANGLE_DEG < angleDegrees 
      || OuttakeConstants.MINIMUM_HOOD_ANGLE_DEG > angleDegrees) {
       System.out.println("setAngle was passed an invalid angle");
       return;
     }
+
+    if (OuttakeConstants.MAXIMUM_HOOD_ANGLE_DEG < trimmedAngleDegrees 
+     || OuttakeConstants.MINIMUM_HOOD_ANGLE_DEG > trimmedAngleDegrees) {
+      System.out.println("trim is too large, ignoring trim");
+      hoodAngleDegEntry.set(targetHoodAngleDegrees);
+      MotionMagicDutyCycle magic = new MotionMagicDutyCycle(trimmedAngleDegrees/360.0);
+      angleChanger.setControl(magic);
+      return;
+    }
     
-    hoodAngleDegEntry.set(angleDegrees);
+    hoodAngleDegEntry.set(trimmedAngleDegrees);
 
-    MotionMagicDutyCycle magic = new MotionMagicDutyCycle(angleDegrees/360.0);
-
+    MotionMagicDutyCycle magic = new MotionMagicDutyCycle(trimmedAngleDegrees/360.0);
     angleChanger.setControl(magic);
   }
 
@@ -214,5 +227,17 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   @Override
   public boolean isSpunUp() {
     return Math.abs(Math.abs(leadShooter.getVelocity().getValueAsDouble()) - flywheelSetpointRPS) < OuttakeConstants.FLYWHEEL_MAX_ERROR_RPS;
+  }
+
+  @Override
+  public void addTrim(double trimDeg) {
+    hoodAngleTrim += trimDeg;
+    setAngle(targetHoodAngleDegrees);
+  }
+
+  @Override
+  public void resetTrim() {
+    hoodAngleTrim = 0.0;
+    setAngle(targetHoodAngleDegrees);
   }
 }

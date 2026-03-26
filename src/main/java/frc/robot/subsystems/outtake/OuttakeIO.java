@@ -47,7 +47,7 @@ public interface OuttakeIO extends Subsystem {
   /** Sets the target shot angle, which the hood will constantly move towards, to be targeting the target */
   public default void setAngleAtTarget(Translation2d currentPosition) {};
 
-  /** Sets the target shot angle, which the hood will constantly move towards, measured ccw+ from horiontal */
+  /** Sets the target shot angle, which the hood will constantly move towards, measured ccw+ from horiontal. Takes into account the hood angle trim. */
   public default void setAngle(double angleDegrees) {};
 
   /** Sets the target angle based on the current network table value at /Outtake/HoodAngleDeg */
@@ -71,4 +71,15 @@ public interface OuttakeIO extends Subsystem {
    * @return true if so, false otherwise
    */
   public default boolean isSpunUp () {return false;}
+
+  /**
+ * Add trim to the hood angle. Doesn't apply immediatly. 
+ * @param trimDeg
+ */
+  public default void addTrim (double trimDeg) {}
+
+  /**
+ * Reset trim.
+ */
+  public default void resetTrim () {}
 }
