@@ -306,8 +306,23 @@ public class Constants {
     public static final double HEADING_SPEED_SCALAR_MPS = 1.0;
     public static final double HEADING_REFERENCE_DISTANCE_M = 2.5;
     
-    public static final double MIN_SCORING_DISTANCE_M = 5.0;
-    public static final double MAX_SCORING_DISTANCE_M = 5.0;
+    public static final double MIN_SCORING_DISTANCE = 0.0;
+    public static final double MAX_SCORING_DISTANCE = 0.0;
+    public static final int MAX_ITERATIONS = 0;
+    public static final double CONVERGENCE_TOLERANCE = 0.001;
+    public static final double TOF_MIN = 0.05;
+    public static final double TOF_MAX = 5.0;
+    public static final double MIN_SOTM_SPEED = 0.1;
+    public static final double MAX_SOTM_SPEED = 3.0;
+    public static final double SOTM_DRAG_COEFF = 0.47;
+
+    // Confidence scoring weights (5-component weighted geometric mean)
+    public static final double W_CONVERGENCE = 1.0;
+    public static final double W_VELOCITY_STABILITY = 0.8;
+    public static final double W_VISION_CONFIDENCE = 1.2;
+    public static final double W_HEADING_ACCURACY = 1.5;
+    public static final double W_DISTANCE_IN_RANGE = 0.5;
+    public static final double HEADING_MAX_ERROR_RAD = Math.toRadians(15);
 
     public static final double HEIGHT_TOLERANCE_M = 0.02;
     public static final double TRIM_MAX = 20;

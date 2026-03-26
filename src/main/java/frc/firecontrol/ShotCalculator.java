@@ -141,15 +141,15 @@ public class ShotCalculator {
     // The ball's inherited robot velocity decays in flight because of drag.
     // Real displacement = (1 - e^(-c*tof)) / c instead of just v*tof.
     // Set to 0 to disable drag compensation.
-    public double sotmDragCoeff = 0.47;
+    public double sotmDragCoeff = SOTMConstants.SOTM_DRAG_COEFF;
 
     // Confidence scoring weights (5-component weighted geometric mean)
-    public double wConvergence = 1.0;
-    public double wVelocityStability = 0.8;
-    public double wVisionConfidence = 1.2;
-    public double wHeadingAccuracy = 1.5;
-    public double wDistanceInRange = 0.5;
-    public double headingMaxErrorRad = Math.toRadians(15);
+    public double wConvergence = SOTMConstants.W_CONVERGENCE;
+    public double wVelocityStability = SOTMConstants.W_VELOCITY_STABILITY;
+    public double wVisionConfidence = SOTMConstants.W_VISION_CONFIDENCE;
+    public double wHeadingAccuracy = SOTMConstants.W_HEADING_ACCURACY;
+    public double wDistanceInRange = SOTMConstants.W_DISTANCE_IN_RANGE;
+    public double headingMaxErrorRad = SOTMConstants.HEADING_MAX_ERROR_RAD;
 
     // Heading tolerance tightens as robot speed increases.
     // scaledMaxError = base / (1 + speedScalar * speed). Set to 0 to disable.
@@ -162,7 +162,7 @@ public class ShotCalculator {
 
     // Suppress firing when pitch or roll exceeds this threshold.
     // Bumps and ramps tilt the robot, which throws off aim. Set to 90 to disable.
-    public double maxTiltDeg = SOTMConstants.MAX_SCORING_DISTANCE_M;
+    public double maxTiltDeg = SOTMConstants.MAX_TILT_DEG;
   }
 
   private final Config config;
@@ -551,7 +551,7 @@ public class ShotCalculator {
 
   /** Bump the angle offset by delta. Clamped to +/- 20. Bind this to copilot D-pad. */
   public void adjustOffset(double delta) {
-    angleOffset = MathUtil.clamp(angleOffset + delta, -SOTMConstants.TRIM_MAX, SOTMConstants.TRIM_MAX); // TODO: make more reasonable numbers
+    angleOffset = MathUtil.clamp(angleOffset + delta, -SOTMConstants.TRIM_MAX, SOTMConstants.TRIM_MAX);
   }
 
   /** Reset the angle offset to zero. Call this on mode transitions so trim doesn't carry over. */
