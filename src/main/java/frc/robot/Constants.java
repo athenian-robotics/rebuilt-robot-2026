@@ -213,7 +213,7 @@ public class Constants {
     public static final int ARM_ID = 26;
     public static final int WHEEL_ID = 25;
     public static final double GEAR_ROTATIONS_TO_ARM_ROTATIONS =
-        1.0 / 180.0;
+        1.0 / 82.5;
 
     // feedback constants
     // public static final double INTAKE_kP = 5.5824; // 55.824
