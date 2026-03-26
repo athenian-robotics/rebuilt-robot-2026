@@ -270,7 +270,7 @@ public class RobotContainer {
         ShotCalculator.Config config = new ShotCalculator.Config();
         // TODO: REAL!
         config.launcherOffsetX = SOTMConstants.LAUNCHER_OFFSET_X_M; // how far forward the launcher is from robot center (m)
-        config.launcherOffsetY = SOTMConstants.LAUNCHER_OFFSET_X_M; // how far left, 0 if centered
+        config.launcherOffsetY = SOTMConstants.LAUNCHER_OFFSET_Y_M; // how far left, 0 if centered
         config.phaseDelayMs = SOTMConstants.PHASE_DELAY_MS; // your vision pipeline latency
         config.mechLatencyMs = SOTMConstants.MECH_LATENCY_MS; // how long the mechanism takes to respond
         config.maxTiltDeg = SOTMConstants.MAX_TILT_DEG; // suppress firing when chassis tilts past this (bumps/ramps)

@@ -115,12 +115,12 @@ public class ShotCalculator {
   // TODO: REAL!
   public static class Config {
     // Launcher geometry (measure from CAD)
-    public double launcherOffsetX = 0.20; // meters forward of robot center
-    public double launcherOffsetY = 0.0;  // meters left of robot center
+    public double launcherOffsetX = SOTMConstants.LAUNCHER_OFFSET_X_M; // meters forward of robot center
+    public double launcherOffsetY = SOTMConstants.LAUNCHER_OFFSET_Y_M;  // meters left of robot center
 
     // How close/far you can score from (meters)
-    public double minScoringDistance = 0.5;
-    public double maxScoringDistance = 5.0;
+    public double minScoringDistance = SOTMConstants.MIN_SCORING_DISTANCE_M;
+    public double maxScoringDistance = SOTMConstants.MAX_SCORING_DISTANCE_M;
 
     // Newton solver tuning
     public int maxIterations = 25;
@@ -135,8 +135,8 @@ public class ShotCalculator {
     public double maxSOTMSpeed = 3.0;
 
     // Latency compensation (ms)
-    public double phaseDelayMs = 30.0;  // vision pipeline lag
-    public double mechLatencyMs = 20.0; // how long the mechanism takes to respond
+    public double phaseDelayMs = SOTMConstants.PHASE_DELAY_MS;  // vision pipeline lag
+    public double mechLatencyMs = SOTMConstants.MECH_LATENCY_MS; // how long the mechanism takes to respond
 
     // The ball's inherited robot velocity decays in flight because of drag.
     // Real displacement = (1 - e^(-c*tof)) / c instead of just v*tof.
@@ -153,16 +153,16 @@ public class ShotCalculator {
 
     // Heading tolerance tightens as robot speed increases.
     // scaledMaxError = base / (1 + speedScalar * speed). Set to 0 to disable.
-    public double headingSpeedScalar = 1.0;
+    public double headingSpeedScalar = SOTMConstants.HEADING_SPEED_SCALAR_MPS;
 
     // Heading tolerance scales with distance from hub.
     // Farther = tighter because the same angle error produces a larger miss at long range.
     // scaledMaxError *= referenceDistance / distance, clamped [0.5, 2.0].
-    public double headingReferenceDistance = 2.5; // meters
+    public double headingReferenceDistance = SOTMConstants.HEADING_REFERENCE_DISTANCE_M; // meters
 
     // Suppress firing when pitch or roll exceeds this threshold.
     // Bumps and ramps tilt the robot, which throws off aim. Set to 90 to disable.
-    public double maxTiltDeg = 5.0;
+    public double maxTiltDeg = SOTMConstants.MAX_SCORING_DISTANCE_M;
   }
 
   private final Config config;

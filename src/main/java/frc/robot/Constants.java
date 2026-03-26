@@ -293,12 +293,12 @@ public class Constants {
     public static final double BALL_DRAG_COEFFICIENT = 0.47; // From original code
     public static final double BALL_MAGNUS_COEFFICIENT = 0.2; // From original code
     public static final double AIR_DENSITY = 1.225; // From original code
-    public static final double EXIT_HEIGHT_M = 0.43; // Exit height (m), floor to where the ball leaves the shooter
+    public static final double EXIT_HEIGHT_M = 0.5588; // Exit height (m), floor to where the ball leaves the shooter
     public static final double WHEELE_DIAMETER_M = 0.1016; // Flywheel diameter (m), measure with calipers
     public static final double TARGET_HEIGHT_M = 1.83; // Hub height from game manual
     public static final double SLIP_FACTOR = 0.6; // Slip factor (0=no grip, 1=perfect), tune this on the real robot
 
-    public static final double LAUNCHER_OFFSET_X_M = 0.0;
+    public static final double LAUNCHER_OFFSET_X_M = -0.16764;
     public static final double LAUNCHER_OFFSET_Y_M = 0.0;
     public static final double PHASE_DELAY_MS = 30.0;
     public static final double MECH_LATENCY_MS = 20.0;
@@ -306,7 +306,8 @@ public class Constants {
     public static final double HEADING_SPEED_SCALAR_MPS = 1.0;
     public static final double HEADING_REFERENCE_DISTANCE_M = 2.5;
     
-    public static final double aldskjfygklsajdghf = 0;
+    public static final double MIN_SCORING_DISTANCE_M = 5.0;
+    public static final double MAX_SCORING_DISTANCE_M = 5.0;
 
     public static final double HEIGHT_TOLERANCE_M = 0.02;
     public static final double TRIM_MAX = 20;
