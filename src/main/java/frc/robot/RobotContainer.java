@@ -354,6 +354,8 @@ public class RobotContainer {
         // Note: does not apply immediately. Set angle again to apply trim. 
         operatorJoystick.povUp().onTrue(outtake.addTrim(OuttakeConstants.HOOD_ANGLE_TRIM_AMOUNT_DEGREES));
         operatorJoystick.povDown().onTrue(outtake.addTrim(-OuttakeConstants.HOOD_ANGLE_TRIM_AMOUNT_DEGREES));
+        // Operator left side top left -> reset hood angle trim
+        operatorJoystick.button(ControllerConstants.OFFHAND_TOP_LEFT).onTrue(outtake.resetTrim());
     
         // operatorJoystick.button(ControllerConstants.OFFHAND_TOP_RIGHT).whileTrue(outtake.aimWithJoystick(() -> operatorJoystick.getY()));
         // operatorJoystick.button(ControllerConstants.OFFHAND_TOP_MIDDLE).onTrue(outtake.toNTAngle().andThen(outtake.updateDistance(() -> drive.getPose().getTranslation(), () -> OuttakeConstants.HUB_POSITION_BLUE)));

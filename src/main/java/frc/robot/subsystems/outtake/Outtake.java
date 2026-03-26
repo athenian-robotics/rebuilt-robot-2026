@@ -164,11 +164,19 @@ public class Outtake extends SubsystemBase {
     }
 
     /**
-     * Add trim to the hood angle. Doesn't apply immediatly. 
+     * Add trim to the hood angle. Applies immediatly. 
      * @param trimDeg
      * @return An instant command to add trim
      */
     public Command addTrim (double trimDeg) {
         return Commands.runOnce(() -> io.addTrim(trimDeg));
+    }
+
+    /**
+     * Reset's hood angle trim. Applies immediatly. 
+     * @return An instant command to reset trim
+     */
+    public Command resetTrim () {
+        return Commands.runOnce(() -> io.resetTrim());
     }
 }

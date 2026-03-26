@@ -73,7 +73,7 @@ public interface OuttakeIO extends Subsystem {
   public default boolean isSpunUp () {return false;}
 
   /**
- * Add trim to the hood angle. Doesn't apply immediatly. 
+ * Add trim to the hood angle. Applies immediatly. 
  * @param trimDeg
  */
   public default void addTrim (double trimDeg) {}
