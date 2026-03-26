@@ -76,5 +76,5 @@ public interface OuttakeIO extends Subsystem {
    * Set the rpm of the flywheel to an arbitrary value. 
    * @param rpm
    */
-  public default void setRMP (double rpm) {}
+  public default void setRPM (double rpm) {}
 }

@@ -129,10 +129,10 @@ public class ShotCalculator {
     public double tofMax = 5.0;
 
     // Below this speed (m/s), don't bother with SOTM, just aim straight
-    public double minSOTMSpeed = 0.1;
+    public double minSOTMSpeed = SOTMConstants.MIN_SOTM_SPEED;
 
     // Above this speed (m/s), don't shoot, we're outside calibration range
-    public double maxSOTMSpeed = 3.0;
+    public double maxSOTMSpeed = SOTMConstants.MAX_SOTM_SPEED;
 
     // Latency compensation (ms)
     public double phaseDelayMs = SOTMConstants.PHASE_DELAY_MS;  // vision pipeline lag
