@@ -208,6 +208,13 @@ public class Constants {
     public static final double HIGH_SET_ANGLE_DEG = 30.0072; // 4.2 m
 
     public static final double HOOD_ANGLE_TRIM_AMOUNT_DEGREES = .5;
+
+    // Based on a curve fit from google sheets (https://docs.google.com/spreadsheets/d/1-HswU1YtXnBABoakHAkioBkk_Xckyyjn1Od3PbBuWjQ/edit?usp=sharing)
+    // The coefficients describe the best fit line through collected data points of (Distance to Hub, Best Hood Angle)
+    // We collect the data by moving the robot to a given distance and either setting hood angle using Elastic or trimming hood angle
+    public static final double CALCULATE_ANGLE_TRENDLINE_COEF_A = -3.98;
+    public static final double CALCULATE_ANGLE_TRENDLINE_COEF_B = 14.9;
+    public static final double CALCULATE_ANGLE_TRENDLINE_COEF_C = -1.55;
   }
 
   public final class IntakeConstants {
@@ -237,13 +244,13 @@ public class Constants {
     // public static final double BASIC_CONTROL_TOLERANCE_DEG = 5.0/360.0;
 
     public static final double MAX_ARM_VOLTAGE = 7;
-    public static final double WHEEL_VOLTAGE = 6;
+    public static final double WHEEL_VOLTAGE = 12;
     public static final double ARM_STARTING_POSITION_ROT = 1.0 / 3.0;
   }
 
   public final class IndexerConstants {
     public static final int MOTOR_ID = 52;
-    public static final double MOTOR_VOLTAGE = 8.0;
+    public static final double MOTOR_VOLTAGE = 10.0; // Bumped to 10 from 8
   }
 
   public final class PathGenerationConstants {
