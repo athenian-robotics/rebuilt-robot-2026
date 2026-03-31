@@ -48,6 +48,7 @@ public class IntakeIOTalonFX implements IntakeIO {
         slot0Configs.kD = IntakeConstants.INTAKE_kD;
         slot0Configs.kS = IntakeConstants.INTAKE_kS;
         slot0Configs.kV = IntakeConstants.INTAKE_kV;
+        slot0Configs.kA = IntakeConstants.INTAKE_kA;
         slot0Configs.kG = IntakeConstants.INTAKE_kG;
 
         MotionMagicConfigs motionMagicConfigs = talonFXConfigs.MotionMagic;
