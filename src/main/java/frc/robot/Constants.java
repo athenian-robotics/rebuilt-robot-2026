@@ -246,6 +246,7 @@ public class Constants {
     public static final double MAX_ARM_VOLTAGE = 7;
     public static final double WHEEL_VOLTAGE = 12;
     public static final double ARM_STARTING_POSITION_ROT = -105.0 / 360.0;
+    public static final double ARM_ENDING_POSITION_ROT = 0.00708;
   }
 
   public final class IndexerConstants {
