@@ -225,18 +225,18 @@ public class Constants {
         1.0 / 180.0;
 
     // feedback constants
-    // public static final double INTAKE_kP = 5.5824; // 55.824
-    // public static final double INTAKE_kI = 0;
-    // public static final double INTAKE_kD = .37177; //3.7177
+    public static final double INTAKE_kP = 0; // 55.824
+    public static final double INTAKE_kI = 0;
+    public static final double INTAKE_kD = 0; //3.7177
     // feedforward constants
-    // public static final double INTAKE_kS = 0.41289;
-    // public static final double INTAKE_kV = 20.206;
-    // public static final double INTAKE_kA = 0.90771;
-    // public static final double INTAKE_kG = 0.36108;
+    public static final double INTAKE_kS = 0.19614;
+    public static final double INTAKE_kV = 19.168;
+    public static final double INTAKE_kA = 0.84738;
+    public static final double INTAKE_kG = 0.051786;
 
     // motion profiler constants
-    // public static final double INTAKE_CRUISE_VELOCITY = 12;
-    // public static final double INTAKE_MAX_ACCELERATION = 100;
+    public static final double INTAKE_CRUISE_VELOCITY = 0.2;
+    public static final double INTAKE_MAX_ACCELERATION = 1;
     // public static final double INTAKE_MAX_ALLOWED_PROFILER_ERROR = 5.0/360.0;
 
     public static final double BASIC_CONTROL_FORWARD_VOLTS = 5.0;
@@ -245,7 +245,7 @@ public class Constants {
 
     public static final double MAX_ARM_VOLTAGE = 7;
     public static final double WHEEL_VOLTAGE = 12;
-    public static final double ARM_STARTING_POSITION_ROT = 1.0 / 3.0;
+    public static final double ARM_STARTING_POSITION_ROT = -105.0 / 360.0;
   }
 
   public final class IndexerConstants {

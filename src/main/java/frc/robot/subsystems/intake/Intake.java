@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
@@ -21,7 +22,8 @@ public class Intake extends SubsystemBase {
     public enum BasicControlState {
         FORWARD,
         STOPPED,
-        BACKWARD
+        BACKWARD,
+        DISABLED
     }
 
     /**
@@ -33,8 +35,8 @@ public class Intake extends SubsystemBase {
         this.io = io;
 
         Config sysIdConfig = new Config(
-                Volts.per(Seconds).of(1), 
-                Volts.of(3), 
+                Volts.per(Seconds).of(.5), 
+                Volts.of(2), 
                 Seconds.of(5)
         );
         Mechanism sysIdMechanism = new Mechanism(
@@ -83,5 +85,9 @@ public class Intake extends SubsystemBase {
     /** Returns a command to run a dynamic test in the specified direction. */
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return run(() -> io.runSysId(0.0)).withTimeout(1.0).andThen(sysId.dynamic(direction));
+    }
+
+    public Command setAngle(double angleDeg) {
+      return new InstantCommand(() -> io.setAngle(angleDeg)); 
     }
 }

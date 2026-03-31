@@ -1,14 +1,18 @@
 package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
@@ -37,18 +41,18 @@ public class IntakeIOTalonFX implements IntakeIO {
                 .withFeedback(feedbackConfigs);
 
         // Sets up for more sophisticated feedback/feedforward control methods (that we don't currently use)
-        // Slot0Configs slot0Configs = talonFXConfigs.Slot0;
-        // slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
-        // slot0Configs.kP = IntakeConstants.INTAKE_kP;
-        // slot0Configs.kI = IntakeConstants.INTAKE_kI;
-        // slot0Configs.kD = IntakeConstants.INTAKE_kD;
-        // slot0Configs.kS = IntakeConstants.INTAKE_kS;
-        // slot0Configs.kV = IntakeConstants.INTAKE_kV;
-        // slot0Configs.kG = IntakeConstants.INTAKE_kG;
+        Slot0Configs slot0Configs = talonFXConfigs.Slot0;
+        slot0Configs.GravityType = GravityTypeValue.Arm_Cosine;
+        slot0Configs.kP = IntakeConstants.INTAKE_kP;
+        slot0Configs.kI = IntakeConstants.INTAKE_kI;
+        slot0Configs.kD = IntakeConstants.INTAKE_kD;
+        slot0Configs.kS = IntakeConstants.INTAKE_kS;
+        slot0Configs.kV = IntakeConstants.INTAKE_kV;
+        slot0Configs.kG = IntakeConstants.INTAKE_kG;
 
-        // MotionMagicConfigs motionMagicConfigs = talonFXConfigs.MotionMagic;
-        // motionMagicConfigs.MotionMagicCruiseVelocity = IntakeConstants.INTAKE_CRUISE_VELOCITY;
-        // motionMagicConfigs.MotionMagicAcceleration = IntakeConstants.INTAKE_MAX_ACCELERATION;
+        MotionMagicConfigs motionMagicConfigs = talonFXConfigs.MotionMagic;
+        motionMagicConfigs.MotionMagicCruiseVelocity = IntakeConstants.INTAKE_CRUISE_VELOCITY;
+        motionMagicConfigs.MotionMagicAcceleration = IntakeConstants.INTAKE_MAX_ACCELERATION;
 
         talonFXConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
@@ -137,5 +141,12 @@ public class IntakeIOTalonFX implements IntakeIO {
     public void sysIDLog(SysIdRoutineLog log) {
         log.motor("arm").angularPosition(armMotor.getPosition().getValue())
                 .angularVelocity(armMotor.getVelocity().getValue()).voltage(Volts.of(sysIdVoltage));
+    }
+
+    @Override
+    public void setAngle(double angleDeg) {
+      basicControlState = BasicControlState.DISABLED;
+      armMotor.setControl(new MotionMagicDutyCycle(angleDeg / 360.0));
+      setpointRotations = angleDeg / 360.0;
     }
 }

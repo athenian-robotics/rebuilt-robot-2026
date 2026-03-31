@@ -41,4 +41,6 @@ public interface IntakeIO {
 
     public default void goWithBasicControl(BasicControlState direction) {
     }
+
+    public default void setAngle(double angleDeg) {}
 }
