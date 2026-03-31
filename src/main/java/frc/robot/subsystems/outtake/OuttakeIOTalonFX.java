@@ -42,7 +42,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   private double currentAngularVelocityDegPerSecond = 0.0;
   private double targetDistanceMeters = 0.0;
   // Doesn't take into account the trim
-  private double targetHoodAngleDegrees;
+  private double targetHoodAngleDegrees = OuttakeConstants.MINIMUM_HOOD_ANGLE_DEG;
 
   private DoubleEntry hoodAngleDegEntry;
 
@@ -188,7 +188,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     // All other methods should call setAngle, so targetHoodAngleDegrees is the most accurate target
     // Does not including trim
     targetHoodAngleDegrees = angleDegrees;
-    
+
     double trimmedAngleDegrees = angleDegrees + hoodAngleTrim;
 
     // Possibilities:
