@@ -202,6 +202,8 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
         // If so, set angle and return
         hoodAngleDegEntry.set(trimmedAngleDegrees);
         MotionMagicDutyCycle magic = new MotionMagicDutyCycle(trimmedAngleDegrees/360.0);
+        // In general, especially when using SysID, the above should be a MotionMagicVoltage. However, we're leaving it as is
+        // Because this motion magic was manually tuned.
         angleChanger.setControl(magic);
         
         return;
