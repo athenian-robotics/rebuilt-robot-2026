@@ -44,4 +44,6 @@ public interface IntakeIO {
     }
 
     public default void setAngle(double angleDeg) {}
+
+    public default double getTargetDeg() {return 0;}
 }

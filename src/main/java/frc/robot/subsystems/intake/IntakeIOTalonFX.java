@@ -151,4 +151,9 @@ public class IntakeIOTalonFX implements IntakeIO {
       armMotor.setControl(new MotionMagicVoltage(angleDeg / 360.0));
       setpointRotations = angleDeg / 360.0;
     }
+
+    @Override
+    public double getTargetDeg() {
+      return setpointRotations * 360;
+    }
 }

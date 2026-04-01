@@ -3,6 +3,7 @@ package frc.robot.subsystems.intake;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
@@ -89,5 +90,10 @@ public class Intake extends SubsystemBase {
 
     public Command setAngle(double angleDeg) {
       return new InstantCommand(() -> io.setAngle(angleDeg)); 
+    }
+
+    public Command wiggleTo(double angleDeg) {
+      double returnAngleDeg = io.getTargetDeg();
+      return new StartEndCommand(() -> io.setAngle(angleDeg), () -> io.setAngle(returnAngleDeg), this);
     }
 }
