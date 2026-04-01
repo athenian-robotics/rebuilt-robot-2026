@@ -178,8 +178,8 @@ public class Constants {
     public static final double FLYWHEEL_MAX_ERROR_RPS = 10.0;
     public static final double FLYWHEEL_VELOCITY_RPS = 80.0;
 
-    public static final double MAXIMUM_HOOD_ANGLE_DEG = 41.217118;
-    public static final double MINIMUM_HOOD_ANGLE_DEG = 15.447513;
+    public static final double MAXIMUM_HOOD_ANGLE_DEG = 41.217118; // 
+    public static final double MINIMUM_HOOD_ANGLE_DEG = 15.447513; // 7.998
     public static final double STARTING_HOOD_ANGLE_DEG = 15.447513;
     public static final double MIDFIELD_SHOT_ANGLE_DEG = 35; // guess
     public static final double OPPOSITE_TEAM_SHOT_ANGLE_DEG = 40; //guess

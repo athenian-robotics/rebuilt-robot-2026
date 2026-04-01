@@ -379,6 +379,9 @@ public class RobotContainer {
         driveJoystick
             .button((ControllerConstants.THUMB_BUTTON_BOTTOM))
             .whileTrue(DriveCommands.brake(drive));
+        
+        // Temporary overide odometry and use vision pose
+        operatorJoystick.button(ControllerConstants.OFFHAND_TOP_MIDDLE).whileTrue(Commands.runOnce(() -> vision.setOverrideOdometry(true)));
     }
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
