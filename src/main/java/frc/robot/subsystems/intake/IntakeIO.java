@@ -18,7 +18,8 @@ public interface IntakeIO {
         public double wheelMotorVoltage_Volts = 0;
         public double wheelMotorCurrent_Amps = 0;
         public double wheelMotorVelocity_RotationsPerSecond = 0;
-        public double setpoint_Rotations = 0;
+        public double setpoint_Rotations = IntakeConstants.ARM_STARTING_POSITION_ROT;
+        public double closedLoopReferenceRot = IntakeConstants.ARM_STARTING_POSITION_ROT;
     }
 
     public default void periodic() {

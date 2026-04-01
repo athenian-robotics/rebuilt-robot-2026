@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OuttakeConstants;
 import frc.robot.Constants.RuntimeConstants;
 import frc.robot.commands.DriveCommands;
@@ -344,11 +345,11 @@ public class RobotContainer {
         operatorJoystick.button(ControllerConstants.MAINHAND_TOP_MIDDLE).onTrue(intake.setAngle(-30));
         operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).onTrue(intake.setAngle(0));
         // Operator right side bottom left          -> lower hood
-        operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).onTrue(outtake.setAngle(() -> OuttakeConstants.LOW_SET_ANGLE_DEG));
+        operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).onTrue(outtake.setAngle(() -> IntakeConstants.ARM_STARTING_POSITION_ROT * 2.0 / 3.0));
         // Operator right side bottom middle        -> set hood to middle
-        operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_MIDDLE).onTrue(outtake.setAngle(() -> OuttakeConstants.MIDDLE_SET_ANGLE_DEG));
+        operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_MIDDLE).onTrue(outtake.setAngle(() -> IntakeConstants.ARM_STARTING_POSITION_ROT / 3.0));
         // Operator right side bottom right         -> lift hood
-        operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_RIGHT).onTrue(outtake.setAngle(() -> OuttakeConstants.HIGH_SET_ANGLE_DEG));
+        operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_RIGHT).onTrue(outtake.setAngle(() -> IntakeConstants.ARM_ENDING_POSITION_ROT));
         
         // Operator thumb pad -> trim hood angle
         operatorJoystick.povUp().onTrue(outtake.addTrim(OuttakeConstants.HOOD_ANGLE_TRIM_AMOUNT_DEGREES));

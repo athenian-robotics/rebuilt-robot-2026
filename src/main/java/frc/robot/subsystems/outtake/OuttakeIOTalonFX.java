@@ -198,7 +198,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
 
     // Check if everything is within limits
     if (trimmedAngleDegrees <= OuttakeConstants.MAXIMUM_HOOD_ANGLE_DEG
-    ||  trimmedAngleDegrees >= OuttakeConstants.MINIMUM_HOOD_ANGLE_DEG) {
+    &&  trimmedAngleDegrees >= OuttakeConstants.MINIMUM_HOOD_ANGLE_DEG) {
         // If so, set angle and return
         hoodAngleDegEntry.set(trimmedAngleDegrees);
         MotionMagicDutyCycle magic = new MotionMagicDutyCycle(trimmedAngleDegrees/360.0);

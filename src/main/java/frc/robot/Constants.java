@@ -225,14 +225,14 @@ public class Constants {
         1.0 / 82.5;
 
     // feedback constants
-    public static final double INTAKE_kP = 0; // 55.824
+    public static final double INTAKE_kP = 5; // 55.824
     public static final double INTAKE_kI = 0;
     public static final double INTAKE_kD = 0; //3.7177
     // feedforward constants
     public static final double INTAKE_kS = 0.19614;
-    public static final double INTAKE_kV = 19.168;
-    public static final double INTAKE_kA = 0.84738;
-    public static final double INTAKE_kG = 0.051786;
+    public static final double INTAKE_kV = 8.0 + 1.0/3.0;
+    public static final double INTAKE_kA = 0.5;
+    public static final double INTAKE_kG = -0.051786;
 
     // motion profiler constants
     public static final double INTAKE_CRUISE_VELOCITY = 0.2;
