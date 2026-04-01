@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -147,7 +148,7 @@ public class IntakeIOTalonFX implements IntakeIO {
     @Override
     public void setAngle(double angleDeg) {
       basicControlState = BasicControlState.DISABLED;
-      armMotor.setControl(new MotionMagicDutyCycle(angleDeg / 360.0));
+      armMotor.setControl(new MotionMagicVoltage(angleDeg / 360.0));
       setpointRotations = angleDeg / 360.0;
     }
 }
