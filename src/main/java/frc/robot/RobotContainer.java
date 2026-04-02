@@ -348,7 +348,7 @@ public class RobotContainer {
         // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).whileTrue(intake.openHopper());
         // Operator right side top middle           -> close hopper and intake
         // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_MIDDLE).whileTrue(intake.fullyRetract());
-        operatorJoystick.button(ControllerConstants.OFFHAND_TOP_MIDDLE).whileTrue(intake.wiggleTo(-60));
+        operatorJoystick.button(ControllerConstants.OFFHAND_TOP_MIDDLE).whileTrue(intake.wiggleTo(-80));
         operatorJoystick.button(ControllerConstants.OFFHAND_TOP_RIGHT).onTrue(intake.setAngle(IntakeConstants.ARM_ENDING_POSITION_ROT * 360.0));
         // Operator right side bottom left          -> lower hood
         operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).onTrue(outtake.setAngle(() -> IntakeConstants.ARM_STARTING_POSITION_ROT * 2.0 / 3.0));
