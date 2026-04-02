@@ -351,11 +351,11 @@ public class RobotContainer {
         operatorJoystick.button(ControllerConstants.OFFHAND_TOP_MIDDLE).whileTrue(intake.wiggleTo(-80));
         operatorJoystick.button(ControllerConstants.OFFHAND_TOP_RIGHT).onTrue(intake.setAngle(IntakeConstants.ARM_ENDING_POSITION_ROT * 360.0));
         // Operator right side bottom left          -> lower hood
-        operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).onTrue(outtake.setAngle(() -> IntakeConstants.ARM_STARTING_POSITION_ROT * 2.0 / 3.0));
+        operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).onTrue(outtake.setAngle(() -> OuttakeConstants.LOW_SET_ANGLE_DEG));
         // Operator right side bottom middle        -> set hood to middle
-        operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_MIDDLE).onTrue(outtake.setAngle(() -> IntakeConstants.ARM_STARTING_POSITION_ROT / 3.0));
+        operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_MIDDLE).onTrue(outtake.setAngle(() -> OuttakeConstants.MIDDLE_SET_ANGLE_DEG));
         // Operator right side bottom right         -> lift hood
-        operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_RIGHT).onTrue(outtake.setAngle(() -> IntakeConstants.ARM_ENDING_POSITION_ROT));
+        operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_RIGHT).onTrue(outtake.setAngle(() -> OuttakeConstants.HIGH_SET_ANGLE_DEG));
         
         // Operator thumb pad -> trim hood angle
         operatorJoystick.povUp().onTrue(outtake.addTrim(OuttakeConstants.HOOD_ANGLE_TRIM_AMOUNT_DEGREES));
