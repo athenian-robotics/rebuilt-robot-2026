@@ -183,6 +183,6 @@ public class Vision extends SubsystemBase {
   }
 
   public boolean odometryBeingOverridden () {
-    return overrideOdometry;
+    return overrideOdometry || sequentialRejections > 0;
   }
 }

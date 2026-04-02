@@ -276,8 +276,6 @@ public class Drive extends SubsystemBase {
     // Update gyro alert
     gyroDisconnectedAlert.set(
         !gyroInputs.connected && RuntimeConstants.currentMode != RuntimeConstants.Mode.SIM);
-
-    LimelightHelpers.SetRobotOrientation(getName(), gyroInputs.yawPositionRad, gyroInputs.yawVelocityRadPerSec, 0, 0, 0, 0);
   }
 
   /**
