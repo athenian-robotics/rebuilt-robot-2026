@@ -104,7 +104,7 @@ public class Constants {
 
     /** Maximum pose ambiguity reported by Limelight to accept a measurement. */
     public static final double MAX_POSE_AMBIGUITY =
-        0.2; // Lower value rejects noisy solves, raise if too many drops occur.
+        .9; // Lower value rejects noisy solves, raise if too many drops occur.
     /** Minimum number of tags contributing to the solve to accept a pose. */
     public static final int MIN_TAG_COUNT = 1; // Set to 2+ if single-tag jitter is problematic.
 
@@ -230,7 +230,7 @@ public class Constants {
     public static final double INTAKE_kD = 0; //3.7177
     // feedforward constants
     public static final double INTAKE_kS = 0.19614;
-    public static final double INTAKE_kV = 8.0 + 1.0/3.0;
+    public static final double INTAKE_kV = 8.5;
     public static final double INTAKE_kA = 0.5;
     public static final double INTAKE_kG = -0.051786;
 

@@ -8,6 +8,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -15,6 +16,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import frc.robot.Constants;
@@ -64,6 +66,7 @@ public class IntakeIOTalonFX implements IntakeIO {
         armMotor.getConfigurator().apply(talonFXConfigs);
         armMotor.setPosition(IntakeConstants.ARM_STARTING_POSITION_ROT);
         armMotor.getConfigurator().apply(Constants.MECHANISM_CURRENT_LIMITS);
+        armMotor.setNeutralMode(NeutralModeValue.Brake);
         wheelMotor.getConfigurator().apply(Constants.MECHANISM_CURRENT_LIMITS);
     }
 

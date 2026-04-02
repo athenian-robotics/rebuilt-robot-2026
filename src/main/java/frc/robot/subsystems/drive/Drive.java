@@ -50,6 +50,7 @@ import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.LimelightHelpers;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.OuttakeConstants;
 import frc.robot.Constants.RuntimeConstants;
@@ -275,6 +276,8 @@ public class Drive extends SubsystemBase {
     // Update gyro alert
     gyroDisconnectedAlert.set(
         !gyroInputs.connected && RuntimeConstants.currentMode != RuntimeConstants.Mode.SIM);
+
+    LimelightHelpers.SetRobotOrientation(getName(), gyroInputs.yawPositionRad, gyroInputs.yawVelocityRadPerSec, 0, 0, 0, 0);
   }
 
   /**

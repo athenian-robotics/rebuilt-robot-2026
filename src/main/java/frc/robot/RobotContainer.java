@@ -326,7 +326,7 @@ public class RobotContainer {
         // Operator left side bottom middle button  -->  send balls to shooter
         operatorJoystick.button(ControllerConstants.OFFHAND_BOTTOM_RIGHT).onTrue(outtake.aimAtTarget(() -> drive.getPose().getTranslation()));
         // Operator left side top right button      -->  snap shooter angle to 40º
-        operatorJoystick.button(ControllerConstants.OFFHAND_TOP_RIGHT).onTrue(outtake.setAngle(() -> 40));
+        operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).onTrue(outtake.setAngle(() -> 40));
 
         // Steer trigger -> send balls to shooter (without indexer rollers)
         steerJoystick.button(ControllerConstants.TRIGGER).whileTrue(outtake.sendBallsToShooter());
@@ -341,8 +341,8 @@ public class RobotContainer {
         // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).whileTrue(intake.openHopper());
         // Operator right side top middle           -> close hopper and intake
         // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_MIDDLE).whileTrue(intake.fullyRetract());
-        operatorJoystick.button(ControllerConstants.MAINHAND_TOP_MIDDLE).whileTrue(intake.wiggleTo(-60));
-        operatorJoystick.button(ControllerConstants.OFFHAND_TOP_RIGHT).onTrue(intake.setAngle(0));
+        operatorJoystick.button(ControllerConstants.OFFHAND_TOP_MIDDLE).whileTrue(intake.wiggleTo(-60));
+        operatorJoystick.button(ControllerConstants.OFFHAND_TOP_RIGHT).onTrue(intake.setAngle(IntakeConstants.ARM_ENDING_POSITION_ROT * 360.0));
         // Operator right side bottom left          -> lower hood
         operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).onTrue(outtake.setAngle(() -> IntakeConstants.ARM_STARTING_POSITION_ROT * 2.0 / 3.0));
         // Operator right side bottom middle        -> set hood to middle

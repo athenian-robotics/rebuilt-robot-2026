@@ -73,7 +73,7 @@ public class Intake extends SubsystemBase {
      * @return A continuous command to run the wheels while the command is active
      */
     public Command runIntake() {
-        return Commands.startEnd(io::startIntake, io::stopIntake, this);
+        return Commands.startEnd(io::startIntake, io::stopIntake);
     }
 
     /** Returns a command to run a quasistatic test in the specified direction. */

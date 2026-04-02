@@ -6,6 +6,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.security.Timestamp;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import frc.robot.Constants;
@@ -160,8 +162,10 @@ public class Vision extends SubsystemBase {
 
   /** Determines whether a cached observation is still recent enough to use. */
   private boolean hasFreshObservation(double maxAgeSeconds) {
+    double timestamp = Timer.getFPGATimestamp();
+    Logger.recordOutput("Vision/ObservationFreshnessSec", timestamp - lastHeartbeatSeconds);
     return latestObservation != null
-        && (Timer.getFPGATimestamp() - lastHeartbeatSeconds) <= maxAgeSeconds;
+        && (timestamp - lastHeartbeatSeconds) <= maxAgeSeconds;
   }
 
   /**
