@@ -149,7 +149,8 @@ public class RobotContainer {
         // Create basic named commands for autos
         NamedCommands.registerCommand("DeployHopperIntake",
                 intake.setAngle(IntakeConstants.ARM_ENDING_POSITION_ROT)
-                .andThen( Commands.waitUntil(intake::atSetpoint))
+                .andThen(Commands.waitSeconds(2))
+                .andThen(intake.wiggleTo(-70).withTimeout(2))
                 .andThen( intake.runIntake()));
 
         NamedCommands.registerCommand("AimAndScore", 
