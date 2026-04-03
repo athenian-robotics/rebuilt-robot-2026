@@ -7,6 +7,8 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
 import static edu.wpi.first.units.Units.Volts;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
@@ -158,5 +160,11 @@ public class IntakeIOTalonFX implements IntakeIO {
     @Override
     public double getTargetDeg() {
       return setpointRotations * 360;
+    }
+
+    @Override
+    @AutoLogOutput
+    public boolean atSetpoint() {
+      return armMotor.getMotionMagicAtTarget().getValue();
     }
 }

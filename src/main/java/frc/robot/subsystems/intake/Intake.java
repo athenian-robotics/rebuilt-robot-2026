@@ -96,4 +96,8 @@ public class Intake extends SubsystemBase {
       double returnAngleDeg = io.getTargetDeg();
       return new StartEndCommand(() -> io.setAngle(angleDeg), () -> io.setAngle(returnAngleDeg), this);
     }
+
+    public boolean atSetpoint() {
+      return io.atSetpoint();
+    }
 }

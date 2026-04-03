@@ -57,6 +57,7 @@ import frc.robot.util.AllianceUtil;
 import frc.robot.util.PathGeneration;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Meters;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -138,8 +139,9 @@ public class RobotContainer {
                           new ModuleIO() {});
                 intake  = new Intake(new IntakeIO() {});
                 outtake = new Outtake(new OuttakeIO() {});
-                indexer = new Indexer(new IndexerIO() {});
+                indexer = new Indexer(new IndexerIO() {}); 
         }
+
 
         // Create a new PathGeneration for autos
         pathGeneration = new PathGeneration();
@@ -147,7 +149,7 @@ public class RobotContainer {
         // Create basic named commands for autos
         NamedCommands.registerCommand("DeployHopperIntake",
                 intake.setAngle(IntakeConstants.ARM_ENDING_POSITION_ROT)
-                .andThen( Commands.waitSeconds(3))
+                .andThen( Commands.waitUntil(intake::atSetpoint))
                 .andThen( intake.runIntake()));
 
         NamedCommands.registerCommand("AimAndScore", 
@@ -271,6 +273,20 @@ public class RobotContainer {
                               ? new Rotation2d(Degrees.of(180))
                               : new Rotation2d();
                       drive.setDriverFieldRelativeHeading(desiredHeading);
+                    },
+                    drive)
+                .ignoringDisable(true));
+
+        steerJoystick
+        .button(ControllerConstants.THUMB_BUTTON_LEFT)
+        .onTrue(
+            Commands.runOnce(
+                    () -> {
+                        Pose2d desiredPose =
+                          AllianceUtil.isRedAlliance()
+                              ? new Pose2d(Meters.of(13.03), Meters.of(4.035), new Rotation2d(Degrees.of(180)))
+                              : new Pose2d(Meters.of(3.510), Meters.of(4.035), new Rotation2d());
+                        drive.setPose(desiredPose);
                     },
                     drive)
                 .ignoringDisable(true));

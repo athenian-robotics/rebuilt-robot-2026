@@ -82,4 +82,6 @@ public interface OuttakeIO extends Subsystem {
  * Reset trim.
  */
   public default void resetTrim () {}
+
+  public default boolean atSetpoint() {return false;}
 }
