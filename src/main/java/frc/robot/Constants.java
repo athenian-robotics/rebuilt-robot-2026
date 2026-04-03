@@ -99,7 +99,7 @@ public class Constants {
     public static final Transform3d ROBOT_TO_CAMERA =
         new Transform3d(
             new Translation3d(Inches.of(0.0), Inches.of(0.0), Inches.of(7.5)),
-            new Rotation3d(0.0, Units.degreesToRadians(28.1), 0.0));
+            new Rotation3d(0.0, Units.degreesToRadians(24), 0.0));
     // TODO: update to the final measured translation/rotation from robot origin to camera.
 
     /** Maximum pose ambiguity reported by Limelight to accept a measurement. */
