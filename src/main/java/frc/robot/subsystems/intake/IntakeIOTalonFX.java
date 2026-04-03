@@ -165,6 +165,6 @@ public class IntakeIOTalonFX implements IntakeIO {
     @Override
     @AutoLogOutput
     public boolean atSetpoint() {
-      return armMotor.getMotionMagicAtTarget().getValue();
+      return Math.abs(armMotor.getPosition().getValueAsDouble() - setpointRotations) < 0.005;
     }
 }
