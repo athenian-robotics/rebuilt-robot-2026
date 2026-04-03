@@ -6,6 +6,7 @@ public interface IndexerIO {
     @AutoLog
     public static class IndexerIOInputs {
         public double appliedVoltage = 0;
+        public double current = 0;
     }
     
     // Updates the logged inputs

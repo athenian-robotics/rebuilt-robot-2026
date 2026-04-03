@@ -101,7 +101,7 @@ public class VisionIOLimelight implements VisionIO {
     // vision measurement is accepted, which matches the intermittent map/vision failures reported.
     // Use MegaTag1 for stability if MegaTag2 is glitchy.
     // Switch to MegaTag2 once gyro sync is verified and stable.
-    boolean useMegaTag2 = true;
+    boolean useMegaTag2 = false;
 
     if (useMegaTag2) {
       return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(
