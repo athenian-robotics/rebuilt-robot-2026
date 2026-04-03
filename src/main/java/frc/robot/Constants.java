@@ -17,17 +17,21 @@ import frc.robot.generated.TunerConstants;
 
 public class Constants {
   public static final CurrentLimitsConfigs MECHANISM_CURRENT_LIMITS = new CurrentLimitsConfigs()
-    .withSupplyCurrentLimit(60)
+    .withSupplyCurrentLimit(40)
     .withSupplyCurrentLowerLimit(37)
     .withSupplyCurrentLowerTime(1)
-    .withSupplyCurrentLimitEnable(true);
+    .withSupplyCurrentLimitEnable(true)
+    .withStatorCurrentLimit(60)
+    .withStatorCurrentLimitEnable(true);
 
   //FOR THIS ONE: MANUALLY IMPLEMENT NEW LIMITS IN MODULEIOTALONFX
   public static final CurrentLimitsConfigs DRIVE_CURRENT_LIMITS = new CurrentLimitsConfigs() 
-    .withSupplyCurrentLimit(45)
+    .withSupplyCurrentLimit(40)
     .withSupplyCurrentLowerLimit(37)
     .withSupplyCurrentLowerTime(1)
-    .withSupplyCurrentLimitEnable(true);
+    .withSupplyCurrentLimitEnable(true)
+    .withStatorCurrentLimit(60)
+    .withStatorCurrentLimitEnable(true);
 
   /**
    * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when
