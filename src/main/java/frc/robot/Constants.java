@@ -216,8 +216,8 @@ public class Constants {
     // Based on a curve fit from google sheets (https://docs.google.com/spreadsheets/d/1-HswU1YtXnBABoakHAkioBkk_Xckyyjn1Od3PbBuWjQ/edit?usp=sharing)
     // The coefficients describe the best fit line through collected data points of (Distance to Hub, Best Hood Angle)
     // We collect the data by moving the robot to a given distance and either setting hood angle using Elastic or trimming hood angle
-    public static final double CALCULATE_ANGLE_TRENDLINE_COEF_A = -6; // was -3.98
-    public static final double CALCULATE_ANGLE_TRENDLINE_COEF_B = 14.9;
+    public static final double CALCULATE_ANGLE_TRENDLINE_COEF_A = -5; // was -3.98
+    public static final double CALCULATE_ANGLE_TRENDLINE_COEF_B = 14.4; // was 14.9
     public static final double CALCULATE_ANGLE_TRENDLINE_COEF_C = -1.55;
   }
 
