@@ -157,12 +157,14 @@ public class RobotContainer {
                 .andThen(intake.runIntake()));
 
         NamedCommands.registerCommand("AimAndScore", 
-                outtake.aimAtTarget(() -> drive.getPose().getTranslation())
+                Commands.print("aiming")
+                .andThen(outtake.aimAtTarget(() -> drive.getPose().getTranslation()))
+                .andThen( Commands.print("flywheeling"))
                 .andThen( outtake.startFlywheel())
                 .andThen( Commands.waitUntil(outtake::isSpunUp))
-                .andThen( indexer.toggle())
-                .andThen( outtake.sendBallsToShooter())
-                .andThen( Commands.waitSeconds(3))
+                .andThen( indexer.hold())
+                .alongWith( outtake.sendBallsToShooter())
+                .withTimeout(8)
                 .andThen( intake.stopIntake()));
 
         NamedCommands.registerCommand("StartFlywheel", 
@@ -172,8 +174,10 @@ public class RobotContainer {
                 outtake.setAngle(() -> 40.0)
                 .andThen( outtake.startFlywheel())
                 .andThen( Commands.waitUntil(outtake::isSpunUp))
-                .andThen( indexer.toggle())
-                .andThen( outtake.sendBallsToShooter()));
+                .andThen( indexer.hold())
+                .alongWith( outtake.sendBallsToShooter())
+                .withTimeout(8)
+                .andThen( intake.stopIntake()));
 
         // Create dashboard item for choosing current auto
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());

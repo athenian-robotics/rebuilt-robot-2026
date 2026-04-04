@@ -167,11 +167,13 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
   public void setMiddleWheelVoltage(double voltage) {
     middleWheel.setControl(new VoltageOut(voltage));
     Logger.recordOutput("Outtake/MiddleWheelVoltage", voltage);
+    System.out.println("middle wheels to " + voltage);
   }
 
   public void setStarWheelVoltage(double voltage) {
     starWheelMotor.setControl(new VoltageOut(voltage));
     Logger.recordOutput("Outtake/StarWheelVoltage", voltage);
+    System.out.println("star wheels to " + voltage);
   }
 
   public void setAngleAtTarget(Translation2d currentPosition) {
@@ -245,6 +247,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
 
   @Override
   public boolean isSpunUp() {
+    System.out.println("vel: " + leadShooter.getVelocity().getValueAsDouble() + ", rps: " + flywheelSetpointRPS);
     return Math.abs(Math.abs(leadShooter.getVelocity().getValueAsDouble()) - Math.abs(flywheelSetpointRPS)) < OuttakeConstants.FLYWHEEL_MAX_ERROR_RPS;
   }
 
