@@ -158,7 +158,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("AimAndScore", 
                 Commands.print("aiming")
-                .andThen(outtake.aimAtTarget(() -> drive.getPose().getTranslation()))
+                .andThen(outtake.setAngle(() -> 25))
                 .andThen( Commands.print("flywheeling"))
                 .andThen( outtake.startFlywheel())
                 .andThen( Commands.waitUntil(outtake::isSpunUp))
