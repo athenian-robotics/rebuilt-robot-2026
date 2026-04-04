@@ -154,7 +154,7 @@ public class RobotContainer {
                 .andThen(Commands.waitSeconds(2))
                 .andThen(intake.wiggleTo(-70).withTimeout(1))
                 .andThen(Commands.waitSeconds(2))
-                .andThen(intake.runIntake()));
+                .andThen(intake.startIntake()));
 
         NamedCommands.registerCommand("AimAndScore", 
                 Commands.print("aiming")
