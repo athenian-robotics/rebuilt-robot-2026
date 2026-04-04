@@ -162,7 +162,8 @@ public class RobotContainer {
                 .andThen( Commands.waitUntil(outtake::isSpunUp))
                 .andThen( indexer.toggle())
                 .andThen( outtake.sendBallsToShooter())
-                .andThen( Commands.waitSeconds(3)));
+                .andThen( Commands.waitSeconds(3))
+                .andThen( intake.stopIntake()));
 
         NamedCommands.registerCommand("StartFlywheel", 
                 outtake.startFlywheel());

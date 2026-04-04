@@ -100,4 +100,12 @@ public class Intake extends SubsystemBase {
     public boolean atSetpoint() {
       return io.atSetpoint();
     }
+
+    public Command startIntake() {
+      return new InstantCommand(() -> io.startIntake());
+    }
+
+    public Command stopIntake() {
+      return new InstantCommand(() -> io.stopIntake());
+    }
 }
