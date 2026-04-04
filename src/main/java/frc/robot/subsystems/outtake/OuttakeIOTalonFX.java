@@ -245,7 +245,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
 
   @Override
   public boolean isSpunUp() {
-    return Math.abs(Math.abs(leadShooter.getVelocity().getValueAsDouble()) - flywheelSetpointRPS) < OuttakeConstants.FLYWHEEL_MAX_ERROR_RPS;
+    return Math.abs(Math.abs(leadShooter.getVelocity().getValueAsDouble()) - Math.abs(flywheelSetpointRPS)) < OuttakeConstants.FLYWHEEL_MAX_ERROR_RPS;
   }
 
   @Override
