@@ -161,7 +161,7 @@ public class RobotContainer {
                 .andThen(outtake.aimAtTarget(() -> drive.getPose().getTranslation()))
                 .andThen( Commands.print("flywheeling"))
                 .andThen( outtake.startFlywheel())
-                .andThen( Commands.waitSeconds(3))
+                .andThen( Commands.waitUntil(outtake::isSpunUp))
                 .andThen( indexer.hold())
                 .alongWith( outtake.sendBallsToShooter())
                 .withTimeout(8)
