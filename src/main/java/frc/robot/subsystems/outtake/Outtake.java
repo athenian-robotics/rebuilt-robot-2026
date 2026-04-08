@@ -162,4 +162,21 @@ public class Outtake extends SubsystemBase {
     public boolean isSpunUp () {
       return io.isSpunUp();
     }
+
+    /**
+     * Add trim to the hood angle. Applies immediatly. 
+     * @param trimDeg
+     * @return An instant command to add trim
+     */
+    public Command addTrim (double trimDeg) {
+        return Commands.runOnce(() -> io.addTrim(trimDeg));
+    }
+
+    /**
+     * Reset's hood angle trim. Applies immediatly. 
+     * @return An instant command to reset trim
+     */
+    public Command resetTrim () {
+        return Commands.runOnce(() -> io.resetTrim());
+    }
 }
