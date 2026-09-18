@@ -50,6 +50,9 @@ public class Indexer extends SubsystemBase {
      * @return A continuous command to do this
      */
     public Command hold () {
-        return Commands.startEnd(() -> io.setVoltage(-IndexerConstants.MOTOR_VOLTAGE), () -> io.setVoltage(0));
+        return Commands.startEnd(() -> {
+            io.setVoltage(-IndexerConstants.MOTOR_VOLTAGE);
+            System.out.println("\n\n\n*************************************\n\n\n\nINDEXER ISNT RUNNING\n\n\n\n\nPLEASE HELP\n\n\n*****************************************\n\n\n\n\n**************************************");
+        }, () -> io.setVoltage(0));
     }
 }
