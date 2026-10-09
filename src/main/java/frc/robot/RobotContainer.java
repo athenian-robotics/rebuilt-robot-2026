@@ -247,9 +247,9 @@ public class RobotContainer {
         drive.setDefaultCommand(
                 DriveCommands.joystickDrive(
                         drive,
-                        () -> -driveJoystick.getY() * 0.4, // ARTIFICIALLY REDUCE SPEED (TODO: remove)
-                        () -> -driveJoystick.getX() * 0.4,
-                        () -> -steerJoystick.getX() * 0.4));
+                        () -> -driveJoystick.getY(),
+                        () -> -driveJoystick.getX(),
+                        () -> -steerJoystick.getX()));
 
         // Run indexer rollers and ground outtake balls
         operatorJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM)

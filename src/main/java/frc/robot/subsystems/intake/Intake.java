@@ -62,7 +62,10 @@ public class Intake extends SubsystemBase {
      * @return An instant command to start the motion
      */
     public Command runBasicControl(BasicControlState direction) {
-        return Commands.runOnce(() -> io.goWithBasicControl(direction), this);
+        return Commands.runOnce(() -> {
+            io.goWithBasicControl(direction);
+            System.out.println("\n\n\n\nRunning intake forwards\n\n\n\n\n\n\n");
+        }, this);
     }
 
     /**
