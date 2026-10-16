@@ -6,6 +6,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -64,16 +65,19 @@ public class IntakeIOTalonFX implements IntakeIO {
     /** Update the set of loggable inputs */
     @Override
     public void updateInputs(IntakeIOInputs inputs) {
+     
         inputs.armMotorVoltage_Volts = armMotor.getMotorVoltage().getValueAsDouble();
         inputs.armMotorCurrent_Amps = armMotor.getTorqueCurrent().getValueAsDouble();
-        inputs.armRotations_Rotations = armMotor.getPosition().getValueAsDouble();
-        inputs.armMotorRotations_Rotations = inputs.armRotations_Rotations
-                / IntakeConstants.GEAR_ROTATIONS_TO_ARM_ROTATIONS;
+       // inputs.armRotations_Rotations = armMotor.getPosition().getValueAsDouble();
+       inputs.armRotations_Rotations = armMotor.getPosition().getValueAsDouble();
+        // inputs.armMotorRotations_Rotations = inputs.armRotations_Rotations
+        //         / IntakeConstants.GEAR_ROTATIONS_TO_ARM_ROTATIONS;
 
         inputs.wheelMotorVoltage_Volts = wheelMotor.getMotorVoltage().getValueAsDouble();
         inputs.wheelMotorCurrent_Amps = wheelMotor.getTorqueCurrent().getValueAsDouble();
         inputs.wheelMotorVelocity_RotationsPerSecond = wheelMotor.getVelocity().getValueAsDouble();
         inputs.setpoint_Rotations = setpointRotations;
+        inputs.pastSetpoint = pastSetpoint();
 
         // if (-Units.rotationsToDegrees(armMotor.getPosition().getValueAsDouble()) +
         // IntakeConstants.FULL_RETRACTION_DEGREES <
@@ -84,6 +88,7 @@ public class IntakeIOTalonFX implements IntakeIO {
 
     @Override
     public void periodic() {
+       
         // If robot is undergoing sysID, ignore everything that would normally happen and simply sysID.
         if (sysIdVoltage != 0) {
             armMotor.setControl(new VoltageOut(sysIdVoltage));
@@ -98,7 +103,7 @@ public class IntakeIOTalonFX implements IntakeIO {
                 );
                 break;
             
-                case BACKWARD:
+            case BACKWARD:
                 armMotor.setControl(
                     new VoltageOut(IntakeConstants.BASIC_CONTROL_BACKWARD_VOLTS)
                 );
@@ -116,6 +121,15 @@ public class IntakeIOTalonFX implements IntakeIO {
     @Override
     public void goWithBasicControl(BasicControlState direction) {
         basicControlState = direction;
+    }
+
+    @Override
+    public boolean pastSetpoint(){
+        return (armMotor.getPosition().getValueAsDouble() > IntakeConstants.SETPOINT_FINAL);
+    }
+    @Override
+    public void neutralize(){
+        armMotor.setControl(new NeutralOut());
     }
 
     @Override

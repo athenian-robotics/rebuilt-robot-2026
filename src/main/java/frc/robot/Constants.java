@@ -198,7 +198,7 @@ public class Constants {
 
     public static final double LOW_SET_ANGLE_DEG = 23.2926886432; // 2.4333333333 m
     public static final double MIDDLE_SET_ANGLE_DEG = 28.2261055557; // 3.3166666667 m
-    public static final double HIGH_SET_ANGLE_DEG = 30.0072; // 4.2 m
+    public static final double HIGH_SET_ANGLE_DEG = 40.0072; // 4.2 m
   }
 
   public final class IntakeConstants {
@@ -225,11 +225,14 @@ public class Constants {
 
     public static final double BASIC_CONTROL_FORWARD_VOLTS = 5.0;
     public static final double BASIC_CONTROL_BACKWARD_VOLTS = 5.0;
-    // public static final double BASIC_CONTROL_TOLERANCE_DEG = 5.0/360.0;
+    // public static final double BASIC_CONTROL_TOLERANCE_DEG = 5.0/360.0; 
+    public static final double DEPLOY_INTAKE_SECONDS = 0.5;
 
     public static final double MAX_ARM_VOLTAGE = 7;
     public static final double WHEEL_VOLTAGE = 6;
     public static final double ARM_STARTING_POSITION_ROT = 1.0 / 3.0;
+    public static final double SETPOINT_DROP = 0.5;
+    public static final double SETPOINT_FINAL = 0.4; // 0.468
   }
 
   public final class IndexerConstants {

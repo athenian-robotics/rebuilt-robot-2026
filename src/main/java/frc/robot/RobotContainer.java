@@ -25,9 +25,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OuttakeConstants;
 import frc.robot.Constants.RuntimeConstants;
 import frc.robot.commands.DriveCommands;
@@ -148,7 +150,7 @@ public class RobotContainer {
         // Create basic named commands for autos
         NamedCommands.registerCommand("DeployHopperIntake",
                 intake.runBasicControl(BasicControlState.FORWARD)
-                .andThen( Commands.waitSeconds(4))
+                .andThen( Commands.waitSeconds(IntakeConstants.DEPLOY_INTAKE_SECONDS))
                 .andThen( intake.runBasicControl(BasicControlState.STOPPED))
                 .andThen( intake.runIntake()));
 
@@ -332,7 +334,8 @@ public class RobotContainer {
 
         // Steer trigger -> send balls to shooter (without indexer rollers)
         steerJoystick.button(ControllerConstants.TRIGGER).whileTrue(outtake.sendBallsToShooter());
-
+        
+        System.out.println("Container bindings working");
         // Operator right thumb                     -> start flywheel
         operatorJoystick.button(ControllerConstants.THUMB_BUTTON_RIGHT).onTrue(outtake.startFlywheel());
         // Operator left thumb                      -> stop flywheel
@@ -343,9 +346,28 @@ public class RobotContainer {
         // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).whileTrue(intake.openHopper());
         // Operator right side top middle           -> close hopper and intake
         // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_MIDDLE).whileTrue(intake.fullyRetract());
-        operatorJoystick.button(ControllerConstants.MAINHAND_TOP_LEFT).onTrue(intake.runBasicControl(BasicControlState.FORWARD));
+        //TODO delete intake arm functionality in teleop
+
+
+
+        // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_LEFT).onTrue(
+        //         intake.runBasicControl(BasicControlState.FORWARD)
+        //         .andThen( Commands.waitSeconds(IntakeConstants.DEPLOY_INTAKE_SECONDS))
+        //         .andThen( intake.runBasicControl(BasicControlState.STOPPED))
+        //         );
+
+
+
+           operatorJoystick.button(ControllerConstants.MAINHAND_TOP_LEFT).onTrue(
+                intake.runBasicControl(BasicControlState.FORWARD)
+                );
+
+
+
+           
         operatorJoystick.button(ControllerConstants.MAINHAND_TOP_MIDDLE).onTrue(intake.runBasicControl(BasicControlState.STOPPED));
-        operatorJoystick.button(ControllerConstants.MAINHAND_TOP_RIGHT).onTrue(intake.runBasicControl(BasicControlState.BACKWARD));
+  
+       // operatorJoystick.button(ControllerConstants.MAINHAND_TOP_LEFT).onTrue(NamedCommands.getCommand("DeployHopperIntake"));
         // Operator right side bottom left          -> lower hood
         operatorJoystick.button(ControllerConstants.MAINHAND_BOTTOM_LEFT).onTrue(outtake.setAngle(() -> OuttakeConstants.LOW_SET_ANGLE_DEG));
         // Operator right side bottom middle        -> set hood to middle

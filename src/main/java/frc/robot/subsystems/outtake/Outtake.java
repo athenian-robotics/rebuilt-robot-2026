@@ -44,7 +44,10 @@ public class Outtake extends SubsystemBase {
    * @return An instant command to start the flywheels
    */
   public Command startFlywheel(){
-    return new InstantCommand(io::startFlywheel);
+    return new InstantCommand(() -> {
+      io.startFlywheel();
+      System.out.println("Flywheel starting");
+    });
   }
 
   /**
@@ -52,7 +55,10 @@ public class Outtake extends SubsystemBase {
    * @return An instant command to stop powering the flywheels.
    */
   public Command stopFlywheel() {
-    return new InstantCommand(io::stopFlywheel);
+    return new InstantCommand(() -> {
+      io.stopFlywheel();
+      System.out.println("Flywheel stopping");
+    });
   }
 
   /**
@@ -60,7 +66,7 @@ public class Outtake extends SubsystemBase {
    * @return An instant command to set the hood into motion
    */
   public Command lowerHood() {
-    return new InstantCommand(() -> io.setAngle(OuttakeConstants.MINIMUM_HOOD_ANGLE_DEG));
+    return new InstantCommand(() -> {io.setAngle(OuttakeConstants.MINIMUM_HOOD_ANGLE_DEG); System.out.printf("\n\n\nLOWERING HOOD TO %s", OuttakeConstants.MINIMUM_HOOD_ANGLE_DEG);});
   }
 
   /**

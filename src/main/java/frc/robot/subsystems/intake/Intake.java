@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
+import frc.robot.Constants.IntakeConstants;
 
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
@@ -62,11 +63,23 @@ public class Intake extends SubsystemBase {
      * @return An instant command to start the motion
      */
     public Command runBasicControl(BasicControlState direction) {
-        return Commands.runOnce(() -> {
+        return Commands.run(() -> {
             io.goWithBasicControl(direction);
             System.out.println("\n\n\n\nRunning intake forwards\n\n\n\n\n\n\n");
-        }, this);
+        }, this)
+        .until(() -> io.pastSetpoint())
+        .andThen(() -> io.goWithBasicControl(BasicControlState.STOPPED));
+        
     }
+
+    // deploy intake, when angle > 30
+    // public Command deployIntake() {
+    //     runBasicControl(BasicControlState.FORWARD)
+    //     .onlyWhile(io.)
+    //             .andThen( Commands.waitSeconds(IntakeConstants.DEPLOY_INTAKE_SECONDS))
+    //             .andThen( intake.runBasicControl(BasicControlState.STOPPED))
+    //             .andThen( intake.runIntake()))
+    // }
 
     /**
      * Causes the intake wheels to spin

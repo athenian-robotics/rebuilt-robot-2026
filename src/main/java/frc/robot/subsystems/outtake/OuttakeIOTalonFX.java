@@ -109,6 +109,7 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
     // If we're trying to spin up
     if (flywheelSetpointRPS != 0.0) {
       // Apply 12 volts if we're under the target speed, otherwise 0 volts
+      System.out.println("Trying to spin up");
       leadShooter.setControl(new VoltageOut(-OuttakeConstants.FLYWHEEL_VOLTS * flywheelController.calculate(-leadShooter.getVelocity().getValue().in(RotationsPerSecond), flywheelSetpointRPS)));
     } else {
       leadShooter.set(0);
