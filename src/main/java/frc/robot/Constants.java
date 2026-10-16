@@ -16,8 +16,15 @@ import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.generated.TunerConstants;
 
 public class Constants {
-  public static final CurrentLimitsConfigs CURRENT_LIMITS = new CurrentLimitsConfigs()
-    .withSupplyCurrentLimit(70)
+  public static final CurrentLimitsConfigs MECHANISM_CURRENT_LIMITS = new CurrentLimitsConfigs()
+    .withSupplyCurrentLimit(60)
+    .withSupplyCurrentLowerLimit(37)
+    .withSupplyCurrentLowerTime(1)
+    .withSupplyCurrentLimitEnable(true);
+
+  //FOR THIS ONE: MANUALLY IMPLEMENT NEW LIMITS IN MODULEIOTALONFX
+  public static final CurrentLimitsConfigs DRIVE_CURRENT_LIMITS = new CurrentLimitsConfigs() 
+    .withSupplyCurrentLimit(45)
     .withSupplyCurrentLowerLimit(37)
     .withSupplyCurrentLowerTime(1)
     .withSupplyCurrentLimitEnable(true);
@@ -171,8 +178,8 @@ public class Constants {
     public static final double FLYWHEEL_MAX_ERROR_RPS = 10.0;
     public static final double FLYWHEEL_VELOCITY_RPS = 80.0;
 
-    public static final double MAXIMUM_HOOD_ANGLE_DEG = 41.217118;
-    public static final double MINIMUM_HOOD_ANGLE_DEG = 15.447513;
+    public static final double MAXIMUM_HOOD_ANGLE_DEG = 41.217118; // 
+    public static final double MINIMUM_HOOD_ANGLE_DEG = 15.447513; // 7.998
     public static final double STARTING_HOOD_ANGLE_DEG = 15.447513;
     public static final double MIDFIELD_SHOT_ANGLE_DEG = 35; // guess
     public static final double OPPOSITE_TEAM_SHOT_ANGLE_DEG = 40; //guess
@@ -199,6 +206,15 @@ public class Constants {
     public static final double LOW_SET_ANGLE_DEG = 23.2926886432; // 2.4333333333 m
     public static final double MIDDLE_SET_ANGLE_DEG = 28.2261055557; // 3.3166666667 m
     public static final double HIGH_SET_ANGLE_DEG = 40.0072; // 4.2 m
+
+    public static final double HOOD_ANGLE_TRIM_AMOUNT_DEGREES = .5;
+
+    // Based on a curve fit from google sheets (https://docs.google.com/spreadsheets/d/1-HswU1YtXnBABoakHAkioBkk_Xckyyjn1Od3PbBuWjQ/edit?usp=sharing)
+    // The coefficients describe the best fit line through collected data points of (Distance to Hub, Best Hood Angle)
+    // We collect the data by moving the robot to a given distance and either setting hood angle using Elastic or trimming hood angle
+    public static final double CALCULATE_ANGLE_TRENDLINE_COEF_A = -3.98;
+    public static final double CALCULATE_ANGLE_TRENDLINE_COEF_B = 14.9;
+    public static final double CALCULATE_ANGLE_TRENDLINE_COEF_C = -1.55;
   }
 
   public final class IntakeConstants {
@@ -229,7 +245,7 @@ public class Constants {
     public static final double DEPLOY_INTAKE_SECONDS = 0.5;
 
     public static final double MAX_ARM_VOLTAGE = 7;
-    public static final double WHEEL_VOLTAGE = 6;
+    public static final double WHEEL_VOLTAGE = 12;
     public static final double ARM_STARTING_POSITION_ROT = 1.0 / 3.0;
     public static final double SETPOINT_DROP = 0.5;
     public static final double SETPOINT_FINAL = 0.4; // 0.468
@@ -237,7 +253,7 @@ public class Constants {
 
   public final class IndexerConstants {
     public static final int MOTOR_ID = 52;
-    public static final double MOTOR_VOLTAGE = 8.0;
+    public static final double MOTOR_VOLTAGE = 10.0; // Bumped to 10 from 8
   }
 
   public final class PathGenerationConstants {

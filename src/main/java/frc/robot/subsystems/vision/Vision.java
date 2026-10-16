@@ -91,6 +91,8 @@ public class Vision extends SubsystemBase {
       return Optional.empty();
     }
 
+    Logger.recordOutput("Vision/SequentialRejections", sequentialRejections);
+
     boolean bypassOdometryCheck = overrideOdometry || currentPose == null 
       || sequentialRejections > Constants.LimelightConstants.MAX_SEQUENTIAL_REJECTIONS || remainingOverrides > 0;
     Logger.recordOutput("Vision/OdometryCheckBypassed", bypassOdometryCheck);
