@@ -35,6 +35,8 @@ public interface OuttakeIO extends Subsystem {
   /** Causes the flywheel to start spinning up */
   public default void startFlywheel() {};
 
+  public default void shootFrom7(){};
+
   /** Causes the flywheel to coast */
   public default void stopFlywheel() {};
 

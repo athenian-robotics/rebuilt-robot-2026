@@ -17,17 +17,17 @@ import frc.robot.generated.TunerConstants;
 
 public class Constants {
   public static final CurrentLimitsConfigs MECHANISM_CURRENT_LIMITS = new CurrentLimitsConfigs()
-    .withSupplyCurrentLimit(60)
+    .withSupplyCurrentLimit(70)
     .withSupplyCurrentLowerLimit(37)
     .withSupplyCurrentLowerTime(1)
     .withSupplyCurrentLimitEnable(true);
 
   //FOR THIS ONE: MANUALLY IMPLEMENT NEW LIMITS IN MODULEIOTALONFX
   public static final CurrentLimitsConfigs DRIVE_CURRENT_LIMITS = new CurrentLimitsConfigs() 
-    .withSupplyCurrentLimit(45)
+    .withSupplyCurrentLimit(70)
     .withSupplyCurrentLowerLimit(37)
     .withSupplyCurrentLowerTime(1)
-    .withSupplyCurrentLimitEnable(true);
+    .withSupplyCurrentLimitEnable(true); // TODO: why did this need to be on
 
   /**
    * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when
@@ -157,8 +157,10 @@ public class Constants {
     public static final double ANGLE_MAX_ACCELERATION = 20.0;
     public static final double FF_START_DELAY = 2.0; // Secs
     public static final double FF_RAMP_RATE = 0.1; // Volts/Sec
-    public static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
-    public static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
+    public static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec, 0.25
+    public static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2, 0.05
+
+    public static final double SPEED_MULTIPLIER = 1.5;
   }
 
   public final class OuttakeConstants {
@@ -253,7 +255,7 @@ public class Constants {
 
   public final class IndexerConstants {
     public static final int MOTOR_ID = 52;
-    public static final double MOTOR_VOLTAGE = 10.0; // Bumped to 10 from 8
+    public static final double MOTOR_VOLTAGE = 8.0; // Bumped to 10 from 8
   }
 
   public final class PathGenerationConstants {

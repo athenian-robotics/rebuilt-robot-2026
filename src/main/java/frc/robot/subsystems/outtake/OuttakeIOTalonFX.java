@@ -184,6 +184,10 @@ public class OuttakeIOTalonFX extends SubsystemBase implements OuttakeIO {
         .ifPresent(this::setAngle);
     }
   }
+  @Override
+  public void shootFrom7(){
+    
+  }
 
   public void setAngle(double angleDegrees) {
     // All other methods should call setAngle, so targetHoodAngleDegrees is the most accurate target

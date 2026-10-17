@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.DriveCommandsConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OuttakeConstants;
 import frc.robot.Constants.RuntimeConstants;
@@ -246,9 +247,9 @@ public class RobotContainer {
         drive.setDefaultCommand(
                 DriveCommands.joystickDrive(
                         drive,
-                        () -> -driveJoystick.getY(),
-                        () -> -driveJoystick.getX(),
-                        () -> -steerJoystick.getX()));
+                        () -> -driveJoystick.getY() * DriveCommandsConstants.SPEED_MULTIPLIER,
+                        () -> -driveJoystick.getX() * DriveCommandsConstants.SPEED_MULTIPLIER,
+                        () -> -steerJoystick.getX() * DriveCommandsConstants.SPEED_MULTIPLIER));
 
         // Run indexer rollers and ground outtake balls
         operatorJoystick.button(ControllerConstants.THUMB_BUTTON_BOTTOM)
@@ -397,13 +398,14 @@ public class RobotContainer {
                                     : OuttakeConstants.HUB_POSITION_BLUE;
                             return hubPosition.minus(drive.getPose().getTranslation()).getAngle();
                             })));
-
+        //might accidentally reassign something, TODO
+      
         driveJoystick
             .button((ControllerConstants.THUMB_BUTTON_BOTTOM))
             .whileTrue(DriveCommands.brake(drive));
         
         // Temporary overide odometry and use vision pose
-        operatorJoystick.button(ControllerConstants.OFFHAND_TOP_MIDDLE).whileTrue(Commands.runOnce(() -> vision.setOverrideOdometry(true)));
+        // operatorJoystick.button(ControllerConstants.OFFHAND_TOP_MIDDLE).whileTrue(Commands.runOnce(() -> vision.setOverrideOdometry(true)));
     }
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
